@@ -21,7 +21,7 @@
 #endif
 
 
-#if __ELF_NATIVE_CLASS == 32
+#ifndef __x86_64__
 /* Registers for entry into PLT on IA-32.  */
 typedef struct La_i86_regs
 {
