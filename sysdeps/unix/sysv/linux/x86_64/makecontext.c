@@ -68,10 +68,10 @@ __makecontext (ucontext_t *ucp, void (*func) (void), int argc, ...)
 
   /* Setup context ucp.  */
   /* Address to jump to.  */
-  ucp->uc_mcontext.gregs[REG_RIP] = (long int) func;
+  ucp->uc_mcontext.gregs[REG_RIP] = (long long int) func;
   /* Setup rbx.*/
-  ucp->uc_mcontext.gregs[REG_RBX] = (long int) &sp[idx_uc_link];
-  ucp->uc_mcontext.gregs[REG_RSP] = (long int) sp;
+  ucp->uc_mcontext.gregs[REG_RBX] = (long long int) &sp[idx_uc_link];
+  ucp->uc_mcontext.gregs[REG_RSP] = (long long int) sp;
 
   /* Setup stack.  */
   sp[0] = (unsigned long int) &__start_context;
@@ -91,22 +91,22 @@ __makecontext (ucontext_t *ucp, void (*func) (void), int argc, ...)
     switch (i)
       {
       case 0:
-	ucp->uc_mcontext.gregs[REG_RDI] = va_arg (ap, long int);
+	ucp->uc_mcontext.gregs[REG_RDI] = va_arg (ap, long long int);
 	break;
       case 1:
-	ucp->uc_mcontext.gregs[REG_RSI] = va_arg (ap, long int);
+	ucp->uc_mcontext.gregs[REG_RSI] = va_arg (ap, long long int);
 	break;
       case 2:
-	ucp->uc_mcontext.gregs[REG_RDX] = va_arg (ap, long int);
+	ucp->uc_mcontext.gregs[REG_RDX] = va_arg (ap, long long int);
 	break;
       case 3:
-	ucp->uc_mcontext.gregs[REG_RCX] = va_arg (ap, long int);
+	ucp->uc_mcontext.gregs[REG_RCX] = va_arg (ap, long long int);
 	break;
       case 4:
-	ucp->uc_mcontext.gregs[REG_R8] = va_arg (ap, long int);
+	ucp->uc_mcontext.gregs[REG_R8] = va_arg (ap, long long int);
 	break;
       case 5:
-	ucp->uc_mcontext.gregs[REG_R9] = va_arg (ap, long int);
+	ucp->uc_mcontext.gregs[REG_R9] = va_arg (ap, long long int);
 	break;
       default:
 	/* Put value on stack.  */

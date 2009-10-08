@@ -36,7 +36,11 @@
 __BEGIN_DECLS
 
 /* Type for a general-purpose register.  */
+#ifdef __x86_64__
+typedef unsigned long long elf_greg_t;
+#else
 typedef unsigned long elf_greg_t;
+#endif
 
 /* And the whole bunch of them.  We could have used `struct
    user_regs_struct' directly in the typedef, but tradition says that
@@ -45,7 +49,7 @@ typedef unsigned long elf_greg_t;
 #define ELF_NGREG (sizeof (struct user_regs_struct) / sizeof(elf_greg_t))
 typedef elf_greg_t elf_gregset_t[ELF_NGREG];
 
-#if __WORDSIZE == 32
+#ifndef __x86_64__
 /* Register set for the floating-point registers.  */
 typedef struct user_fpregs_struct elf_fpregset_t;
 
@@ -80,8 +84,13 @@ struct elf_prstatus
   {
     struct elf_siginfo pr_info;		/* Info associated with signal.  */
     short int pr_cursig;		/* Current signal.  */
+#ifdef __x86_64__
+    unsigned long long int pr_sigpend;	/* Set of pending signals.  */
+    unsigned long long int pr_sighold;	/* Set of held signals.  */
+#else
     unsigned long int pr_sigpend;	/* Set of pending signals.  */
     unsigned long int pr_sighold;	/* Set of held signals.  */
+#endif
     __pid_t pr_pid;
     __pid_t pr_ppid;
     __pid_t pr_pgrp;
@@ -104,7 +113,7 @@ struct elf_prpsinfo
     char pr_zomb;			/* Zombie.  */
     char pr_nice;			/* Nice val.  */
     unsigned long int pr_flag;		/* Flags.  */
-#if __WORDSIZE == 32
+#ifndef __x86_64__
     unsigned short int pr_uid;
     unsigned short int pr_gid;
 #else

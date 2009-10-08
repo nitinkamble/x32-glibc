@@ -1,3 +1,13 @@
 # The i386 fragment also works for x86_64.
 
 . $srcdir/sysdeps/i386/configure
+
+case "$base_machine" in
+x86_64)
+  case "$CC $CFLAGS $CPPFLAGS " in
+  *" -mn32"*)
+    machine=x86_64/n32
+    libc_cv_slibdir="/lib32"
+    ;;
+  esac
+esac
