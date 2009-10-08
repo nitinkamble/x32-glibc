@@ -1,0 +1,4 @@
+2009-10-08  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/x86_64/bits/wordsize.h: Check __LP64__ instead of
+	__x86_64__.
