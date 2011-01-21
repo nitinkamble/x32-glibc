@@ -1,3 +1,13 @@
+2011-01-21  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/n32: Moved to ...
+	* sysdeps/unix/sysv/linux/x86_64/x32: This.
+
+	* sysdeps/x86_64/configure: Check -mx32 instead of -mn32.
+
+	* sysdeps/x86_64/n32: Moved to ...
+	* sysdeps/x86_64/x32: This.
+
 2009-10-08  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/unix/sysv/linux/x86_64/n32/syscall.S: New.
