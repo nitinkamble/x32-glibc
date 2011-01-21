@@ -1,4 +1,4 @@
-/* Copyright (C) 2000,2002,2003,2004,2006 Free Software Foundation, Inc.
+/* Copyright (C) 2000,2002-2004,2006,2009,2010 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -25,16 +25,23 @@
 #include <sys/syscall.h>
 #include <kernel-features.h>
 
-#if __ASSUME_FCNTL64 == 0
+#ifndef __ASSUME_FCNTL64
 /* This variable is shared with all files that check for fcntl64.  */
 int __have_no_fcntl64;
 #endif
 
-#if defined NO_CANCELLATION && __ASSUME_FCNTL64 == 0
+#ifdef __ASSUME_F_GETOWN_EX
+# define miss_F_GETOWN_EX 0
+#elif !defined __ASSUME_FCNTL64
+static int miss_F_GETOWN_EX;
+#endif
+
+
+#if defined NO_CANCELLATION && !defined __ASSUME_FCNTL64
 # define __fcntl_nocancel  __libc_fcntl
 #endif
 
-#if !defined NO_CANCELLATION || __ASSUME_FCNTL64 == 0
+#if !defined NO_CANCELLATION || !defined __ASSUME_FCNTL64
 int
 __fcntl_nocancel (int fd, int cmd, ...)
 {
@@ -45,7 +52,7 @@ __fcntl_nocancel (int fd, int cmd, ...)
   arg = va_arg (ap, void *);
   va_end (ap);
 
-#if __ASSUME_FCNTL64 == 0
+#ifndef __ASSUME_FCNTL64
 # ifdef __NR_fcntl64
   if (! __have_no_fcntl64)
     {
@@ -119,6 +126,26 @@ __fcntl_nocancel (int fd, int cmd, ...)
 	assert (F_SETLK - F_SETLKW == F_SETLK64 - F_SETLKW64);
 	return INLINE_SYSCALL (fcntl, 3, fd, cmd + F_SETLK - F_SETLK64, &fl);
       }
+    case F_GETOWN:
+      if (! miss_F_GETOWN_EX)
+	{
+	  INTERNAL_SYSCALL_DECL (err);
+	  struct f_owner_ex fex;
+	  int res = INTERNAL_SYSCALL (fcntl, err, 3, fd, F_GETOWN_EX, &fex);
+	  if (!INTERNAL_SYSCALL_ERROR_P (res, err))
+	    return fex.type == F_OWNER_GID ? -fex.pid : fex.pid;
+
+# ifndef __ASSUME_F_GETOWN_EX
+	  if (INTERNAL_SYSCALL_ERRNO (res, err) == EINVAL)
+	    miss_F_GETOWN_EX = 1;
+	  else
+# endif
+	    {
+	      __set_errno (INTERNAL_SYSCALL_ERRNO (res, err));
+	      return -1;
+	    }
+	}
+      /* FALLTHROUGH */
     default:
       return INLINE_SYSCALL (fcntl, 3, fd, cmd, arg);
     }
@@ -141,21 +168,21 @@ __libc_fcntl (int fd, int cmd, ...)
   arg = va_arg (ap, void *);
   va_end (ap);
 
-#if __ASSUME_FCNTL64 > 0
+# ifdef __ASSUME_FCNTL64
   if (SINGLE_THREAD_P || (cmd != F_SETLKW && cmd != F_SETLKW64))
     return INLINE_SYSCALL (fcntl64, 3, fd, cmd, arg);
 
   int oldtype = LIBC_CANCEL_ASYNC ();
 
   int result = INLINE_SYSCALL (fcntl64, 3, fd, cmd, arg);
-#else
+# else
   if (SINGLE_THREAD_P || (cmd != F_SETLKW && cmd != F_SETLKW64))
     return __fcntl_nocancel (fd, cmd, arg);
 
   int oldtype = LIBC_CANCEL_ASYNC ();
 
   int result = __fcntl_nocancel (fd, cmd, arg);
-#endif
+# endif
 
   LIBC_CANCEL_RESET (oldtype);
 

@@ -41,16 +41,13 @@ static inline Elf32_Addr * __attribute__ ((const))
 ppc_got (void)
 {
   Elf32_Addr *got;
-#ifdef HAVE_ASM_PPC_REL16
+
   asm ("bcl 20,31,1f\n"
        "1:	mflr %0\n"
        "	addis %0,%0,_GLOBAL_OFFSET_TABLE_-1b@ha\n"
        "	addi %0,%0,_GLOBAL_OFFSET_TABLE_-1b@l\n"
        : "=b" (got) : : "lr");
-#else
-  asm (" bl _GLOBAL_OFFSET_TABLE_-4@local"
-       : "=l" (got));
-#endif
+
   return got;
 }
 
@@ -226,7 +223,6 @@ elf_machine_runtime_setup (struct link_map *map,
 
 /* Change the PLT entry whose reloc is 'reloc' to call the actual routine.  */
 extern Elf32_Addr __elf_machine_fixup_plt (struct link_map *map,
-					   const Elf32_Rela *reloc,
 					   Elf32_Addr *reloc_addr,
 					   Elf32_Addr finaladdr);
 
@@ -237,7 +233,7 @@ elf_machine_fixup_plt (struct link_map *map, lookup_t t,
 {
   if (map->l_info[DT_PPC(GOT)] == 0)
     /* Handle old style PLT.  */
-    return __elf_machine_fixup_plt (map, reloc, reloc_addr, finaladdr);
+    return __elf_machine_fixup_plt (map, reloc_addr, finaladdr);
 
   *reloc_addr = finaladdr;
   return finaladdr;
@@ -316,6 +312,11 @@ elf_machine_rela (struct link_map *map, const Elf32_Rela *reloc,
 #else
   value = reloc->r_addend;
 #endif
+
+  if (sym != NULL
+      && __builtin_expect (ELFW(ST_TYPE) (sym->st_info) == STT_GNU_IFUNC, 0)
+      && __builtin_expect (sym->st_shndx != SHN_UNDEF, 1))
+    value = ((Elf32_Addr (*) (void)) value) ();
 
   /* A small amount of code is duplicated here for speed.  In libc,
      more than 90% of the relocs are R_PPC_RELATIVE; in the X11 shared

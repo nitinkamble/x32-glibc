@@ -1,4 +1,4 @@
-/* Copyright (C) 1998-2003, 2004, 2005, 2006 Free Software Foundation, Inc.
+/* Copyright (C) 1998-2006, 2010 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Ulrich Drepper <drepper@cygnus.com>, 1998.
 
@@ -29,6 +29,11 @@
 #include <sys/statfs.h>
 #include <sys/statvfs.h>
 #include "linux_fsinfo.h"
+#include "kernel-features.h"
+
+
+/* Special internal-only bit value.  */
+#define ST_VALID 0x0020
 
 
 #ifndef STATFS
@@ -37,6 +42,7 @@
 # define INTERNAL_STATVFS __internal_statvfs
 
 
+# ifndef __ASSUME_STATFS_F_FLAGS
 int
 __statvfs_getflags (const char *name, int fstype, struct stat64 *st)
 {
@@ -45,13 +51,15 @@ __statvfs_getflags (const char *name, int fstype, struct stat64 *st)
 
   const char *fsname = NULL;
   const char *fsname2 = NULL;
+  const char *fsname3 = NULL;
 
   /* Map the filesystem type we got from the statfs call to a string.  */
   switch (fstype)
     {
     case EXT2_SUPER_MAGIC:
-      fsname = "ext3";
-      fsname2 = "ext2";
+      fsname = "ext4";
+      fsname2 = "ext3";
+      fsname3 = "ext2";
       break;
     case DEVPTS_SUPER_MAGIC:
       fsname= "devpts";
@@ -98,6 +106,15 @@ __statvfs_getflags (const char *name, int fstype, struct stat64 *st)
     case NTFS_SUPER_MAGIC:
       fsname = "ntfs";
       break;
+    case LOGFS_MAGIC_U32:
+      fsname = "logfs";
+      break;
+    case BTRFS_SUPER_MAGIC:
+      fsname = "btrfs";
+      break;
+    case CGROUP_SUPER_MAGIC:
+      fsname = "cgroup";
+      break;
     }
 
   FILE *mtab = __setmntent ("/proc/mounts", "r");
@@ -126,7 +143,9 @@ __statvfs_getflags (const char *name, int fstype, struct stat64 *st)
 	  else if (fsname != NULL
 		   && strcmp (fsname, mntbuf.mnt_type) != 0
 		   && (fsname2 == NULL
-		       || strcmp (fsname2, mntbuf.mnt_type) != 0))
+		       || strcmp (fsname2, mntbuf.mnt_type) != 0)
+		   && (fsname3 == NULL
+		       || strcmp (fsname3, mntbuf.mnt_type) != 0))
 	    continue;
 
 	  /* Find out about the device the current entry is for.  */
@@ -176,7 +195,7 @@ __statvfs_getflags (const char *name, int fstype, struct stat64 *st)
 	    {
 	      /* Try without a filesystem name.  */
 	      assert (fsname != NULL);
-	      fsname = fsname2 = NULL;
+	      fsname = fsname2 = fsname3 = NULL;
 	    }
 
 	  /* It is not strictly allowed to use rewind here.  But
@@ -193,6 +212,7 @@ __statvfs_getflags (const char *name, int fstype, struct stat64 *st)
 
   return result;
 }
+# endif
 #else
 extern int __statvfs_getflags (const char *name, int fstype,
 			       struct stat64 *st);
@@ -214,7 +234,8 @@ INTERNAL_STATVFS (const char *name, struct STATVFS *buf,
   buf->f_files = fsbuf->f_files;
   buf->f_ffree = fsbuf->f_ffree;
   if (sizeof (buf->f_fsid) == sizeof (fsbuf->f_fsid))
-    buf->f_fsid = (fsbuf->f_fsid.__val[0]
+    buf->f_fsid = ((fsbuf->f_fsid.__val[0]
+		    & ((1UL << (8 * sizeof (fsbuf->f_fsid.__val[0]))) - 1))
 		   | ((unsigned long int) fsbuf->f_fsid.__val[1]
 		      << (8 * (sizeof (buf->f_fsid)
 			       - sizeof (fsbuf->f_fsid.__val[0])))));
@@ -233,9 +254,14 @@ INTERNAL_STATVFS (const char *name, struct STATVFS *buf,
   /* XXX I have no idea how to compute f_favail.  Any idea???  */
   buf->f_favail = buf->f_ffree;
 
-  /* Determining the flags is tricky.  We have to read /proc/mounts or
-     the /etc/mtab file and search for the entry which matches the given
-     file.  The way we can test for matching filesystem is using the
-     device number.  */
-  buf->f_flag = __statvfs_getflags (name, fsbuf->f_type, st);
+#ifndef __ASSUME_STATFS_F_FLAGS
+  if ((fsbuf->f_flags & ST_VALID) == 0)
+    /* Determining the flags is tricky.  We have to read /proc/mounts or
+       the /etc/mtab file and search for the entry which matches the given
+       file.  The way we can test for matching filesystem is using the
+       device number.  */
+    buf->f_flag = __statvfs_getflags (name, fsbuf->f_type, st);
+  else
+#endif
+    buf->f_flag = fsbuf->f_flags ^ ST_VALID;
 }

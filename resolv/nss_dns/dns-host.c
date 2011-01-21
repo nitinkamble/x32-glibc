@@ -1,4 +1,4 @@
-/* Copyright (C) 1996-2004, 2007, 2008, 2009 Free Software Foundation, Inc.
+/* Copyright (C) 1996-2004, 2007-2009, 2010 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Extended from original form by Ulrich Drepper <drepper@cygnus.com>, 1996.
 
@@ -198,21 +198,27 @@ _nss_dns_gethostbyname3_r (const char *name, int af, struct hostent *result,
 			  1024, &host_buffer.ptr, NULL, NULL, NULL);
   if (n < 0)
     {
-      if (errno == ESRCH)
+      switch (errno)
 	{
+	case ESRCH:
 	  status = NSS_STATUS_TRYAGAIN;
 	  h_errno = TRY_AGAIN;
+	  break;
+	case ECONNREFUSED:
+	case ETIMEDOUT:
+	  status = NSS_STATUS_UNAVAIL;
+	  break;
+	default:
+	  status = NSS_STATUS_NOTFOUND;
+	  break;
 	}
-      else
-	status = (errno == ECONNREFUSED
-		  ? NSS_STATUS_UNAVAIL : NSS_STATUS_NOTFOUND);
       *h_errnop = h_errno;
       if (h_errno == TRY_AGAIN)
 	*errnop = EAGAIN;
       else
 	__set_errno (olderr);
 
-      /* If we are looking for a IPv6 address and mapping is enabled
+      /* If we are looking for an IPv6 address and mapping is enabled
 	 by having the RES_USE_INET6 bit in _res.options set, we try
 	 another lookup.  */
       if (af == AF_INET6 && (_res.options & RES_USE_INET6))
@@ -593,7 +599,6 @@ getanswer_r (const querybuf *answer, int anslen, const char *qname, int qtype,
   int (*name_ok) (const char *);
   u_char packtmp[NS_MAXCDNAME];
   int have_to_map = 0;
-  int32_t ttl = 0;
   uintptr_t pad = -(uintptr_t) buffer % __alignof__ (struct host_data);
   buffer += pad;
   if (__builtin_expect (buflen < sizeof (struct host_data) + pad, 0))
@@ -727,7 +732,7 @@ getanswer_r (const querybuf *answer, int anslen, const char *qname, int qtype,
       cp += INT16SZ;			/* type */
       class = __ns_get16 (cp);
       cp += INT16SZ;			/* class */
-      ttl = __ns_get32 (cp);
+      int32_t ttl = __ns_get32 (cp);
       cp += INT32SZ;			/* TTL */
       n = __ns_get16 (cp);
       cp += INT16SZ;			/* len */
@@ -878,7 +883,8 @@ getanswer_r (const querybuf *answer, int anslen, const char *qname, int qtype,
 		}
 	      bp += n;
 	      linebuflen -= n;
-	      map_v4v6_hostent (result, &bp, &linebuflen);
+	      if (map_v4v6_hostent (result, &bp, &linebuflen))
+		goto too_small;
 	    }
 	  *h_errnop = NETDB_SUCCESS;
 	  return NSS_STATUS_SUCCESS;
@@ -900,7 +906,7 @@ getanswer_r (const querybuf *answer, int anslen, const char *qname, int qtype,
 	    {
 	      register int nn;
 
-	      if (ttlp != NULL && ttl != 0)
+	      if (ttlp != NULL)
 		*ttlp = ttl;
 	      if (canonp != NULL)
 		*canonp = bp;
@@ -953,7 +959,8 @@ getanswer_r (const querybuf *answer, int anslen, const char *qname, int qtype,
 	}
 
       if (have_to_map)
-	map_v4v6_hostent (result, &bp, &linebuflen);
+	if (map_v4v6_hostent (result, &bp, &linebuflen))
+	  goto too_small;
       *h_errnop = NETDB_SUCCESS;
       return NSS_STATUS_SUCCESS;
     }
@@ -1042,7 +1049,7 @@ gaih_getanswer_slice (const querybuf *answer, int anslen, const char *qname,
 	  ++had_error;
 	  continue;
 	}
-      if (*firstp)
+      if (*firstp && canon == NULL)
 	{
 	  h_name = buffer;
 	  buffer += h_namelen;
@@ -1155,22 +1162,10 @@ gaih_getanswer_slice (const querybuf *answer, int anslen, const char *qname,
 
       if (*firstp)
 	{
-	  if (ttl != 0 && ttlp != NULL)
+	  if (ttlp != NULL)
 	    *ttlp = ttl;
 
-	  if (canon != NULL)
-	    {
-	      (*pat)->name = canon;
-
-	      /* Reclaim buffer space.  */
-	      if (h_name + h_namelen == buffer)
-		{
-		  buffer = h_name;
-		  buflen += h_namelen;
-		}
-	    }
-	  else
-	    (*pat)->name = h_name;
+	  (*pat)->name = canon ?: h_name;
 
 	  *firstp = 0;
 	}

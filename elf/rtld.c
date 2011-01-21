@@ -1,5 +1,5 @@
 /* Run time dynamic linker.
-   Copyright (C) 1995-2006, 2007, 2008, 2009 Free Software Foundation, Inc.
+   Copyright (C) 1995-2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -40,6 +40,7 @@
 #include <dl-osinfo.h>
 #include <dl-procinfo.h>
 #include <tls.h>
+#include <stackinfo.h>
 
 #include <assert.h>
 
@@ -122,10 +123,12 @@ INTVARDEF(_dl_starting_up)
    (except those which cannot be added for some reason).  */
 struct rtld_global _rtld_global =
   {
-    /* Default presumption without further information is executable stack.  */
-    ._dl_stack_flags = PF_R|PF_W|PF_X,
+    /* Generally the default presumption without further information is an
+     * executable stack but this is not true for all platforms.  */
+    ._dl_stack_flags = DEFAULT_STACK_PERMS,
 #ifdef _LIBC_REENTRANT
     ._dl_load_lock = _RTLD_LOCK_RECURSIVE_INITIALIZER,
+    ._dl_load_write_lock = _RTLD_LOCK_RECURSIVE_INITIALIZER,
 #endif
     ._dl_nns = 1,
     ._dl_ns =
@@ -182,7 +185,7 @@ extern struct rtld_global_ro _rtld_local_ro
 
 
 static void dl_main (const ElfW(Phdr) *phdr, ElfW(Word) phnum,
-		     ElfW(Addr) *user_entry);
+		     ElfW(Addr) *user_entry, ElfW(auxv_t) *auxv);
 
 /* These two variables cannot be moved into .data.rel.ro.  */
 static struct libname_list _dl_rtld_libname;
@@ -588,7 +591,6 @@ struct map_args
   /* Argument to map_doit.  */
   char *str;
   struct link_map *loader;
-  int is_preloaded;
   int mode;
   /* Return value of map_doit.  */
   struct link_map *map;
@@ -626,16 +628,17 @@ static void
 map_doit (void *a)
 {
   struct map_args *args = (struct map_args *) a;
-  args->map = _dl_map_object (args->loader, args->str,
-			      args->is_preloaded, lt_library, 0, args->mode,
-			      LM_ID_BASE);
+  args->map = _dl_map_object (args->loader, args->str, lt_library, 0,
+			      args->mode, LM_ID_BASE);
 }
 
 static void
 dlmopen_doit (void *a)
 {
   struct dlmopen_args *args = (struct dlmopen_args *) a;
-  args->map = _dl_open (args->fname, RTLD_LAZY | __RTLD_DLOPEN | __RTLD_AUDIT,
+  args->map = _dl_open (args->fname,
+			(RTLD_LAZY | __RTLD_DLOPEN | __RTLD_AUDIT
+			 | __RTLD_SECURE),
 			dl_main, LM_ID_NEWLM, _dl_argc, INTUSE(_dl_argv),
 			__environ);
 }
@@ -805,8 +808,7 @@ do_preload (char *fname, struct link_map *main_map, const char *where)
 
   args.str = fname;
   args.loader = main_map;
-  args.is_preloaded = 1;
-  args.mode = 0;
+  args.mode = __RTLD_SECURE;
 
   unsigned int old_nloaded = GL(dl_ns)[LM_ID_BASE]._ns_nloaded;
 
@@ -882,7 +884,8 @@ static int version_info attribute_relro;
 static void
 dl_main (const ElfW(Phdr) *phdr,
 	 ElfW(Word) phnum,
-	 ElfW(Addr) *user_entry)
+	 ElfW(Addr) *user_entry,
+	 ElfW(auxv_t) *auxv)
 {
   const ElfW(Phdr) *ph;
   enum mode mode;
@@ -1013,11 +1016,11 @@ of this helper program; chances are you did not intend to run this program.\n\
 \n\
   --list                list all dependencies and how they are resolved\n\
   --verify              verify that given object really is a dynamically linked\n\
-                        object we can handle\n\
+			object we can handle\n\
   --library-path PATH   use given PATH instead of content of the environment\n\
-                        variable LD_LIBRARY_PATH\n\
+			variable LD_LIBRARY_PATH\n\
   --inhibit-rpath LIST  ignore RUNPATH and RPATH information in object names\n\
-                        in LIST\n\
+			in LIST\n\
   --audit LIST          use objects named in LIST as auditors\n");
 
       ++_dl_skip_args;
@@ -1052,7 +1055,6 @@ of this helper program; chances are you did not intend to run this program.\n\
 
 	  args.str = rtld_progname;
 	  args.loader = NULL;
-	  args.is_preloaded = 0;
 	  args.mode = __RTLD_OPENEXEC;
 	  (void) _dl_catch_error (&objname, &err_str, &malloced, map_doit,
 				  &args);
@@ -1064,7 +1066,7 @@ of this helper program; chances are you did not intend to run this program.\n\
       else
 	{
 	  HP_TIMING_NOW (start);
-	  _dl_map_object (NULL, rtld_progname, 0, lt_library, 0,
+	  _dl_map_object (NULL, rtld_progname, lt_library, 0,
 			  __RTLD_OPENEXEC, LM_ID_BASE);
 	  HP_TIMING_NOW (stop);
 
@@ -1082,6 +1084,24 @@ of this helper program; chances are you did not intend to run this program.\n\
 	 makes sense to free the old string first.  */
       main_map->l_name = (char *) "";
       *user_entry = main_map->l_entry;
+
+#ifdef HAVE_AUX_VECTOR
+      /* Adjust the on-stack auxiliary vector so that it looks like the
+	 binary was executed directly.  */
+      for (ElfW(auxv_t) *av = auxv; av->a_type != AT_NULL; av++)
+	switch (av->a_type)
+	  {
+	  case AT_PHDR:
+	    av->a_un.a_val = (uintptr_t) phdr;
+	    break;
+	  case AT_PHNUM:
+	    av->a_un.a_val = phnum;
+	    break;
+	  case AT_ENTRY:
+	    av->a_un.a_val = *user_entry;
+	    break;
+	  }
+#endif
     }
   else
     {
@@ -1090,10 +1110,14 @@ of this helper program; chances are you did not intend to run this program.\n\
       main_map = _dl_new_object ((char *) "", "", lt_executable, NULL,
 				 __RTLD_OPENEXEC, LM_ID_BASE);
       assert (main_map != NULL);
-      assert (main_map == GL(dl_ns)[LM_ID_BASE]._ns_loaded);
       main_map->l_phdr = phdr;
       main_map->l_phnum = phnum;
       main_map->l_entry = *user_entry;
+
+      /* Even though the link map is not yet fully initialized we can add
+	 it to the map list since there are no possible users running yet.  */
+      _dl_add_to_namespace_list (main_map, LM_ID_BASE);
+      assert (main_map == GL(dl_ns)[LM_ID_BASE]._ns_loaded);
 
       /* At this point we are in a bit of trouble.  We would have to
 	 fill in the values for l_dev and l_ino.  But in general we
@@ -1237,7 +1261,7 @@ of this helper program; chances are you did not intend to run this program.\n\
       /* We were invoked directly, so the program might not have a
 	 PT_INTERP.  */
       _dl_rtld_libname.name = GL(dl_rtld_map).l_name;
-      /* _dl_rtld_libname.next = NULL; 	Already zero.  */
+      /* _dl_rtld_libname.next = NULL;	Already zero.  */
       GL(dl_rtld_map).l_libname =  &_dl_rtld_libname;
     }
   else
@@ -1361,6 +1385,9 @@ of this helper program; chances are you did not intend to run this program.\n\
 		_dl_fatal_printf ("out of memory\n");
 	      l->l_libname->name = memcpy (copy, dsoname, len);
 	    }
+
+	  /* Add the vDSO to the object list.  */
+	  _dl_add_to_namespace_list (l, LM_ID_BASE);
 
 	  /* Rearrange the list so this DSO appears after rtld_map.  */
 	  assert (l->l_next == NULL);
@@ -2013,7 +2040,7 @@ ERROR: ld.so: object '%s' cannot be loaded as audit interface: %s; ignored.\n",
 		  _dl_relocate_object (&GL(dl_rtld_map),
 				       main_map->l_scope, 0, 0);
 		}
-            }
+	    }
 #define VERNEEDTAG (DT_NUM + DT_THISPROCNUM + DT_VERSIONTAGIDX (DT_VERNEED))
 	  if (version_info)
 	    {
@@ -2270,6 +2297,10 @@ ERROR: ld.so: object '%s' cannot be loaded as audit interface: %s; ignored.\n",
 	_dl_fatal_printf ("cannot set up thread-local storage: %s\n",
 			  lossage);
     }
+
+  /* Remember the last search directory added at startup, now that
+     malloc will no longer be the one from dl-minimal.c.  */
+  GLRO(dl_init_all_dirs) = GL(dl_all_dirs);
 
   if (! prelinked && rtld_multiple_ref)
     {
@@ -2682,10 +2713,10 @@ process_envvars (enum mode *modep)
       while (*nextp != '\0');
 
       if (__access ("/etc/suid-debug", F_OK) != 0)
-        {
+	{
 	  unsetenv ("MALLOC_CHECK_");
 	  GLRO(dl_debug_mask) = 0;
-        }
+	}
 
       if (mode != normal)
 	_exit (5);
@@ -2752,7 +2783,7 @@ print_statistics (hp_timing_t *rtld_total_timep)
 	}
       *wp = '\0';
       _dl_debug_printf ("\
-            time needed for relocation: %s (%s%%)\n", buf, pbuf);
+	    time needed for relocation: %s (%s%%)\n", buf, pbuf);
     }
 #endif
 
@@ -2815,7 +2846,7 @@ print_statistics (hp_timing_t *rtld_total_timep)
 	}
       *wp = '\0';
       _dl_debug_printf ("\
-           time needed to load objects: %s (%s%%)\n",
+	   time needed to load objects: %s (%s%%)\n",
 				buf, pbuf);
     }
 #endif

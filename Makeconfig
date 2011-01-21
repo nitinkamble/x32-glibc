@@ -1,4 +1,4 @@
-# Copyright (C) 1991-2003,2004,2005,2006,2007,2008,2009
+# Copyright (C) 1991-2003,2004,2005,2006,2007,2008,2009,2010
 #	Free Software Foundation, Inc.
 # This file is part of the GNU C Library.
 
@@ -387,6 +387,14 @@ ifeq ($(elf),yes)
 have-initfini = yes
 endif
 
+ifeq ($(have-as-needed),yes)
+as-needed := -Wl,--as-needed
+no-as-needed := -Wl,--no-as-needed
+else
+as-needed :=
+no-as-needed :=
+endif
+
 # Installed name of the startup code.
 ifneq ($(have-initfini),yes)
 # When not having init/fini, there is just one startfile, called crt0.o.
@@ -484,7 +492,8 @@ ifeq ($(elf),yes)
 # run the linked programs.
 link-libc = -Wl,-rpath-link=$(rpath-link) \
 	    $(common-objpfx)libc.so$(libc.so-version) \
-	    $(common-objpfx)$(patsubst %,$(libtype.oS),c) $(gnulib)
+	    $(common-objpfx)$(patsubst %,$(libtype.oS),c) \
+	    $(as-needed) $(common-objpfx)elf/ld.so $(no-as-needed) $(gnulib)
 # This is how to find at build-time things that will be installed there.
 rpath-dirs = math elf dlfcn nss nis rt resolv crypt
 endif
@@ -549,11 +558,11 @@ endif
 ifeq ($(elf),yes)
 +preinit = $(addprefix $(csu-objpfx),crti.o)
 +postinit = $(addprefix $(csu-objpfx),crtn.o)
-+prector = `$(CC) --print-file-name=crtbegin.o`
-+postctor = `$(CC) --print-file-name=crtend.o`
++prector = `$(CC) $(sysdep-LDFLAGS) --print-file-name=crtbegin.o`
++postctor = `$(CC) $(sysdep-LDFLAGS) --print-file-name=crtend.o`
 # Variants of the two previous definitions for linking PIE programs.
-+prectorS = `$(CC) --print-file-name=crtbeginS.o`
-+postctorS = `$(CC) --print-file-name=crtendS.o`
++prectorS = `$(CC) $(sysdep-LDFLAGS) --print-file-name=crtbeginS.o`
++postctorS = `$(CC) $(sysdep-LDFLAGS) --print-file-name=crtendS.o`
 +interp = $(addprefix $(elf-objpfx),interp.os)
 endif
 csu-objpfx = $(common-objpfx)csu/
@@ -686,7 +695,7 @@ CPPFLAGS = $($(subdir)-CPPFLAGS) $(+includes) $(defines) \
 	   -include $(..)include/libc-symbols.h $(sysdep-CPPFLAGS) \
 	   $(CPPFLAGS-$(suffix $@)) \
 	   $(foreach lib,$(libof-$(basename $(@F))) \
-		         $(libof-$(<F)) $(libof-$(@F)),$(CPPFLAGS-$(lib))) \
+			 $(libof-$(<F)) $(libof-$(@F)),$(CPPFLAGS-$(lib))) \
 	   $(CPPFLAGS-$(<F)) $(CPPFLAGS-$(@F)) $(CPPFLAGS-$(basename $(@F)))
 override CFLAGS	= -std=gnu99 $(gnu89-inline-CFLAGS) \
 		  $(filter-out %frame-pointer,$(+cflags)) $(+gccwarn-c) \
@@ -780,7 +789,7 @@ endif
 # The assembler can generate debug information too.
 ifndef ASFLAGS
 ifeq ($(have-cpp-asm-debuginfo),yes)
-ASFLAGS := $(filter -g%,$(CFLAGS))
+ASFLAGS := $(filter -g% -fdebug-prefix-map=%,$(CFLAGS))
 else
 ASFLAGS :=
 endif
@@ -957,7 +966,7 @@ endif
 # emitted into sysd-rules.  A sysdeps Makeconfig fragment can
 # add its own special object file prefix to this list with e.g. foo-%:%
 # to have foo-*.? compiled from *.? using $(foo-CPPFLAGS).
-sysd-rules-patterns := %:% rtld-%:% m_%:s_%
+sysd-rules-patterns := %:% rtld-%:rtld-% rtld-%:% m_%:s_%
 
 # Let sysdeps/ subdirs contain a Makeconfig fragment for us to include here.
 sysdep-makeconfigs := $(wildcard $(+sysdep_dirs:=/Makeconfig))
@@ -966,8 +975,8 @@ include $(sysdep-makeconfigs)
 endif
 
 # Compute just the target patterns.  Makeconfig has set sysd-rules-patterns.
-sysd-rules-targets := $(foreach p,$(sysd-rules-patterns),\
-		      		$(firstword $(subst :, ,$p)))
+sysd-rules-targets := $(sort $(foreach p,$(sysd-rules-patterns),\
+					 $(firstword $(subst :, ,$p))))
 
 endif # Makeconfig not yet included
 

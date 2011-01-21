@@ -1,3 +1,277 @@
+2011-01-19  Roland McGrath  <roland@redhat.com>
+
+	* pthread_cond_wait.c (__pthread_cond_wait): Fix comment typo.
+	* pthread_cond_timedwait.c (__pthread_cond_timedwait): Likewise.
+	* pthread_rwlock_rdlock.c (__pthread_rwlock_rdlock): Likewise.
+	* pthread_rwlock_wrlock.c (__pthread_rwlock_wrlock): Likewise.
+	* pthread_rwlock_timedrdlock.c (pthread_rwlock_timedrdlock): Likewise.
+	* pthread_rwlock_timedwrlock.c (pthread_rwlock_timedwrlock): Likewise.
+
+2011-01-16  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* Makefile (test-extras): Add tst-cleanup4aux.
+
+2011-01-14  Ulrich Drepper  <drepper@gmail.com>
+
+	[BZ #10563]
+	* sysdeps/pthread/setxid.h (__SETXID_1): Add cast to assignment.
+	(__SETXID_2): Likewise.
+	(__SETXID_3): Likewise.
+
+2011-01-13  Ulrich Drepper  <drepper@gmail.com>
+
+	[BZ #10484]
+	* Versions [libc] (GLIBC_PRIVATE): Export __libc_alloca_cutoff.
+	* alloca_cutoff.c: Add libc_hidden_def.
+
+2010-10-13  H.J. Lu  <hongjiu.lu@intel.com>
+
+	[BZ #12113]
+	* sysdeps/x86_64/pthreaddef.h (TCB_ALIGNMENT): Changed to 32.
+	* sysdeps/x86_64/tls.h (TLS_TCB_ALIGN): Defined with alignment
+	of "struct pthread".
+
+2010-09-21  Andreas Schwab  <schwab@redhat.com>
+
+	* sysdeps/pthread/pthread.h (pthread_cleanup_push)
+	[!__EXCEPTIONS]: Mangle local variable not_first_call.
+	(pthread_cleanup_push_defer_np): Likewise.
+
+2010-09-03  Ulrich Drepper  <drepper@redhat.com>
+
+	* sysdeps/pthread/allocalim.h (__libc_use_alloca): Expect blocks are
+	small.
+
+2010-08-10  Dinakar Guniguntala  <dino@in.ibm.com>
+	    Stefan Hajnoczi  <stefanha@linux.vnet.ibm.com>
+
+	* sysdeps/unix/sysv/linux/i386/i486/pthread_cond_signal.S: If
+	FUTEX_WAKE_OP fails make sure to call FUTEX_WAKE instead.
+
+2010-08-12  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/unix/sysv/linux/i386/Makefile: New file.
+
+2010-05-01  Alan Modra  <amodra@gmail.com>
+
+	* sysdeps/unix/sysv/linux/powerpc/powerpc64/sysdep-cancel.h
+	(PSEUDO): Use correct cr save.  Don't use wrong parm save area
+	to save temps.  Correct cfi for possible later frame manipulation.
+	(DOCARGS_1, UNDOCARGS_1): Use the correct parm save area.
+	(DOCARGS_2, UNDOCARGS_2, DOCARGS_3, UNDOCARGS_3): Likewise.
+	(DOCARGS_4, UNDOCARGS_4, DOCARGS_5, UNDOCARGS_5): Likewise.
+	(DOCARGS_6, UNDOCARGS_6): Likewise.
+	(CENABLE, CDISABLE): Add nops for non-shared calls.
+
+2010-07-06  Andreas Schwab  <schwab@redhat.com>
+
+	* sysdeps/unix/sysv/linux/pthread_getname.c (pthread_getname_np):
+	Fix type mismatch.
+
+2010-07-03  Ulrich Drepper  <drepper@redhat.com>
+
+	* tst-abstime.c (do_test): Some more cleanups
+
+2010-07-02  Ulrich Drepper  <drepper@redhat.com>
+
+	* tst-abstime.c: Correct testing and add test for sem_timedwait.
+
+2010-07-01  Andreas Schwab  <schwab@redhat.com>
+	    Ulrich Drepper  <drepper@redhat.com>
+
+	* Makefile (tests): Add tst-abstime.
+	* tst-abstime.c: New file.
+	* sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S
+	(__lll_timedlock_wait): Check for timestamp before the Epoch.
+	* sysdeps/unix/sysv/linux/x86_64/lowlevellock.S
+	(__lll_timedlock_wait): Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/lowlevelrobustlock.S
+	(__lll_robust_timedlock_wait): Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/pthread_cond_timedwait.S
+	(__pthread_cond_timedwait): Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/pthread_rwlock_timedrdlock.S
+	(pthread_rwlock_timedrdlock): Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/pthread_rwlock_timedwrlock.S
+	(pthread_rwlock_timedwrlock): Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/sem_timedwait.S (sem_timedwait):
+	Likewise.
+
+2010-07-01  Ulrich Drepper  <drepper@redhat.com>
+
+	* Makefile (tst-_res1): Add tst-_res1mod1 to dependency list.
+
+2010-06-01  Takashi Yoshii  <takashi.yoshii.zj@renesas.com>
+
+	* sysdeps/unix/sysv/linux/sh/lowlevellock.S: Fix incorrect
+	location of ifndef __ASSUME_FUTEX_CLOCK_REALTIME.
+
+2010-04-09  Ulrich Drepper  <drepper@redhat.com>
+
+	[BZ #11390]
+	* sysdeps/unix/sysv/linux/pthread_getname.c: New file.
+	* sysdeps/unix/sysv/linux/pthread_setname.c: New file.
+	* nptl/sysdeps/pthread/pthread.h: Declare pthread_getname and
+	pthread_setname.
+	* Makefile (libpthread-routines): Add pthread_getname and
+	pthread_setname.
+	* Versions: Export pthread_getname and pthread_setname for GLIBC_2.12.
+
+2010-04-05  Thomas Schwinge  <thomas@schwinge.name>
+
+	* sysdeps/pthread/unwind-resume.c: Moved to main tree sysdeps/gnu/.
+	* sysdeps/pthread/rt-unwind-resume.c: Likewise.
+	* sysdeps/pthread/Makefile: Remove csu section and rt section's
+	unwind-resume bits, now in main tree sysdeps/gnu/Makefile instead.
+
+2010-03-23  Luis Machado  <luisgpm@br.ibm.com>
+
+	* pthread_cond_timedwait.c: Add check for
+	HAVE_CLOCK_GETTIME_VSYSCALL to use VDSO whenever possible.
+	(pthread_cond_timedwait): Use INTERNAL_VSYSCALL instead of
+	INTERNAL_SYSCALL.
+
+2010-03-09  Ulrich Drepper  <drepper@redhat.com>
+
+	* pthread_create.c (__pthread_create_2_1): If priorities are incorrect
+	and the call fails wake eventually waiting setxid threads.  Don't free
+	stack here if we try starting a thread.
+	* sysdeps/pthread/createthread.c (do_clone): Only wake setxid waiter
+	if the clone call failed.
+
+2010-03-08  Andreas Schwab  <schwab@redhat.com>
+
+	* pthread_create.c (__pthread_create_2_1): Don't set setxid_futex.
+	* allocatestack.c (get_cached_stack): Set setxid_futex.
+	(allocate_stack): Likewise.
+
+2010-03-05  Andreas Schwab  <schwab@redhat.com>
+	    Ulrich Drepper  <drepper@redhat.com>
+
+	* allocatestack.c (setxid_mark_thread): Delay handling of thread if
+	it is creating a thread or it is just being created.
+	* pthread_create.c (start_thread): Wake setxid thread if it is
+	waiting.
+	(__pthread_create_2_1): Initialize setxid_futex.
+	* sysdeps/pthread/createthread.c (do_clone): Wake setxid thread if it
+	is waiting.
+
+2010-01-15  Ulrich Drepper  <drepper@redhat.com>
+
+	* sysdeps/unix/sysv/linux/i386/i486/pthread_cond_timedwait.S:
+	Fix unwind info.
+	* sysdeps/unix/sysv/linux/i386/i486/pthread_cond_wait.S: Likewise.
+
+2010-01-15  Michal Schmidt  <mschmidt@redhat.com>
+
+	* sysdeps/unix/sysv/linux/i386/i486/pthread_cond_timedwait.S:
+	Fix pthread_cond_timedwait with requeue-PI.
+	* sysdeps/unix/sysv/linux/i386/i486/pthread_cond_wait.S:
+	Fix pthread_cond_wait with requeue-PI.
+
+2010-01-14  Ulrich Drepper  <drepper@redhat.com>
+
+	* Versions: Add pthread_mutex_consistent, pthread_mutexattr_getrobust,
+	and pthread_mutexattr_setrobust for GLIBC_2.12.
+	* pthread_mutex_consistent.c: Define alias pthread_mutex_consistent.
+	* pthread_mutexattr_getrobust.c: Define alias
+	pthread_mutexattr_getrobust.
+	* pthread_mutexattr_setrobust.c: Define alias
+	pthread_mutexattr_setrobust.
+
+2010-01-12  Ulrich Drepper  <drepper@redhat.com>
+
+	* sysdeps/pthread/pthread.h: Cleanup.  Fix up for XPG7.
+
+2010-01-08  Ulrich Drepper  <drepper@redhat.com>
+
+	* sysdeps/pthread/pthread.h: Fix pthread_mutex_consistent declaration.
+
+2009-12-18  Thomas Schwinge  <thomas@codesourcery.com>
+
+	* sysdeps/unix/sysv/linux/s390/s390-32/pt-initfini.c (_init): Don't
+	call __gmon_start__.
+	* sysdeps/unix/sysv/linux/s390/s390-64/pt-initfini.c (_init): Likewise.
+
+2009-12-17  Ulrich Drepper  <drepper@redhat.com>
+
+	* pthread_rwlock_init.c (__pthread_rwlock_init): Simplify code by
+	using memset.
+
+2009-12-01  Dinakar Guniguntala  <dino@in.ibm.com>
+
+	* sysdeps/unix/sysv/linux/i386/i486/lowlevellock.h: Define
+	FUTEX_WAIT_REQUEUE_PI and FUTEX_CMP_REQUEUE_PI.
+	* sysdeps/unix/sysv/linux/i386/i486/pthread_cond_broadcast.S: If mutex
+	is a non robust PI mutex, then use FUTEX_CMP_REQUEUE_PI.
+	* sysdeps/unix/sysv/linux/i386/i486/pthread_cond_signal.S: Likewise.
+	* sysdeps/unix/sysv/linux/i386/i486/pthread_cond_timedwait.S: If mutex
+	is a non robust PI mutex, then use FUTEX_WAIT_REQUEUE_PI.
+	* sysdeps/unix/sysv/linux/i386/i486/pthread_cond_wait.S: Likewise.
+
+2009-12-12  Ulrich Drepper  <drepper@redhat.com>
+
+	* sysdeps/unix/sysv/linux/i386/i486/sem_timedwait.S (sem_timedwait):
+	Don't update nwaiters after invalid timeout is recognized.
+
+2009-11-27  Thomas Schwinge  <thomas@codesourcery.com>
+
+	* sysdeps/unix/sysv/linux/sh/pt-initfini.c (_init): Don't call
+	__gmon_start__.
+
+2009-11-27  Andreas Schwab  <schwab@redhat.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/cancellation.S: Reload
+	THREAD_SELF->cancelhandling after returning from futex call.
+
+2009-11-24  Ulrich Drepper  <drepper@redhat.com>
+
+	* tst-sem13.c: New file.
+	* Makefile (tests): Add tst-sem13.
+
+2009-11-22  Roland McGrath  <roland@redhat.com>
+
+	* sysdeps/unix/sysv/linux/i386/dl-sysdep.h: # include "i686/dl-sysdep.h"
+	instead of recapitulating its contents.
+
+2009-11-18  Ulrich Drepper  <drepper@redhat.com>
+
+	* sysdeps/unix/sysv/linux/i386/i486/pthread_cond_broadcast.S: Minor
+	optimizations and cleanups.
+
+2009-11-18  Dinakar Guniguntala  <dino@in.ibm.com>
+
+	* sysdeps/unix/sysv/linux/i386/i486/pthread_cond_broadcast.S:
+	Remove redundant code. Fix cfi offsets.
+	* sysdeps/unix/sysv/linux/i386/i486/pthread_cond_signal.S:
+	Fix cfi offsets.
+
+2009-11-17  Ulrich Drepper  <drepper@redhat.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/pthread_cond_timedwait.S: Minimally
+	reduce size of unwind info.
+
+	* sysdeps/unix/sysv/linux/i386/i486/pthread_cond_wait.S: Convert to use
+	cfi directives.
+	* sysdeps/unix/sysv/linux/i386/i486/pthread_cond_timedwait.S: Likewise.
+	Based on a patch by Dinakar Guniguntala <dino@in.ibm.com>.
+
+2009-11-03  Andreas Schwab  <schwab@linux-m68k.org>
+
+	[BZ #4457]
+	* sysdeps/pthread/unwind-resume.c: Include <libgcc_s.h> and use
+	LIBGCC_S_SO.
+	* sysdeps/pthread/unwind-forcedunwind.c: Likewise.
+
+2009-10-30  Ulrich Drepper  <drepper@redhat.com>
+
+	* tst-sem11.c (main): Rewrite to avoid aliasing problems.
+
+	[BZ #3270]
+	* allocatestack.c (__nptl_setxid): Perform the operation in multiple
+	steps to avoid races with creation and terminations.
+	* nptl-init.c (sighandler_setxid): Adjust.
+	Patch by Daniel Jacobowitz.
+
 2009-09-07  Andreas Schwab  <schwab@redhat.com>
 
 	* sysdeps/pthread/bits/libc-lock.h (BP_SYM): Remove space before paren.

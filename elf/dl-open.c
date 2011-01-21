@@ -1,5 +1,5 @@
 /* Load a shared object at runtime, relocate it, and run its initializer.
-   Copyright (C) 1996-2007, 2009 Free Software Foundation, Inc.
+   Copyright (C) 1996-2007, 2009, 2010 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -40,7 +40,8 @@
 extern ElfW(Addr) _dl_sysdep_start (void **start_argptr,
 				    void (*dl_main) (const ElfW(Phdr) *phdr,
 						     ElfW(Word) phnum,
-						     ElfW(Addr) *user_entry));
+						     ElfW(Addr) *user_entry,
+						     ElfW(auxv_t) *auxv));
 weak_extern (BP_SYM (_dl_sysdep_start))
 
 extern int __libc_multiple_libcs;	/* Defined in init-first.c.  */
@@ -220,38 +221,9 @@ dl_open_worker (void *a)
 
   assert (_dl_debug_initialize (0, args->nsid)->r_state == RT_CONSISTENT);
 
-  /* Maybe we have to expand a DST.  */
-  if (__builtin_expect (dst != NULL, 0))
-    {
-      size_t len = strlen (file);
-
-      /* Determine how much space we need.  We have to allocate the
-	 memory locally.  */
-      size_t required = DL_DST_REQUIRED (call_map, file, len,
-					 _dl_dst_count (dst, 0));
-
-      /* Get space for the new file name.  */
-      char *new_file = (char *) alloca (required + 1);
-
-      /* Generate the new file name.  */
-      _dl_dst_substitute (call_map, file, new_file, 0);
-
-      /* If the substitution failed don't try to load.  */
-      if (*new_file == '\0')
-	_dl_signal_error (0, "dlopen", NULL,
-			  N_("empty dynamic string token substitution"));
-
-      /* Now we have a new file name.  */
-      file = new_file;
-
-      /* It does not matter whether call_map is set even if we
-	 computed it only because of the DST.  Since the path contains
-	 a slash the value is not used.  See dl-load.c.  */
-    }
-
   /* Load the named object.  */
   struct link_map *new;
-  args->map = new = _dl_map_object (call_map, file, 0, lt_loaded, 0,
+  args->map = new = _dl_map_object (call_map, file, lt_loaded, 0,
 				    mode | __RTLD_CALLMAP, args->nsid);
 
   /* If the pointer returned is NULL this means the RTLD_NOLOAD flag is
@@ -346,8 +318,8 @@ dl_open_worker (void *a)
 	    {
 	      /* If this here is the shared object which we want to profile
 		 make sure the profile is started.  We can find out whether
-	         this is necessary or not by observing the `_dl_profile_map'
-	         variable.  If was NULL but is not NULL afterwars we must
+		 this is necessary or not by observing the `_dl_profile_map'
+		 variable.  If was NULL but is not NULL afterwars we must
 		 start the profiling.  */
 	      struct link_map *old_profile_map = GL(dl_profile_map);
 

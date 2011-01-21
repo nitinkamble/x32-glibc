@@ -1,4 +1,4 @@
-/* Copyright (C) 1995, 1997-2000, 2001, 2002, 2003, 2006
+/* Copyright (C) 1995, 1997-2000, 2001, 2002, 2003, 2006, 2010
    Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
@@ -53,12 +53,15 @@ _IO_vdprintf (d, format, arg)
       INTUSE(_IO_un_link) (&tmpfil);
       return EOF;
     }
-  tmpfil.file._IO_file_flags =
-    (_IO_mask_flags (&tmpfil.file, _IO_NO_READS,
-		     _IO_NO_READS+_IO_NO_WRITES+_IO_IS_APPENDING)
-     | _IO_DELETE_DONT_CLOSE);
+  tmpfil.file._flags |= _IO_DELETE_DONT_CLOSE;
+
+  _IO_mask_flags (&tmpfil.file, _IO_NO_READS,
+		  _IO_NO_READS+_IO_NO_WRITES+_IO_IS_APPENDING);
 
   done = INTUSE(_IO_vfprintf) (&tmpfil.file, format, arg);
+
+  if (done != EOF && _IO_do_flush (&tmpfil.file) == EOF)
+    done = EOF;
 
   _IO_FINISH (&tmpfil.file);
 

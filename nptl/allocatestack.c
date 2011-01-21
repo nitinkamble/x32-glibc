@@ -1,4 +1,4 @@
-/* Copyright (C) 2002-2007, 2009 Free Software Foundation, Inc.
+/* Copyright (C) 2002-2007, 2009, 2010 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Ulrich Drepper <drepper@redhat.com>, 2002.
 
@@ -213,6 +213,9 @@ get_cached_stack (size_t *sizep, void **memp)
       return NULL;
     }
 
+  /* Don't allow setxid until cloned.  */
+  result->setxid_futex = -1;
+
   /* Dequeue the entry.  */
   stack_list_del (&result->list);
 
@@ -380,7 +383,7 @@ allocate_stack (const struct pthread_attr *attr, struct pthread **pdp,
 			       - TLS_TCB_SIZE - adj);
 #elif TLS_DTV_AT_TP
       pd = (struct pthread *) (((uintptr_t) attr->stackaddr
-			        - __static_tls_size - adj)
+				- __static_tls_size - adj)
 			       - TLS_PRE_TCB_SIZE);
 #endif
 
@@ -417,6 +420,9 @@ allocate_stack (const struct pthread_attr *attr, struct pthread **pdp,
 
       /* The process ID is also the same as that of the caller.  */
       pd->pid = THREAD_GETMEM (THREAD_SELF, pid);
+
+      /* Don't allow setxid until cloned.  */
+      pd->setxid_futex = -1;
 
       /* Allocate the DTV for this thread.  */
       if (_dl_allocate_tls (TLS_TPADJ (pd)) == NULL)
@@ -546,13 +552,16 @@ allocate_stack (const struct pthread_attr *attr, struct pthread **pdp,
 #ifndef __ASSUME_PRIVATE_FUTEX
 	  /* The thread must know when private futexes are supported.  */
 	  pd->header.private_futex = THREAD_GETMEM (THREAD_SELF,
-                                                    header.private_futex);
+						    header.private_futex);
 #endif
 
 #ifdef NEED_DL_SYSINFO
 	  /* Copy the sysinfo value from the parent.  */
 	  THREAD_SYSINFO(pd) = THREAD_SELF_SYSINFO;
 #endif
+
+	  /* Don't allow setxid until cloned.  */
+	  pd->setxid_futex = -1;
 
 	  /* The process ID is also the same as that of the caller.  */
 	  pd->pid = THREAD_GETMEM (THREAD_SELF, pid);
@@ -965,22 +974,60 @@ __find_thread_by_id (pid_t tid)
 
 static void
 internal_function
+setxid_mark_thread (struct xid_command *cmdp, struct pthread *t)
+{
+  int ch;
+
+  /* Wait until this thread is cloned.  */
+  if (t->setxid_futex == -1
+      && ! atomic_compare_and_exchange_bool_acq (&t->setxid_futex, -2, -1))
+    do
+      lll_futex_wait (&t->setxid_futex, -2, LLL_PRIVATE);
+    while (t->setxid_futex == -2);
+
+  /* Don't let the thread exit before the setxid handler runs.  */
+  t->setxid_futex = 0;
+
+  do
+    {
+      ch = t->cancelhandling;
+
+      /* If the thread is exiting right now, ignore it.  */
+      if ((ch & EXITING_BITMASK) != 0)
+	return;
+    }
+  while (atomic_compare_and_exchange_bool_acq (&t->cancelhandling,
+					       ch | SETXID_BITMASK, ch));
+}
+
+
+static void
+internal_function
+setxid_unmark_thread (struct xid_command *cmdp, struct pthread *t)
+{
+  int ch;
+
+  do
+    {
+      ch = t->cancelhandling;
+      if ((ch & SETXID_BITMASK) == 0)
+	return;
+    }
+  while (atomic_compare_and_exchange_bool_acq (&t->cancelhandling,
+					       ch & ~SETXID_BITMASK, ch));
+
+  /* Release the futex just in case.  */
+  t->setxid_futex = 1;
+  lll_futex_wake (&t->setxid_futex, 1, LLL_PRIVATE);
+}
+
+
+static int
+internal_function
 setxid_signal_thread (struct xid_command *cmdp, struct pthread *t)
 {
-  if (! IS_DETACHED (t))
-    {
-      int ch;
-      do
-	{
-	  ch = t->cancelhandling;
-
-	  /* If the thread is exiting right now, ignore it.  */
-	  if ((ch & EXITING_BITMASK) != 0)
-	    return;
-	}
-      while (atomic_compare_and_exchange_bool_acq (&t->cancelhandling,
-						   ch | SETXID_BITMASK, ch));
-    }
+  if ((t->cancelhandling & SETXID_BITMASK) == 0)
+    return 0;
 
   int val;
   INTERNAL_SYSCALL_DECL (err);
@@ -997,8 +1044,14 @@ setxid_signal_thread (struct xid_command *cmdp, struct pthread *t)
     val = INTERNAL_SYSCALL (tkill, err, 2, t->tid, SIGSETXID);
 #endif
 
+  /* If this failed, it must have had not started yet or else exited.  */
   if (!INTERNAL_SYSCALL_ERROR_P (val, err))
-    atomic_increment (&cmdp->cntr);
+    {
+      atomic_increment (&cmdp->cntr);
+      return 1;
+    }
+  else
+    return 0;
 }
 
 
@@ -1006,6 +1059,7 @@ int
 attribute_hidden
 __nptl_setxid (struct xid_command *cmdp)
 {
+  int signalled;
   int result;
   lll_lock (stack_cache_lock, LLL_PRIVATE);
 
@@ -1022,7 +1076,7 @@ __nptl_setxid (struct xid_command *cmdp)
       if (t == self)
 	continue;
 
-      setxid_signal_thread (cmdp, t);
+      setxid_mark_thread (cmdp, t);
     }
 
   /* Now the list with threads using user-allocated stacks.  */
@@ -1032,14 +1086,61 @@ __nptl_setxid (struct xid_command *cmdp)
       if (t == self)
 	continue;
 
-      setxid_signal_thread (cmdp, t);
+      setxid_mark_thread (cmdp, t);
     }
 
-  int cur = cmdp->cntr;
-  while (cur != 0)
+  /* Iterate until we don't succeed in signalling anyone.  That means
+     we have gotten all running threads, and their children will be
+     automatically correct once started.  */
+  do
     {
-      lll_futex_wait (&cmdp->cntr, cur, LLL_PRIVATE);
-      cur = cmdp->cntr;
+      signalled = 0;
+
+      list_for_each (runp, &stack_used)
+	{
+	  struct pthread *t = list_entry (runp, struct pthread, list);
+	  if (t == self)
+	    continue;
+
+	  signalled += setxid_signal_thread (cmdp, t);
+	}
+
+      list_for_each (runp, &__stack_user)
+	{
+	  struct pthread *t = list_entry (runp, struct pthread, list);
+	  if (t == self)
+	    continue;
+
+	  signalled += setxid_signal_thread (cmdp, t);
+	}
+
+      int cur = cmdp->cntr;
+      while (cur != 0)
+	{
+	  lll_futex_wait (&cmdp->cntr, cur, LLL_PRIVATE);
+	  cur = cmdp->cntr;
+	}
+    }
+  while (signalled != 0);
+
+  /* Clean up flags, so that no thread blocks during exit waiting
+     for a signal which will never come.  */
+  list_for_each (runp, &stack_used)
+    {
+      struct pthread *t = list_entry (runp, struct pthread, list);
+      if (t == self)
+	continue;
+
+      setxid_unmark_thread (cmdp, t);
+    }
+
+  list_for_each (runp, &__stack_user)
+    {
+      struct pthread *t = list_entry (runp, struct pthread, list);
+      if (t == self)
+	continue;
+
+      setxid_unmark_thread (cmdp, t);
     }
 
   /* This must be last, otherwise the current thread might not have

@@ -1,7 +1,7 @@
 /* @(#)mount.x	2.1 88/08/01 4.0 RPCSRC */
-/* @(#)mount.x 1.2 87/09/18 Copyr 1987 Sun Micro */
 
 /*
+ * Copyright (c) 2010, Oracle America, Inc.
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
  * met:
@@ -12,7 +12,7 @@
  *       copyright notice, this list of conditions and the following
  *       disclaimer in the documentation and/or other materials
  *       provided with the distribution.
- *     * Neither the name of Sun Microsystems, Inc. nor the names of its
+ *     * Neither the name of the "Oracle America, Inc." nor the names of its
  *       contributors may be used to endorse or promote products derived
  *       from this software without specific prior written permission.
  *
@@ -114,7 +114,7 @@ program MOUNTPROG {
 
 		/*
 		 * If fhs_status is 0, then fhs_fhandle contains the
-	 	 * file handle for the directory. This file handle may
+		 * file handle for the directory. This file handle may
 		 * be used in the NFS protocol. This procedure also adds
 		 * a new entry to the mount list for this client mounting
 		 * the directory.

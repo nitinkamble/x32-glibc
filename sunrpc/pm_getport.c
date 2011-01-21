@@ -2,7 +2,7 @@
  * pmap_getport.c
  * Client interface to pmap rpc service.
  *
- * Copyright (C) 1984, Sun Microsystems, Inc.
+ * Copyright (c) 2010, Oracle America, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -14,7 +14,7 @@
  *       copyright notice, this list of conditions and the following
  *       disclaimer in the documentation and/or other materials
  *       provided with the distribution.
- *     * Neither the name of Sun Microsystems, Inc. nor the names of its
+ *     * Neither the name of the "Oracle America, Inc." nor the names of its
  *       contributors may be used to endorse or promote products derived
  *       from this software without specific prior written permission.
  *
@@ -38,11 +38,6 @@
 #include <rpc/pmap_prot.h>
 #include <rpc/pmap_clnt.h>
 #include <sys/socket.h>
-
-static const struct timeval timeout =
-{5, 0};
-static const struct timeval tottimeout =
-{60, 0};
 
 /*
  * Create a socket that is locally bound to a non-reserve port. For
@@ -81,16 +76,24 @@ __get_socket (struct sockaddr_in *saddr)
 
 /*
  * Find the mapped port for program,version.
+ * Internal version with additional parameters.
  * Calls the pmap service remotely to do the lookup.
  * Returns 0 if no map exists.
  */
 u_short
-pmap_getport (address, program, version, protocol)
+internal_function
+__libc_rpc_getport (address, program, version, protocol, timeout_sec,
+		    tottimeout_sec)
      struct sockaddr_in *address;
      u_long program;
      u_long version;
      u_int protocol;
+     time_t timeout_sec;
+     time_t tottimeout_sec;
 {
+  const struct timeval timeout = {timeout_sec, 0};
+  const struct timeval tottimeout = {tottimeout_sec, 0};
+
   u_short port = 0;
   int socket = -1;
   CLIENT *client;
@@ -136,5 +139,22 @@ pmap_getport (address, program, version, protocol)
     (void) __close (socket);
   address->sin_port = 0;
   return port;
+}
+libc_hidden_def (__libc_rpc_getport)
+
+
+/*
+ * Find the mapped port for program,version.
+ * Calls the pmap service remotely to do the lookup.
+ * Returns 0 if no map exists.
+ */
+u_short
+pmap_getport (address, program, version, protocol)
+     struct sockaddr_in *address;
+     u_long program;
+     u_long version;
+     u_int protocol;
+{
+  return __libc_rpc_getport (address, program, version, protocol, 5, 60);
 }
 libc_hidden_def (pmap_getport)

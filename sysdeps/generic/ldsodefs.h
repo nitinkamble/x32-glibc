@@ -1,5 +1,5 @@
 /* Run-time dynamic linker data structures for loaded ELF shared objects.
-   Copyright (C) 1995-2006, 2007, 2008, 2009 Free Software Foundation, Inc.
+   Copyright (C) 1995-2009, 2010 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -416,6 +416,10 @@ struct rtld_global
      the loaded object might as well require a call to this function.
      At this time it is not anymore a problem to modify the tables.  */
   __rtld_lock_define_recursive (EXTERN, _dl_load_lock)
+  /* This lock is used to keep __dl_iterate_phdr from inspecting the
+     list of loaded objects while an object is added to or removed
+     from that list.  */
+  __rtld_lock_define_recursive (EXTERN, _dl_load_write_lock)
 
   /* Incremented whenever something may have been added to dl_loaded.  */
   EXTERN unsigned long long _dl_load_adds;
@@ -748,7 +752,7 @@ extern int _dl_starting_up_internal attribute_hidden;
 #endif
 
 /* Random data provided by the kernel.  */
-extern void *_dl_random attribute_hidden;
+extern void *_dl_random attribute_hidden attribute_relro;
 
 /* OS-dependent function to open the zero-fill device.  */
 extern int _dl_sysdep_open_zero_fill (void); /* dl-sysdep.c */
@@ -820,11 +824,9 @@ extern void _dl_receive_error (receiver_fct fct, void (*operate) (void *),
 
 /* Open the shared object NAME and map in its segments.
    LOADER's DT_RPATH is used in searching for NAME.
-   If the object is already opened, returns its existing map.
-   For preloaded shared objects PRELOADED is set to a non-zero
-   value to allow additional security checks.  */
+   If the object is already opened, returns its existing map.  */
 extern struct link_map *_dl_map_object (struct link_map *loader,
-					const char *name, int preloaded,
+					const char *name,
 					int type, int trace_mode, int mode,
 					Lmid_t nsid)
      internal_function attribute_hidden;
@@ -889,8 +891,11 @@ extern lookup_t _dl_lookup_symbol_x (const char *undef,
 extern ElfW(Addr) _dl_symbol_value (struct link_map *map, const char *name)
      internal_function;
 
-/* Allocate a `struct link_map' for a new object being loaded,
-   and enter it into the _dl_main_map list.  */
+/* Add the new link_map NEW to the end of the namespace list.  */
+extern void _dl_add_to_namespace_list (struct link_map *new, Lmid_t nsid)
+     internal_function attribute_hidden;
+
+/* Allocate a `struct link_map' for a new object being loaded.  */
 extern struct link_map *_dl_new_object (char *realname, const char *libname,
 					int type, struct link_map *loader,
 					int mode, Lmid_t nsid)
@@ -1015,7 +1020,8 @@ extern void *_dl_sysdep_read_whole_file (const char *file, size_t *sizep,
 extern ElfW(Addr) _dl_sysdep_start (void **start_argptr,
 				    void (*dl_main) (const ElfW(Phdr) *phdr,
 						     ElfW(Word) phnum,
-						     ElfW(Addr) *user_entry))
+						     ElfW(Addr) *user_entry,
+						     ElfW(auxv_t) *auxv))
      attribute_hidden;
 
 extern void _dl_sysdep_start_cleanup (void)

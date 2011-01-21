@@ -600,7 +600,8 @@ gaih_inet (const char *name, const struct gaih_service *service,
 	      && ++__nss_not_use_nscd_hosts > NSS_NSCD_RETRY)
 	    __nss_not_use_nscd_hosts = 0;
 
-	  if (!__nss_not_use_nscd_hosts)
+	  if (!__nss_not_use_nscd_hosts
+	      && !__nss_database_custom[NSS_DBSIDX_hosts])
 	    {
 	      /* Try to use nscd.  */
 	      struct nscd_ai_result *air = NULL;
@@ -702,6 +703,7 @@ gaih_inet (const char *name, const struct gaih_service *service,
 
 	  while (!no_more)
 	    {
+	      no_data = 0;
 	      nss_gethostbyname4_r fct4
 		= __nss_lookup_function (nip, "gethostbyname4_r");
 	      if (fct4 != NULL)
@@ -719,13 +721,8 @@ gaih_inet (const char *name, const struct gaih_service *service,
 		      if (status != NSS_STATUS_TRYAGAIN
 			  || rc != ERANGE || herrno != NETDB_INTERNAL)
 			{
-			  if (herrno == NETDB_INTERNAL)
-			    {
-			      __set_h_errno (herrno);
-			      _res.options = old_res_options;
-			      return -EAI_SYSTEM;
-			    }
-			  if (herrno == TRY_AGAIN)
+			  if (status == NSS_STATUS_TRYAGAIN
+			      && herrno == TRY_AGAIN)
 			    no_data = EAI_AGAIN;
 			  else
 			    no_data = herrno == NO_DATA;
@@ -821,17 +818,18 @@ gaih_inet (const char *name, const struct gaih_service *service,
 				    canon = name;
 				}
 			    }
-
-			  break;
+			  status = NSS_STATUS_SUCCESS;
 			}
-
-		      /* We can have different states for AF_INET and
-			 AF_INET6.  Try to find a useful one for both.  */
-		      if (inet6_status == NSS_STATUS_TRYAGAIN)
-			status = NSS_STATUS_TRYAGAIN;
-		      else if (status == NSS_STATUS_UNAVAIL
-			       && inet6_status != NSS_STATUS_UNAVAIL)
-			status = inet6_status;
+		      else
+			{
+			  /* We can have different states for AF_INET and
+			     AF_INET6.  Try to find a useful one for both.  */
+			  if (inet6_status == NSS_STATUS_TRYAGAIN)
+			    status = NSS_STATUS_TRYAGAIN;
+			  else if (status == NSS_STATUS_UNAVAIL
+				   && inet6_status != NSS_STATUS_UNAVAIL)
+			    status = inet6_status;
+			}
 		    }
 		  else
 		    status = NSS_STATUS_UNAVAIL;
@@ -967,6 +965,7 @@ gaih_inet (const char *name, const struct gaih_service *service,
 		   make a copy.  */
 		if (out == canon)
 		  goto make_copy;
+		canon = out;
 	      }
 	    else
 #endif

@@ -12,13 +12,13 @@ CFLAGS-malloc.c += -DMORECORE_CLEARS=2
 endif
 
 ifeq ($(subdir),socket)
-sysdep_routines += internal_accept4
+sysdep_routines += internal_accept4 recvmmsg internal_recvmmsg
 endif
 
 ifeq ($(subdir),misc)
 sysdep_routines += sysctl clone llseek umount umount2 readahead \
 		   setfsuid setfsgid makedev epoll_pwait signalfd \
-		   eventfd eventfd_read eventfd_write
+		   eventfd eventfd_read eventfd_write prlimit
 
 CFLAGS-gethostid.c = -fexceptions
 
@@ -30,7 +30,7 @@ sysdep_headers += sys/mount.h sys/acct.h sys/sysctl.h \
 		  scsi/sg.h scsi/scsi.h scsi/scsi_ioctl.h sys/pci.h \
 		  sys/ultrasound.h sys/raw.h sys/personality.h sys/epoll.h \
 		  bits/a.out.h sys/inotify.h sys/signalfd.h sys/eventfd.h \
-		  sys/timerfd.h
+		  sys/timerfd.h sys/fanotify.h
 
 install-others += $(inst_includedir)/bits/syscall.h
 
@@ -84,8 +84,8 @@ endif
 $(inst_includedir)/bits/syscall.h: $(objpfx)syscall-list.h $(+force)
 	$(make-target-directory)
 	if test -r $@ && cmp -s $< $@; \
-        then echo 'bits/syscall.h unchanged'; \
-        else $(INSTALL_DATA) $< $@; fi
+	then echo 'bits/syscall.h unchanged'; \
+	else $(INSTALL_DATA) $< $@; fi
 
 ifndef no_deps
 # Get the generated list of dependencies (probably /usr/include/asm/unistd.h).
@@ -97,7 +97,7 @@ endif
 ifeq ($(subdir),time)
 sysdep_headers += sys/timex.h
 
-sysdep_routines += ntp_gettime
+sysdep_routines += ntp_gettime ntp_gettimex
 endif
 
 ifeq ($(subdir),socket)

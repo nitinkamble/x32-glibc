@@ -1,4 +1,4 @@
-# Copyright (C) 2002-2008,2009 Free Software Foundation, Inc.
+# Copyright (C) 2002-2008,2009,2010 Free Software Foundation, Inc.
 # This file is part of the GNU C Library.
 
 # The GNU C Library is free software; you can redistribute it and/or
@@ -124,7 +124,9 @@ libpthread-routines = nptl-init vars events version \
 		      pthread_mutexattr_setprotocol \
 		      pthread_mutexattr_getprioceiling \
 		      pthread_mutexattr_setprioceiling tpp \
-		      pthread_mutex_getprioceiling pthread_mutex_setprioceiling
+		      pthread_mutex_getprioceiling \
+		      pthread_mutex_setprioceiling \
+		      pthread_setname pthread_getname
 #		      pthread_setuid pthread_seteuid pthread_setreuid \
 #		      pthread_setresuid \
 #		      pthread_setgid pthread_setegid pthread_setregid \
@@ -216,7 +218,7 @@ tests = tst-typesizes \
 	tst-once1 tst-once2 tst-once3 tst-once4 \
 	tst-key1 tst-key2 tst-key3 tst-key4 \
 	tst-sem1 tst-sem2 tst-sem3 tst-sem4 tst-sem5 tst-sem6 tst-sem7 \
-	tst-sem8 tst-sem9 tst-sem10 tst-sem11 tst-sem12 \
+	tst-sem8 tst-sem9 tst-sem10 tst-sem11 tst-sem12 tst-sem13 \
 	tst-barrier1 tst-barrier2 tst-barrier3 tst-barrier4 \
 	tst-align tst-align2 tst-align3 \
 	tst-basic1 tst-basic2 tst-basic3 tst-basic4 tst-basic5 tst-basic6 \
@@ -254,6 +256,7 @@ tests = tst-typesizes \
 	tst-sched1 \
 	tst-backtrace1 \
 	tst-oddstacklimit \
+	tst-abstime \
 	tst-vfork1 tst-vfork2 tst-vfork1x tst-vfork2x \
 	tst-getpid1 tst-getpid2 tst-getpid3 \
 	tst-initializers1 $(patsubst %,tst-initializers1-%,c89 gnu89 c99 gnu99)
@@ -297,7 +300,7 @@ modules-names = tst-atfork2mod tst-tls3mod tst-tls4moda tst-tls4modb \
 		tst-tls5modd tst-tls5mode tst-tls5modf \
 		tst-_res1mod1 tst-_res1mod2 tst-execstack-mod tst-fini1mod
 extra-test-objs += $(addsuffix .os,$(strip $(modules-names))) tst-cleanup4aux.o
-test-extras += $(modules-names)
+test-extras += $(modules-names) tst-cleanup4aux
 test-modules = $(addprefix $(objpfx),$(addsuffix .so,$(modules-names)))
 
 tst-atfork2mod.so-no-z-defs = yes
@@ -489,7 +492,8 @@ $(objpfx)tst-rwlock14: $(common-objpfx)rt/librt.so
 $(objpfx)tst-_res1mod2.so: $(objpfx)tst-_res1mod1.so
 LDFLAGS-tst-_res1mod1.so = -Wl,-soname,tst-_res1mod1.so
 LDFLAGS-tst-_res1mod2.so = -Wl,-soname,tst-_res1mod2.so
-$(objpfx)tst-_res1: $(objpfx)tst-_res1mod2.so $(shared-thread-library)
+$(objpfx)tst-_res1: $(objpfx)tst-_res1mod1.so $(objpfx)tst-_res1mod2.so \
+		    $(shared-thread-library)
 else
 $(objpfx)tst-cond11: $(common-objpfx)rt/librt.a
 $(objpfx)tst-cond19: $(common-objpfx)rt/librt.a

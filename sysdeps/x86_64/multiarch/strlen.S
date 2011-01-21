@@ -1,5 +1,5 @@
 /* strlen(str) -- determine the length of the string STR.
-   Copyright (C) 2009 Free Software Foundation, Inc.
+   Copyright (C) 2009, 2010 Free Software Foundation, Inc.
    Contributed by Ulrich Drepper <drepper@redhat.com>.
    This file is part of the GNU C Library.
 
@@ -19,7 +19,7 @@
    02111-1307 USA.  */
 
 #include <sysdep.h>
-#include <ifunc-defines.h>
+#include <init-arch.h>
 
 
 /* Define multiple versions only for the definition in libc and for
@@ -33,47 +33,15 @@ ENTRY(strlen)
 	jne	1f
 	call	__init_cpu_features
 1:	leaq	__strlen_sse2(%rip), %rax
-	testl	$(1<<20), __cpu_features+CPUID_OFFSET+COMMON_CPUID_INDEX_1*CPUID_SIZE+CPUID_ECX_OFFSET(%rip)
+	testl	$bit_SSE4_2, __cpu_features+CPUID_OFFSET+index_SSE4_2(%rip)
 	jz	2f
 	leaq	__strlen_sse42(%rip), %rax
-2:	ret
+	ret
+2:	testl	$bit_Slow_BSF, __cpu_features+FEATURE_OFFSET+index_Slow_BSF(%rip)
+	jz	3f
+	leaq    __strlen_no_bsf(%rip), %rax
+3:	ret
 END(strlen)
-
-
-	.section .text.sse4.2,"ax",@progbits
-	.align 	16
-	.type	__strlen_sse42, @function
-__strlen_sse42:
-	cfi_startproc
-	CALL_MCOUNT
-	pxor	%xmm2, %xmm2
-	movq	%rdi, %rcx
-	movq	%rdi, %r8
-	andq	$~15, %rdi
-	movdqa	%xmm2, %xmm1
-	pcmpeqb	(%rdi), %xmm2
-	orl	$0xffffffff, %esi
-	subq	%rdi, %rcx
-	shll	%cl, %esi
-	pmovmskb %xmm2, %edx
-	andl	%esi, %edx
-	jnz	1f
-
-2:	pcmpistri $0x08, 16(%rdi), %xmm1
-	leaq	16(%rdi), %rdi
-	jnz	2b
-
-	leaq	(%rdi,%rcx), %rax
-	subq	%r8, %rax
-	ret
-
-1:	subq	%r8, %rdi
-	bsfl	%edx, %eax
-	addq	%rdi, %rax
-	ret
-	cfi_endproc
-	.size	__strlen_sse42, .-__strlen_sse42
-
 
 # undef ENTRY
 # define ENTRY(name) \

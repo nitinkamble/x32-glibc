@@ -1,5 +1,5 @@
 /* Malloc implementation for multiple threads without lock contention.
-   Copyright (C) 1996-2006, 2007, 2008, 2009 Free Software Foundation, Inc.
+   Copyright (C) 1996-2009, 2010 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Wolfram Gloger <wg@malloc.de>
    and Doug Lea <dl@cs.oswego.edu>, 2001.
@@ -148,8 +148,7 @@
   Thread-safety: thread-safe unless NO_THREADS is defined
 
   Compliance: I believe it is compliant with the 1997 Single Unix Specification
-       (See http://www.opennc.org). Also SVID/XPG, ANSI C, and probably
-       others as well.
+       Also SVID/XPG, ANSI C, and probably others as well.
 
 * Synopsis of compile-time options:
 
@@ -2351,7 +2350,8 @@ typedef struct malloc_chunk* mfastbinptr;
 */
 
 #define set_max_fast(s) \
-  global_max_fast = ((s) == 0)? SMALLBIN_WIDTH: request2size(s)
+  global_max_fast = (((s) == 0)						      \
+		     ? SMALLBIN_WIDTH: ((s + SIZE_SZ) & ~MALLOC_ALIGN_MASK))
 #define get_max_fast() global_max_fast
 
 
@@ -2831,7 +2831,7 @@ static void do_check_malloc_state(mstate av)
   max_fast_bin = fastbin_index(get_max_fast ());
 
   for (i = 0; i < NFASTBINS; ++i) {
-    p = av->fastbins[i];
+    p = fastbin (av, i);
 
     /* The following test can only be performed for the main arena.
        While mallopt calls malloc_consolidate to get rid of all fast
@@ -3466,7 +3466,7 @@ static int sYSTRIm(pad, av) size_t pad; mstate av;
   top_size = chunksize(av->top);
 
   /* Release in pagesize units, keeping at least one page */
-  extra = ((top_size - pad - MINSIZE + (pagesz-1)) / pagesz - 1) * pagesz;
+  extra = (top_size - pad - MINSIZE - 1) & ~(pagesz - 1);
 
   if (extra > 0) {
 
@@ -3933,9 +3933,10 @@ public_vALLOc(size_t bytes)
   if(!p) {
     /* Maybe the failure is due to running out of mmapped areas. */
     if(ar_ptr != &main_arena) {
-      (void)mutex_lock(&main_arena.mutex);
-      p = _int_memalign(&main_arena, pagesz, bytes);
-      (void)mutex_unlock(&main_arena.mutex);
+      ar_ptr = &main_arena;
+      (void)mutex_lock(&ar_ptr->mutex);
+      p = _int_memalign(ar_ptr, pagesz, bytes);
+      (void)mutex_unlock(&ar_ptr->mutex);
     } else {
 #if USE_ARENAS
       /* ... or sbrk() has failed and there is still a chance to mmap() */
@@ -3978,9 +3979,10 @@ public_pVALLOc(size_t bytes)
   if(!p) {
     /* Maybe the failure is due to running out of mmapped areas. */
     if(ar_ptr != &main_arena) {
-      (void)mutex_lock(&main_arena.mutex);
-      p = _int_memalign(&main_arena, pagesz, rounded_bytes);
-      (void)mutex_unlock(&main_arena.mutex);
+      ar_ptr = &main_arena;
+      (void)mutex_lock(&ar_ptr->mutex);
+      p = _int_memalign(ar_ptr, pagesz, rounded_bytes);
+      (void)mutex_unlock(&ar_ptr->mutex);
     } else {
 #if USE_ARENAS
       /* ... or sbrk() has failed and there is still a chance to mmap() */
@@ -4304,6 +4306,7 @@ _int_malloc(mstate av, size_t bytes)
 	  errstr = "malloc(): memory corruption (fast)";
 	errout:
 	  malloc_printerr (check_action, errstr, chunk2mem (victim));
+	  return NULL;
 	}
 #ifndef ATOMIC_FASTBINS
       *fb = victim->fd;
@@ -4847,14 +4850,16 @@ _int_free(mstate av, mchunkptr p)
       }
 
     if (__builtin_expect (perturb_byte, 0))
-      free_perturb (chunk2mem(p), size - SIZE_SZ);
+      free_perturb (chunk2mem(p), size - 2 * SIZE_SZ);
 
     set_fastchunks(av);
-    fb = &fastbin (av, fastbin_index(size));
+    unsigned int idx = fastbin_index(size);
+    fb = &fastbin (av, idx);
 
 #ifdef ATOMIC_FASTBINS
     mchunkptr fd;
     mchunkptr old = *fb;
+    unsigned int old_idx = ~0u;
     do
       {
 	/* Another simple check: make sure the top of the bin is not the
@@ -4864,15 +4869,29 @@ _int_free(mstate av, mchunkptr p)
 	    errstr = "double free or corruption (fasttop)";
 	    goto errout;
 	  }
+	if (old != NULL)
+	  old_idx = fastbin_index(chunksize(old));
 	p->fd = fd = old;
       }
     while ((old = catomic_compare_and_exchange_val_rel (fb, p, fd)) != fd);
+
+    if (fd != NULL && __builtin_expect (old_idx != idx, 0))
+      {
+	errstr = "invalid fastbin entry (free)";
+	goto errout;
+      }
 #else
     /* Another simple check: make sure the top of the bin is not the
        record we are going to add (i.e., double free).  */
     if (__builtin_expect (*fb == p, 0))
       {
 	errstr = "double free or corruption (fasttop)";
+	goto errout;
+      }
+    if (*fb != NULL
+	&& __builtin_expect (fastbin_index(chunksize(*fb)) != idx, 0))
+      {
+	errstr = "invalid fastbin entry (free)";
 	goto errout;
       }
 
@@ -4935,7 +4954,7 @@ _int_free(mstate av, mchunkptr p)
       }
 
     if (__builtin_expect (perturb_byte, 0))
-      free_perturb (chunk2mem(p), size - SIZE_SZ);
+      free_perturb (chunk2mem(p), size - 2 * SIZE_SZ);
 
     /* consolidate backward */
     if (!prev_inuse(p)) {
@@ -6369,16 +6388,19 @@ malloc_info (int options, FILE *fp)
 
     mbinptr bin = bin_at (ar_ptr, 1);
     struct malloc_chunk *r = bin->fd;
-    while (r != bin)
+    if (r != NULL)
       {
-	++sizes[NFASTBINS].count;
-	sizes[NFASTBINS].total += r->size;
-	sizes[NFASTBINS].from = MIN (sizes[NFASTBINS].from, r->size);
-	sizes[NFASTBINS].to = MAX (sizes[NFASTBINS].to, r->size);
-	r = r->fd;
+	while (r != bin)
+	  {
+	    ++sizes[NFASTBINS].count;
+	    sizes[NFASTBINS].total += r->size;
+	    sizes[NFASTBINS].from = MIN (sizes[NFASTBINS].from, r->size);
+	    sizes[NFASTBINS].to = MAX (sizes[NFASTBINS].to, r->size);
+	    r = r->fd;
+	  }
+	nblocks += sizes[NFASTBINS].count;
+	avail += sizes[NFASTBINS].total;
       }
-    nblocks += sizes[NFASTBINS].count;
-    avail += sizes[NFASTBINS].total;
 
     for (size_t i = 2; i < NBINS; ++i)
       {
@@ -6388,17 +6410,18 @@ malloc_info (int options, FILE *fp)
 	sizes[NFASTBINS - 1 + i].to = sizes[NFASTBINS - 1 + i].total
 	  = sizes[NFASTBINS - 1 + i].count = 0;
 
-	while (r != bin)
-	  {
-	    ++sizes[NFASTBINS - 1 + i].count;
-	    sizes[NFASTBINS - 1 + i].total += r->size;
-	    sizes[NFASTBINS - 1 + i].from = MIN (sizes[NFASTBINS - 1 + i].from,
+	if (r != NULL)
+	  while (r != bin)
+	    {
+	      ++sizes[NFASTBINS - 1 + i].count;
+	      sizes[NFASTBINS - 1 + i].total += r->size;
+	      sizes[NFASTBINS - 1 + i].from
+		= MIN (sizes[NFASTBINS - 1 + i].from, r->size);
+	      sizes[NFASTBINS - 1 + i].to = MAX (sizes[NFASTBINS - 1 + i].to,
 						 r->size);
-	    sizes[NFASTBINS - 1 + i].to = MAX (sizes[NFASTBINS - 1 + i].to,
-					       r->size);
 
-	    r = r->fd;
-	  }
+	      r = r->fd;
+	    }
 
 	if (sizes[NFASTBINS - 1 + i].count == 0)
 	  sizes[NFASTBINS - 1 + i].from = 0;
@@ -6460,6 +6483,9 @@ malloc_info (int options, FILE *fp)
     fputs ("</heap>\n", fp);
   }
 
+  if(__malloc_initialized < 0)
+    ptmalloc_init ();
+
   fputs ("<malloc version=\"1\">\n", fp);
 
   /* Iterate over all arenas currently in use.  */
@@ -6474,8 +6500,8 @@ malloc_info (int options, FILE *fp)
   fprintf (fp,
 	   "<total type=\"fast\" count=\"%zu\" size=\"%zu\"/>\n"
 	   "<total type=\"rest\" count=\"%zu\" size=\"%zu\"/>\n"
-	   "<system type=\"current\" size=\"%zu\n/>\n"
-	   "<system type=\"max\" size=\"%zu\n/>\n"
+	   "<system type=\"current\" size=\"%zu\"/>\n"
+	   "<system type=\"max\" size=\"%zu\"/>\n"
 	   "<aspace type=\"total\" size=\"%zu\"/>\n"
 	   "<aspace type=\"mprotect\" size=\"%zu\"/>\n"
 	   "</malloc>\n",

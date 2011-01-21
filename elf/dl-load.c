@@ -1,5 +1,5 @@
 /* Map in a shared object's segments from the file.
-   Copyright (C) 1995-2005, 2006, 2007, 2009 Free Software Foundation, Inc.
+   Copyright (C) 1995-2005, 2006, 2007, 2009, 2010 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -313,7 +313,7 @@ static char *
 expand_dynamic_string_token (struct link_map *l, const char *s)
 {
   /* We make two runs over the string.  First we determine how large the
-     resulting string is and then we copy it over.  Since this is now
+     resulting string is and then we copy it over.  Since this is no
      frequently executed operation we are looking here not for performance
      but rather for code size.  */
   size_t cnt;
@@ -391,7 +391,7 @@ fillin_rpath (char *rpath, struct r_search_path_elem **result, const char *sep,
       size_t len = strlen (cp);
 
       /* `strsep' can pass an empty string.  This has to be
-         interpreted as `use the current directory'. */
+	 interpreted as `use the current directory'. */
       if (len == 0)
 	{
 	  static const char curwd[] = "./";
@@ -787,9 +787,6 @@ _dl_init_paths (const char *llp)
     }
   else
     env_path_list.dirs = (void *) -1;
-
-  /* Remember the last search directory added at startup.  */
-  GLRO(dl_init_all_dirs) = GL(dl_all_dirs);
 }
 
 
@@ -801,19 +798,7 @@ lose (int code, int fd, const char *name, char *realname, struct link_map *l,
   /* The file might already be closed.  */
   if (fd != -1)
     (void) __close (fd);
-  if (l != NULL)
-    {
-      /* Remove the stillborn object from the list and free it.  */
-      assert (l->l_next == NULL);
-      if (l->l_prev == NULL)
-	/* No other module loaded. This happens only in the static library,
-	   or in rtld under --verify.  */
-	GL(dl_ns)[l->l_ns]._ns_loaded = NULL;
-      else
-	l->l_prev->l_next = NULL;
-      --GL(dl_ns)[l->l_ns]._ns_nloaded;
-      free (l);
-    }
+  free (l);
   free (realname);
 
   if (r != NULL)
@@ -897,6 +882,9 @@ _dl_map_object_from_fd (const char *name, int fd, struct filebuf *fbp,
       /* No need to bump the refcount of the real object, ld.so will
 	 never be unloaded.  */
       __close (fd);
+
+      /* Add the map for the mirrored object to the object list.  */
+      _dl_add_to_namespace_list (l, nsid);
 
       return l;
     }
@@ -996,8 +984,10 @@ _dl_map_object_from_fd (const char *name, int fd, struct filebuf *fbp,
 	}
     }
 
-  /* Presumed absent PT_GNU_STACK.  */
-  uint_fast16_t stack_flags = PF_R|PF_W|PF_X;
+   /* On most platforms presume that PT_GNU_STACK is absent and the stack is
+    * executable.  Other platforms default to a nonexecutable stack and don't
+    * need PT_GNU_STACK to do so.  */
+   uint_fast16_t stack_flags = DEFAULT_STACK_PERMS;
 
   {
     /* Scan the program header table, collecting its load commands.  */
@@ -1492,6 +1482,9 @@ cannot enable executable stack as shared object requires");
     add_name_to_object (l, ((const char *) D_PTR (l, l_info[DT_STRTAB])
 			    + l->l_info[DT_SONAME]->d_un.d_val));
 
+  /* Now that the object is fully initialized add it to the object list.  */
+  _dl_add_to_namespace_list (l, nsid);
+
 #ifdef SHARED
   /* Auditing checkpoint: we have a new object.  */
   if (__builtin_expect (GLRO(dl_naudit) > 0, 0)
@@ -1519,7 +1512,7 @@ cannot enable executable stack as shared object requires");
 /* Print search path.  */
 static void
 print_search_path (struct r_search_path_elem **list,
-                   const char *what, const char *name)
+		   const char *what, const char *name)
 {
   char buf[max_dirnamelen + max_capstrlen];
   int first = 1;
@@ -1569,11 +1562,11 @@ open_verify (const char *name, struct filebuf *fbp, struct link_map *loader,
 #ifndef VALID_ELF_HEADER
 # define VALID_ELF_HEADER(hdr,exp,size)	(memcmp (hdr, exp, size) == 0)
 # define VALID_ELF_OSABI(osabi)		(osabi == ELFOSABI_SYSV)
-# define VALID_ELF_ABIVERSION(ver)	(ver == 0)
+# define VALID_ELF_ABIVERSION(osabi,ver) (ver == 0)
 #elif defined MORE_ELF_HEADER_DATA
   MORE_ELF_HEADER_DATA;
 #endif
-  static const unsigned char expected[EI_PAD] =
+  static const unsigned char expected[EI_NIDENT] =
   {
     [EI_MAG0] = ELFMAG0,
     [EI_MAG1] = ELFMAG1,
@@ -1655,7 +1648,13 @@ open_verify (const char *name, struct filebuf *fbp, struct link_map *loader,
 
       /* See whether the ELF header is what we expect.  */
       if (__builtin_expect (! VALID_ELF_HEADER (ehdr->e_ident, expected,
-						EI_PAD), 0))
+						EI_ABIVERSION)
+			    || !VALID_ELF_ABIVERSION (ehdr->e_ident[EI_OSABI],
+						      ehdr->e_ident[EI_ABIVERSION])
+			    || memcmp (&ehdr->e_ident[EI_PAD],
+				       &expected[EI_PAD],
+				       EI_NIDENT - EI_PAD) != 0,
+			    0))
 	{
 	  /* Something is wrong.  */
 	  const Elf32_Word *magp = (const void *) ehdr->e_ident;
@@ -1695,8 +1694,12 @@ open_verify (const char *name, struct filebuf *fbp, struct link_map *loader,
 	     allowed here.  */
 	  else if (!VALID_ELF_OSABI (ehdr->e_ident[EI_OSABI]))
 	    errstring = N_("ELF file OS ABI invalid");
-	  else if (!VALID_ELF_ABIVERSION (ehdr->e_ident[EI_ABIVERSION]))
+	  else if (!VALID_ELF_ABIVERSION (ehdr->e_ident[EI_OSABI],
+					  ehdr->e_ident[EI_ABIVERSION]))
 	    errstring = N_("ELF file ABI version invalid");
+	  else if (memcmp (&ehdr->e_ident[EI_PAD], &expected[EI_PAD],
+			   EI_NIDENT - EI_PAD) != 0)
+	    errstring = N_("nonzero padding in e_ident");
 	  else
 	    /* Otherwise we don't know what went wrong.  */
 	    errstring = N_("internal error");
@@ -1802,7 +1805,7 @@ open_verify (const char *name, struct filebuf *fbp, struct link_map *loader,
    if MAY_FREE_DIRS is true.  */
 
 static int
-open_path (const char *name, size_t namelen, int preloaded,
+open_path (const char *name, size_t namelen, int secure,
 	   struct r_search_path_struct *sps, char **realname,
 	   struct filebuf *fbp, struct link_map *loader, int whatcode,
 	   bool *found_other_class)
@@ -1884,7 +1887,7 @@ open_path (const char *name, size_t namelen, int preloaded,
 	  /* Remember whether we found any existing directory.  */
 	  here_any |= this_dir->status[cnt] != nonexisting;
 
-	  if (fd != -1 && __builtin_expect (preloaded, 0)
+	  if (fd != -1 && __builtin_expect (secure, 0)
 	      && INTUSE(__libc_enable_secure))
 	    {
 	      /* This is an extra security effort to make sure nobody can
@@ -1953,7 +1956,7 @@ open_path (const char *name, size_t namelen, int preloaded,
 
 struct link_map *
 internal_function
-_dl_map_object (struct link_map *loader, const char *name, int preloaded,
+_dl_map_object (struct link_map *loader, const char *name,
 		int type, int trace_mode, int mode, Lmid_t nsid)
 {
   int fd;
@@ -2044,7 +2047,7 @@ _dl_map_object (struct link_map *loader, const char *name, int preloaded,
       fd = -1;
 
       /* When the object has the RUNPATH information we don't use any
-         RPATHs.  */
+	 RPATHs.  */
       if (loader == NULL || loader->l_info[DT_RUNPATH] == NULL)
 	{
 	  /* This is the executable's map (if there is one).  Make sure that
@@ -2057,7 +2060,8 @@ _dl_map_object (struct link_map *loader, const char *name, int preloaded,
 	  for (l = loader; l; l = l->l_loader)
 	    if (cache_rpath (l, &l->l_rpath_dirs, DT_RPATH, "RPATH"))
 	      {
-		fd = open_path (name, namelen, preloaded, &l->l_rpath_dirs,
+		fd = open_path (name, namelen, mode & __RTLD_SECURE,
+				&l->l_rpath_dirs,
 				&realname, &fb, loader, LA_SER_RUNPATH,
 				&found_other_class);
 		if (fd != -1)
@@ -2067,19 +2071,20 @@ _dl_map_object (struct link_map *loader, const char *name, int preloaded,
 	      }
 
 	  /* If dynamically linked, try the DT_RPATH of the executable
-             itself.  NB: we do this for lookups in any namespace.  */
+	     itself.  NB: we do this for lookups in any namespace.  */
 	  if (fd == -1 && !did_main_map
 	      && main_map != NULL && main_map->l_type != lt_loaded
 	      && cache_rpath (main_map, &main_map->l_rpath_dirs, DT_RPATH,
 			      "RPATH"))
-	    fd = open_path (name, namelen, preloaded, &main_map->l_rpath_dirs,
+	    fd = open_path (name, namelen, mode & __RTLD_SECURE,
+			    &main_map->l_rpath_dirs,
 			    &realname, &fb, loader ?: main_map, LA_SER_RUNPATH,
 			    &found_other_class);
 	}
 
       /* Try the LD_LIBRARY_PATH environment variable.  */
       if (fd == -1 && env_path_list.dirs != (void *) -1)
-	fd = open_path (name, namelen, preloaded, &env_path_list,
+	fd = open_path (name, namelen, mode & __RTLD_SECURE, &env_path_list,
 			&realname, &fb,
 			loader ?: GL(dl_ns)[LM_ID_BASE]._ns_loaded,
 			LA_SER_LIBPATH, &found_other_class);
@@ -2088,12 +2093,12 @@ _dl_map_object (struct link_map *loader, const char *name, int preloaded,
       if (fd == -1 && loader != NULL
 	  && cache_rpath (loader, &loader->l_runpath_dirs,
 			  DT_RUNPATH, "RUNPATH"))
-	fd = open_path (name, namelen, preloaded,
+	fd = open_path (name, namelen, mode & __RTLD_SECURE,
 			&loader->l_runpath_dirs, &realname, &fb, loader,
 			LA_SER_RUNPATH, &found_other_class);
 
       if (fd == -1
-	  && (__builtin_expect (! preloaded, 1)
+	  && (__builtin_expect (! (mode & __RTLD_SECURE), 1)
 	      || ! INTUSE(__libc_enable_secure)))
 	{
 	  /* Check the list of libraries in the file /etc/ld.so.cache,
@@ -2159,12 +2164,12 @@ _dl_map_object (struct link_map *loader, const char *name, int preloaded,
 	  && ((l = loader ?: GL(dl_ns)[nsid]._ns_loaded) == NULL
 	      || __builtin_expect (!(l->l_flags_1 & DF_1_NODEFLIB), 1))
 	  && rtld_search_dirs.dirs != (void *) -1)
-	fd = open_path (name, namelen, preloaded, &rtld_search_dirs,
+	fd = open_path (name, namelen, mode & __RTLD_SECURE, &rtld_search_dirs,
 			&realname, &fb, l, LA_SER_DEFAULT, &found_other_class);
 
       /* Add another newline when we are tracing the library loading.  */
       if (__builtin_expect (GLRO(dl_debug_mask) & DL_DEBUG_LIBS, 0))
-        _dl_debug_printf ("\n");
+	_dl_debug_printf ("\n");
     }
   else
     {
@@ -2204,7 +2209,7 @@ _dl_map_object (struct link_map *loader, const char *name, int preloaded,
 	     have.  */
 	  static const Elf_Symndx dummy_bucket = STN_UNDEF;
 
-	  /* Enter the new object in the list of loaded objects.  */
+	  /* Allocate a new object map.  */
 	  if ((name_copy = local_strdup (name)) == NULL
 	      || (l = _dl_new_object (name_copy, name, type, loader,
 				      mode, nsid)) == NULL)
@@ -2221,6 +2226,9 @@ _dl_map_object (struct link_map *loader, const char *name, int preloaded,
 	  l->l_buckets = &dummy_bucket;
 	  l->l_nbuckets = 1;
 	  l->l_relocated = 1;
+
+	  /* Enter the object in the object list.  */
+	  _dl_add_to_namespace_list (l, nsid);
 
 	  return l;
 	}

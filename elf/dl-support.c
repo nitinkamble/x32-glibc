@@ -1,5 +1,5 @@
 /* Support for dynamic linking code in static libc.
-   Copyright (C) 1996-2008, 2009 Free Software Foundation, Inc.
+   Copyright (C) 1996-2008,2009,2010 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -32,6 +32,7 @@
 #include <dl-procinfo.h>
 #include <unsecvars.h>
 #include <hp-timing.h>
+#include <stackinfo.h>
 
 extern char *__progname;
 char **_dl_argv = &__progname;	/* This is checked for some error messages.  */
@@ -126,8 +127,17 @@ ElfW(Phdr) *_dl_phdr;
 size_t _dl_phnum;
 uint64_t _dl_hwcap __attribute__ ((nocommon));
 
-/* Prevailing state of the stack, PF_X indicating it's executable.  */
-ElfW(Word) _dl_stack_flags = PF_R|PF_W|PF_X;
+/* This is not initialized to HWCAP_IMPORTANT, matching the definition
+   of _dl_important_hwcaps, below, where no hwcap strings are ever
+   used.  This mask is still used to mediate the lookups in the cache
+   file.  Since there is no way to set this nonzero (we don't grok the
+   LD_HWCAP_MASK environment variable here), there is no real point in
+   setting _dl_hwcap nonzero below, but we do anyway.  */
+uint64_t _dl_hwcap_mask __attribute__ ((nocommon));
+
+/* Prevailing state of the stack.  Generally this includes PF_X, indicating it's
+ * executable but this isn't true for all platforms.  */
+ElfW(Word) _dl_stack_flags = DEFAULT_STACK_PERMS;
 
 /* If loading a shared object requires that we make the stack executable
    when it was not, we do it by calling this function.
@@ -158,6 +168,10 @@ const ElfW(Ehdr) *_dl_sysinfo_dso;
    the loaded object might as well require a call to this function.
    At this time it is not anymore a problem to modify the tables.  */
 __rtld_lock_define_initialized_recursive (, _dl_load_lock)
+/* This lock is used to keep __dl_iterate_phdr from inspecting the
+   list of loaded objects while an object is added to or removed from
+   that list.  */
+__rtld_lock_define_initialized_recursive (, _dl_load_write_lock)
 
 
 #ifdef HAVE_AUX_VECTOR
@@ -251,6 +265,9 @@ _dl_non_dynamic_init (void)
   /* Initialize the data structures for the search paths for shared
      objects.  */
   _dl_init_paths (getenv ("LD_LIBRARY_PATH"));
+
+  /* Remember the last search directory added at startup.  */
+  _dl_init_all_dirs = GL(dl_all_dirs);
 
   _dl_lazy = *(getenv ("LD_BIND_NOW") ?: "") == '\0';
 

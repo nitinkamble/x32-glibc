@@ -199,10 +199,6 @@ static void		Perror(const res_state, FILE *, const char *, int);
 #endif
 static int		sock_eq(struct sockaddr_in6 *, struct sockaddr_in6 *);
 
-/* Reachover. */
-
-static void convaddr4to6(struct sockaddr_in6 *sa);
-
 /* Public. */
 
 /* int
@@ -219,33 +215,33 @@ res_ourserver_p(const res_state statp, const struct sockaddr_in6 *inp)
 {
 	int ns;
 
-        if (inp->sin6_family == AF_INET) {
-            struct sockaddr_in *in4p = (struct sockaddr_in *) inp;
+	if (inp->sin6_family == AF_INET) {
+	    struct sockaddr_in *in4p = (struct sockaddr_in *) inp;
 	    in_port_t port = in4p->sin_port;
 	    in_addr_t addr = in4p->sin_addr.s_addr;
 
-            for (ns = 0;  ns < MAXNS;  ns++) {
-                const struct sockaddr_in *srv =
+	    for (ns = 0;  ns < MAXNS;  ns++) {
+		const struct sockaddr_in *srv =
 		    (struct sockaddr_in *)EXT(statp).nsaddrs[ns];
 
-                if ((srv != NULL) && (srv->sin_family == AF_INET) &&
-                    (srv->sin_port == port) &&
-                    (srv->sin_addr.s_addr == INADDR_ANY ||
-                     srv->sin_addr.s_addr == addr))
-                    return (1);
-            }
-        } else if (inp->sin6_family == AF_INET6) {
-            for (ns = 0;  ns < MAXNS;  ns++) {
-                const struct sockaddr_in6 *srv = EXT(statp).nsaddrs[ns];
-                if ((srv != NULL) && (srv->sin6_family == AF_INET6) &&
-                    (srv->sin6_port == inp->sin6_port) &&
-                    !(memcmp(&srv->sin6_addr, &in6addr_any,
-                             sizeof (struct in6_addr)) &&
-                      memcmp(&srv->sin6_addr, &inp->sin6_addr,
-                             sizeof (struct in6_addr))))
-                    return (1);
-            }
-        }
+		if ((srv != NULL) && (srv->sin_family == AF_INET) &&
+		    (srv->sin_port == port) &&
+		    (srv->sin_addr.s_addr == INADDR_ANY ||
+		     srv->sin_addr.s_addr == addr))
+		    return (1);
+	    }
+	} else if (inp->sin6_family == AF_INET6) {
+	    for (ns = 0;  ns < MAXNS;  ns++) {
+		const struct sockaddr_in6 *srv = EXT(statp).nsaddrs[ns];
+		if ((srv != NULL) && (srv->sin6_family == AF_INET6) &&
+		    (srv->sin6_port == inp->sin6_port) &&
+		    !(memcmp(&srv->sin6_addr, &in6addr_any,
+			     sizeof (struct in6_addr)) &&
+		      memcmp(&srv->sin6_addr, &inp->sin6_addr,
+			     sizeof (struct in6_addr))))
+		    return (1);
+	    }
+	}
 	return (0);
 }
 
@@ -445,7 +441,7 @@ __libc_res_nsend(res_state statp, const u_char *buf, int buflen,
 				    malloc(sizeof (struct sockaddr_in6));
 			if (EXT(statp).nsaddrs[n] != NULL) {
 				memset (mempcpy(EXT(statp).nsaddrs[n],
-						&statp->nsaddr_list[ns],
+						&statp->nsaddr_list[n],
 						sizeof (struct sockaddr_in)),
 					'\0',
 					sizeof (struct sockaddr_in6)
@@ -494,6 +490,9 @@ __libc_res_nsend(res_state statp, const u_char *buf, int buflen,
 	for (try = 0; try < statp->retry; try++) {
 	    for (ns = 0; ns < MAXNS; ns++)
 	    {
+#ifdef DEBUG
+		char tmpbuf[40];
+#endif
 		struct sockaddr_in6 *nsap = EXT(statp).nsaddrs[ns];
 
 		if (nsap == NULL)
@@ -534,12 +533,12 @@ __libc_res_nsend(res_state statp, const u_char *buf, int buflen,
 		}
 #endif
 
-#ifdef DEBUG
-		char tmpbuf[40];
-#endif
 		Dprint(statp->options & RES_DEBUG,
 		       (stdout, ";; Querying server (# %d) address = %s\n",
-			ns + 1, inet_ntop(AF_INET6, &nsap->sin6_addr,
+			ns + 1, inet_ntop(nsap->sin6_family,
+					  (nsap->sin6_family == AF_INET6
+					   ? &nsap->sin6_addr
+					   : &((struct sockaddr_in *) nsap)->sin_addr),
 					  tmpbuf, sizeof (tmpbuf))));
 
 		if (__builtin_expect (v_circuit, 0)) {
@@ -579,11 +578,12 @@ __libc_res_nsend(res_state statp, const u_char *buf, int buflen,
 			(statp->pfcode & RES_PRF_REPLY),
 			(stdout, "%s", ""),
 			ans, (resplen > anssiz) ? anssiz : resplen);
-		if (buf2 != NULL)
+		if (buf2 != NULL) {
 		  DprintQ((statp->options & RES_DEBUG) ||
 			  (statp->pfcode & RES_PRF_REPLY),
 			  (stdout, "%s", ""),
 			  *ansp2, (*resplen2 > *nansp2) ? *nansp2 : *resplen2);
+		}
 
 		/*
 		 * If we have temporarily opened a virtual circuit,
@@ -887,7 +887,7 @@ send_vc(res_state statp,
 			(statp->pfcode & RES_PRF_REPLY),
 			(stdout, ";; old answer (unexpected):\n"),
 			*thisansp,
-			(rlen > *thisanssiz) ? *thisanssiz: rlen);
+			(rlen > *thisanssizp) ? *thisanssizp: rlen);
 		goto read_len;
 	}
 
@@ -911,10 +911,12 @@ static int
 reopen (res_state statp, int *terrno, int ns)
 {
 	if (EXT(statp).nssocks[ns] == -1) {
-		struct sockaddr_in6 *nsap = EXT(statp).nsaddrs[ns];
+		struct sockaddr *nsap
+		  = (struct sockaddr *) EXT(statp).nsaddrs[ns];
+		socklen_t slen;
 
 		/* only try IPv6 if IPv6 NS and if not failed before */
-		if ((EXT(statp).nscount6 > 0) && !statp->ipv6_unavail) {
+		if (nsap->sa_family == AF_INET6 && !statp->ipv6_unavail) {
 			if (__builtin_expect (__have_o_nonblock >= 0, 1)) {
 				EXT(statp).nssocks[ns] =
 				  socket(PF_INET6, SOCK_DGRAM|SOCK_NONBLOCK,
@@ -931,12 +933,8 @@ reopen (res_state statp, int *terrno, int ns)
 				  socket(PF_INET6, SOCK_DGRAM, 0);
 			if (EXT(statp).nssocks[ns] < 0)
 			    statp->ipv6_unavail = errno == EAFNOSUPPORT;
-			/* If IPv6 socket and nsap is IPv4, make it
-			   IPv4-mapped */
-			else if (nsap->sin6_family == AF_INET)
-			    convaddr4to6(nsap);
-		}
-		if (EXT(statp).nssocks[ns] < 0) {
+			slen = sizeof (struct sockaddr_in6);
+		} else if (nsap->sa_family == AF_INET) {
 			if (__builtin_expect (__have_o_nonblock >= 0, 1)) {
 				EXT(statp).nssocks[ns]
 				  = socket(PF_INET, SOCK_DGRAM|SOCK_NONBLOCK,
@@ -951,6 +949,7 @@ reopen (res_state statp, int *terrno, int ns)
 			if (__builtin_expect (__have_o_nonblock < 0, 0))
 				EXT(statp).nssocks[ns]
 				  = socket(PF_INET, SOCK_DGRAM, 0);
+			slen = sizeof (struct sockaddr_in);
 		}
 		if (EXT(statp).nssocks[ns] < 0) {
 			*terrno = errno;
@@ -969,10 +968,8 @@ reopen (res_state statp, int *terrno, int ns)
 		 * error message is received.  We can thus detect
 		 * the absence of a nameserver without timing out.
 		 */
-		if (connect(EXT(statp).nssocks[ns], (struct sockaddr *)nsap,
-			    sizeof *nsap) < 0) {
-			Aerror(statp, stderr, "connect(dg)", errno,
-			       (struct sockaddr *) nsap);
+		if (connect(EXT(statp).nssocks[ns], nsap, slen) < 0) {
+			Aerror(statp, stderr, "connect(dg)", errno, nsap);
 			__res_iclose(statp, false);
 			return (0);
 		}
@@ -1003,9 +1000,10 @@ send_dg(res_state statp,
 	int orig_anssizp = *anssizp;
 	struct timespec now, timeout, finish;
 	struct pollfd pfd[1];
-        int ptimeout;
+	int ptimeout;
 	struct sockaddr_in6 from;
-	int resplen, n;
+	int resplen = 0;
+	int n;
 
 	/*
 	 * Compute time for the total operation.
@@ -1050,7 +1048,7 @@ send_dg(res_state statp,
 		evSubTime(&timeout, &finish, &now);
 		need_recompute = 0;
 	}
-        /* Convert struct timespec in milliseconds.  */
+	/* Convert struct timespec in milliseconds.  */
 	ptimeout = timeout.tv_sec * 1000 + timeout.tv_nsec / 1000000;
 
 	n = 0;
@@ -1192,7 +1190,7 @@ send_dg(res_state statp,
 			 */
 			Dprint(statp->options & RES_DEBUG,
 			       (stdout, ";; undersized: %d\n",
-				*thisresplen));
+				*thisresplenp));
 			*terrno = EMSGSIZE;
 			goto err_out;
 		}
@@ -1206,9 +1204,9 @@ send_dg(res_state statp,
 			DprintQ((statp->options & RES_DEBUG) ||
 				(statp->pfcode & RES_PRF_REPLY),
 				(stdout, ";; old answer:\n"),
-				thisansp,
-				(*thisresplen > *thisanssiz)
-				? *thisanssiz : *thisresplen);
+				*thisansp,
+				(*thisresplenp > *thisanssizp)
+				? *thisanssizp : *thisresplenp);
 			goto wait;
 		}
 		if (!(statp->options & RES_INSECURE1) &&
@@ -1221,9 +1219,9 @@ send_dg(res_state statp,
 			DprintQ((statp->options & RES_DEBUG) ||
 				(statp->pfcode & RES_PRF_REPLY),
 				(stdout, ";; not our server:\n"),
-				thisansp,
-				(*thisresplen > *thisanssiz)
-				? *thisanssiz : *thisresplen);
+				*thisansp,
+				(*thisresplenp > *thisanssizp)
+				? *thisanssizp : *thisresplenp);
 			goto wait;
 		}
 #ifdef RES_USE_EDNS0
@@ -1238,13 +1236,13 @@ send_dg(res_state statp,
 			DprintQ(statp->options & RES_DEBUG,
 				(stdout,
 				 "server rejected query with EDNS0:\n"),
-				thisans,
-				(*thisresplen > *thisanssiz)
-				? *thisanssiz : *thisresplen);
+				*thisansp,
+				(*thisresplenp > *thisanssizp)
+				? *thisanssizp : *thisresplenp);
 			/* record the error */
 			statp->_flags |= RES_F_EDNS0ERR;
 			goto err_out;
-        }
+	}
 #endif
 		if (!(statp->options & RES_INSECURE2)
 		    && (recvresp1 || !res_queriesmatch(buf, buf + buflen,
@@ -1263,9 +1261,9 @@ send_dg(res_state statp,
 			DprintQ((statp->options & RES_DEBUG) ||
 				(statp->pfcode & RES_PRF_REPLY),
 				(stdout, ";; wrong query name:\n"),
-				thisansp,
-				(*thisresplen > *thisanssiz)
-				? *thisanssiz : *thisresplen);
+				*thisansp,
+				(*thisresplenp > *thisanssizp)
+				? *thisanssizp : *thisresplenp);
 			goto wait;
 		}
 		if (anhp->rcode == SERVFAIL ||
@@ -1273,9 +1271,9 @@ send_dg(res_state statp,
 		    anhp->rcode == REFUSED) {
 			DprintQ(statp->options & RES_DEBUG,
 				(stdout, "server rejected query:\n"),
-				thisansp,
-				(*thisresplen > *thisanssiz)
-				? *thisanssiz : *thisresplen);
+				*thisansp,
+				(*thisresplenp > *thisanssizp)
+				? *thisanssizp : *thisresplenp);
 
 			if (recvresp1 || (buf2 != NULL && recvresp2))
 			  return resplen;
@@ -1300,9 +1298,9 @@ send_dg(res_state statp,
 		    && anhp->aa == 0 && anhp->ra == 0 && anhp->arcount == 0) {
 			DprintQ(statp->options & RES_DEBUG,
 				(stdout, "referred query:\n"),
-				thisansp,
-				(*thisresplen > *thisanssiz)
-				? *thisanssiz : *thisresplen);
+				*thisansp,
+				(*thisresplenp > *thisanssizp)
+				? *thisanssizp : *thisresplenp);
 			goto next_ns;
 		}
 		if (!(statp->options & RES_IGNTC) && anhp->tc) {
@@ -1413,23 +1411,4 @@ sock_eq(struct sockaddr_in6 *a1, struct sockaddr_in6 *a2) {
 		IN6_IS_ADDR_V4MAPPED(&a1->sin6_addr) &&
 		(a1->sin6_addr.s6_addr32[3] ==
 		 ((struct sockaddr_in *)a2)->sin_addr.s_addr));
-}
-
-/*
- * Converts IPv4 family, address and port to
- * IPv6 family, IPv4-mapped IPv6 address and port.
- */
-static void
-convaddr4to6(struct sockaddr_in6 *sa)
-{
-    struct sockaddr_in *sa4p = (struct sockaddr_in *) sa;
-    in_port_t port = sa4p->sin_port;
-    in_addr_t addr = sa4p->sin_addr.s_addr;
-
-    sa->sin6_family = AF_INET6;
-    sa->sin6_port = port;
-    sa->sin6_addr.s6_addr32[0] = 0;
-    sa->sin6_addr.s6_addr32[1] = 0;
-    sa->sin6_addr.s6_addr32[2] = htonl(0xFFFF);
-    sa->sin6_addr.s6_addr32[3] = addr;
 }

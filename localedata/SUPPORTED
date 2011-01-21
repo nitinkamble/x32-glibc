@@ -80,6 +80,7 @@ crh_UA/UTF-8 \
 cs_CZ.UTF-8/UTF-8 \
 cs_CZ/ISO-8859-2 \
 csb_PL/UTF-8 \
+cv_RU/UTF-8 \
 cy_GB.UTF-8/UTF-8 \
 cy_GB/ISO-8859-14 \
 da_DK.UTF-8/UTF-8 \
@@ -259,6 +260,7 @@ km_KH/UTF-8 \
 kn_IN/UTF-8 \
 ko_KR.EUC-KR/EUC-KR \
 ko_KR.UTF-8/UTF-8 \
+kok_IN/UTF-8 \
 ks_IN/UTF-8 \
 ks_IN@devanagari/UTF-8 \
 ku_TR.UTF-8/UTF-8 \
@@ -289,6 +291,7 @@ ms_MY.UTF-8/UTF-8 \
 ms_MY/ISO-8859-1 \
 mt_MT.UTF-8/UTF-8 \
 mt_MT/ISO-8859-3 \
+my_MM/UTF-8 \
 nan_TW@latin/UTF-8 \
 nb_NO.UTF-8/UTF-8 \
 nb_NO/ISO-8859-1 \
@@ -317,6 +320,7 @@ pa_PK/UTF-8 \
 pap_AN/UTF-8 \
 pl_PL.UTF-8/UTF-8 \
 pl_PL/ISO-8859-2 \
+ps_AF/UTF-8 \
 pt_BR.UTF-8/UTF-8 \
 pt_BR/ISO-8859-1 \
 pt_PT.UTF-8/UTF-8 \
@@ -351,6 +355,7 @@ so_SO.UTF-8/UTF-8 \
 so_SO/ISO-8859-1 \
 sq_AL.UTF-8/UTF-8 \
 sq_AL/ISO-8859-1 \
+sq_MK/UTF-8 \
 sr_ME/UTF-8 \
 sr_RS/UTF-8 \
 sr_RS@latin/UTF-8 \
@@ -381,7 +386,7 @@ tr_TR.UTF-8/UTF-8 \
 tr_TR/ISO-8859-9 \
 ts_ZA/UTF-8 \
 tt_RU.UTF-8/UTF-8 \
-tt_RU@iqtelif.UTF-8/UTF-8 \
+tt_RU.UTF-8@iqtelif/UTF-8 \
 ug_CN/UTF-8 \
 uk_UA.UTF-8/UTF-8 \
 uk_UA/KOI8-U \

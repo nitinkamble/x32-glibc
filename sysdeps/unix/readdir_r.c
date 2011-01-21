@@ -1,4 +1,4 @@
-/* Copyright (C) 1991,92,93,94,95,96,97,98,99,2000,02
+/* Copyright (C) 1991,92,93,94,95,96,97,98,99,2000,02,10
 	Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
@@ -113,7 +113,18 @@ __READDIR_R (DIR *dirp, DIRENT_TYPE *entry, DIRENT_TYPE **result)
   while (dp->d_ino == 0);
 
   if (dp != NULL)
-    *result = memcpy (entry, dp, reclen);
+    {
+#ifdef GETDENTS_64BIT_ALIGNED
+      /* The d_reclen value might include padding which is not part of
+	 the DIRENT_TYPE data structure.  */
+      reclen = MIN (reclen,
+		    offsetof (DIRENT_TYPE, d_name) + sizeof (dp->d_name));
+#endif
+      *result = memcpy (entry, dp, reclen);
+#ifdef GETDENTS_64BIT_ALIGNED
+      entry->d_reclen = reclen;
+#endif
+    }
   else
     *result = NULL;
 

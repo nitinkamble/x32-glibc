@@ -1,7 +1,7 @@
 /*
  * rpc_callmsg.c
  *
- * Copyright (C) 1984, Sun Microsystems, Inc.
+ * Copyright (c) 2010, Oracle America, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -13,7 +13,7 @@
  *       copyright notice, this list of conditions and the following
  *       disclaimer in the documentation and/or other materials
  *       provided with the distribution.
- *     * Neither the name of Sun Microsystems, Inc. nor the names of its
+ *     * Neither the name of the "Oracle America, Inc." nor the names of its
  *       contributors may be used to endorse or promote products derived
  *       from this software without specific prior written permission.
  *
@@ -85,7 +85,7 @@ xdr_callmsg (XDR *xdrs, struct rpc_msg *cmsg)
 	    {
 	      memcpy ((caddr_t) buf, oa->oa_base, oa->oa_length);
 	      /* no real need....
-	         buf = (long *) ((char *) buf + RNDUP(oa->oa_length));
+		 buf = (long *) ((char *) buf + RNDUP(oa->oa_length));
 	       */
 	    }
 	  return TRUE;

@@ -141,6 +141,19 @@ libc {
   GLIBC_2.10 {
     fallocate;
   }
+  GLIBC_2.12 {
+    #errlist-compat	134
+    _sys_errlist; sys_errlist; _sys_nerr; sys_nerr;
+
+    ntp_gettimex;
+
+    recvmmsg;
+  }
+  GLIBC_2.13 {
+    prlimit; prlimit64;
+
+    fanotify_init; fanotify_mark;
+  }
   GLIBC_PRIVATE {
     # functions used in other libraries
     __syscall_rt_sigqueueinfo;

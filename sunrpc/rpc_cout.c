@@ -1,6 +1,7 @@
 /*
- * From: @(#)rpc_cout.c 1.13 89/02/22 (C) 1987 SMI
+ * From: @(#)rpc_cout.c 1.13 89/02/22
  *
+ * Copyright (c) 2010, Oracle America, Inc.
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
  * met:
@@ -11,7 +12,7 @@
  *       copyright notice, this list of conditions and the following
  *       disclaimer in the documentation and/or other materials
  *       provided with the distribution.
- *     * Neither the name of Sun Microsystems, Inc. nor the names of its
+ *     * Neither the name of the "Oracle America, Inc." nor the names of its
  *       contributors may be used to endorse or promote products derived
  *       from this software without specific prior written permission.
  *
@@ -80,9 +81,9 @@ emit (definition * def)
   if (def->def_kind == DEF_TYPEDEF)
     {
       /* now we need to handle declarations like
-         struct typedef foo foo;
-         since we don't want this to be expanded
-         into 2 calls to xdr_foo */
+	 struct typedef foo foo;
+	 since we don't want this to be expanded
+	 into 2 calls to xdr_foo */
 
       if (strcmp (def->def.ty.old_type, def->def_name) == 0)
 	return;

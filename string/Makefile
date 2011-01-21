@@ -1,4 +1,4 @@
-# Copyright (C) 1991-2002, 2005-2008, 2009 Free Software Foundation, Inc.
+# Copyright (C) 1991-2002, 2005-2008, 2009, 2010 Free Software Foundation, Inc.
 # This file is part of the GNU C Library.
 
 # The GNU C Library is free software; you can redistribute it and/or
@@ -36,7 +36,7 @@ routines	:= strcat strchr strcmp strcoll strcpy strcspn		\
 		   memccpy memcpy wordcopy strsep strcasestr		\
 		   swab strfry memfrob memmem rawmemchr strchrnul	\
 		   $(addprefix argz-,append count create ctsep next	\
-			             delete extract insert stringify	\
+				     delete extract insert stringify	\
 				     addsep replace)			\
 		   envz basename					\
 		   strcoll_l strxfrm_l string-inlines memrchr		\
@@ -48,13 +48,15 @@ o-objects.ob	:= memcpy.o memset.o memchr.o
 
 strop-tests	:= memchr memcmp memcpy memmove mempcpy memset memccpy	\
 		   stpcpy stpncpy strcat strchr strcmp strcpy strcspn	\
-		   strlen strncmp strncpy strpbrk strrchr strspn memmem
+		   strlen strncmp strncpy strpbrk strrchr strspn memmem	\
+		   strstr strcasestr strnlen strcasecmp strncasecmp
 tests		:= tester inl-tester noinl-tester testcopy test-ffs	\
 		   tst-strlen stratcliff tst-svc tst-inlcall		\
 		   bug-strncat1 bug-strspn1 bug-strpbrk1 tst-bswap	\
 		   tst-strtok tst-strxfrm bug-strcoll1 tst-strfry	\
 		   bug-strtok1 $(addprefix test-,$(strop-tests))	\
-		   bug-envz1 tst-strxfrm2 tst-endian tst-svc2
+		   bug-envz1 tst-strxfrm2 tst-endian tst-svc2		\
+		   bug-strstr1 bug-strchr1
 distribute	:= memcopy.h pagecopy.h tst-svc.expect test-string.h	\
 		   str-two-way.h
 
@@ -73,6 +75,7 @@ CFLAGS-tst-strlen.c = -fno-builtin
 CFLAGS-stratcliff.c = -fno-builtin
 CFLAGS-test-ffs.c = -fno-builtin
 CFLAGS-tst-inlcall.c = -fno-builtin
+CFLAGS-bug-strstr1.c = -fno-builtin
 
 ifeq ($(cross-compiling),no)
 tests: $(objpfx)tst-svc.out

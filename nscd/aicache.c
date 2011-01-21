@@ -1,5 +1,5 @@
 /* Cache handling for host lookup.
-   Copyright (C) 2004-2008, 2009 Free Software Foundation, Inc.
+   Copyright (C) 2004-2008, 2009, 2010 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Ulrich Drepper <drepper@redhat.com>, 2004.
 
@@ -111,7 +111,7 @@ addhstaiX (struct database_dyn *db, int fd, request_header *req,
   int old_res_options = _res.options;
   _res.options &= ~RES_USE_INET6;
 
-  size_t tmpbuf6len = 512;
+  size_t tmpbuf6len = 1024;
   char *tmpbuf6 = alloca (tmpbuf6len);
   size_t tmpbuf4len = 0;
   char *tmpbuf4 = NULL;
@@ -133,9 +133,11 @@ addhstaiX (struct database_dyn *db, int fd, request_header *req,
 							 "gethostbyname4_r");
       if (fct4 != NULL)
 	{
-	  struct gaih_addrtuple *at = NULL;
+	  struct gaih_addrtuple atmem;
+	  struct gaih_addrtuple *at;
 	  while (1)
 	    {
+	      at = &atmem;
 	      rc6 = 0;
 	      herrno = 0;
 	      status[1] = DL_CALL_FCT (fct4, (key, &at, tmpbuf6, tmpbuf6len,
@@ -153,7 +155,7 @@ addhstaiX (struct database_dyn *db, int fd, request_header *req,
 	    goto next_nip;
 
 	  /* We found the data.  Count the addresses and the size.  */
-	  for (const struct gaih_addrtuple *at2 = at; at2 != NULL;
+	  for (const struct gaih_addrtuple *at2 = at = &atmem; at2 != NULL;
 	       at2 = at2->next)
 	    {
 	      ++naddrs;
@@ -453,13 +455,13 @@ addhstaiX (struct database_dyn *db, int fd, request_header *req,
 	    {
 	      assert (db->wr_fd != -1);
 	      assert ((char *) &dataset->resp > (char *) db->data);
-	      assert ((char *) &dataset->resp - (char *) db->head + total
+	      assert ((char *) dataset - (char *) db->head + total
 		      <= (sizeof (struct database_pers_head)
 			  + db->head->module * sizeof (ref_t)
 			  + db->head->data_size));
 	      ssize_t written;
 	      written = sendfileall (fd, db->wr_fd, (char *) &dataset->resp
-				     - (char *) db->head, total);
+				     - (char *) db->head, dataset->head.recsize);
 # ifndef __ASSUME_SENDFILE
 	      if (written == -1 && errno == ENOSYS)
 		goto use_write;
@@ -470,7 +472,7 @@ addhstaiX (struct database_dyn *db, int fd, request_header *req,
 	  use_write:
 # endif
 #endif
-	    writeall (fd, &dataset->resp, total);
+	    writeall (fd, &dataset->resp, dataset->head.recsize);
 	}
 
       goto out;

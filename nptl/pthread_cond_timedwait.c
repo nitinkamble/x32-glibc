@@ -1,4 +1,4 @@
-/* Copyright (C) 2003, 2004, 2007 Free Software Foundation, Inc.
+/* Copyright (C) 2003,2004,2007,2010,2011 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Martin Schwidefsky <schwidefsky@de.ibm.com>, 2003.
 
@@ -27,6 +27,14 @@
 
 #include <shlib-compat.h>
 
+#ifndef HAVE_CLOCK_GETTIME_VSYSCALL
+# undef INTERNAL_VSYSCALL
+# define INTERNAL_VSYSCALL INTERNAL_SYSCALL
+# undef INLINE_VSYSCALL
+# define INLINE_VSYSCALL INLINE_SYSCALL
+#else
+# include <bits/libc-vdso.h>
+#endif
 
 /* Cleanup handler, defined in pthread_cond_wait.c.  */
 extern void __condvar_cleanup (void *arg)
@@ -57,7 +65,7 @@ __pthread_cond_timedwait (cond, mutex, abstime)
   int pshared = (cond->__data.__mutex == (void *) ~0l)
 		? LLL_SHARED : LLL_PRIVATE;
 
-  /* Make sure we are along.  */
+  /* Make sure we are alone.  */
   lll_lock (cond->__data.__lock, pshared);
 
   /* Now we can release the mutex.  */
@@ -102,7 +110,7 @@ __pthread_cond_timedwait (cond, mutex, abstime)
 #ifdef __NR_clock_gettime
 	INTERNAL_SYSCALL_DECL (err);
 	int ret;
-	ret = INTERNAL_SYSCALL (clock_gettime, err, 2,
+	ret = INTERNAL_VSYSCALL (clock_gettime, err, 2,
 				(cond->__data.__nwaiters
 				 & ((1 << COND_NWAITERS_SHIFT) - 1)),
 				&rt);
