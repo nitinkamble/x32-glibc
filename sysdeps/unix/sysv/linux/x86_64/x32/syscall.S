@@ -1,4 +1,4 @@
-/* Copyright (C) 2009 Free Software Foundation, Inc.
+/* Copyright (C) 2011 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -31,10 +31,11 @@ ENTRY (syscall)
 	pushq %rbp
 	pushq %rbx
 	mov %edi, %eax		/* Syscall number -> rax.  */
-	mov %esi, %ebx		/* shift arg1 - arg6.  */
+	mov %esi, %ebx		/* shift arg1 - arg5.  */
 	xchg %edx, %ecx
-	mov %r8d, %edi
-	mov %r9d, %ebp
+	mov %r8d, %esi
+	mov %r9d, %edi
+	movl 24(%rsp), %ebp	/* arg6 is on the stack.  */
 	int $0x80
 	cmpq $-4095, %rax	/* Check %rax for error.  */
 	popq %rbx

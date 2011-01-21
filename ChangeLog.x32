@@ -1,5 +1,10 @@
 2011-01-21  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/unix/sysv/linux/x86_64/x32/syscall.S: Properly
+	shuffle arguments.
+
+2011-01-21  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/unix/sysv/linux/x86_64/n32: Moved to ...
 	* sysdeps/unix/sysv/linux/x86_64/x32: This.
 
