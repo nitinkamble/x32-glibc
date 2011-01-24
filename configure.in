@@ -2100,7 +2100,7 @@ if test -n "$submachine"; then
   AC_CACHE_CHECK([for compiler option for CPU variant],
   		 libc_cv_cc_submachine, [dnl
   libc_cv_cc_submachine=no
-  for opt in "-march=$submachine" "-mcpu=$submachine"; do
+  for opt in "-march=$submachine" "-mtune=$submachine"; do
     if AC_TRY_COMMAND([${CC-cc} $opt -xc /dev/null -S -o /dev/null]); then
       libc_cv_cc_submachine="$opt"
       break

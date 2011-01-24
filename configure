@@ -7202,7 +7202,7 @@ if test "${libc_cv_cc_submachine+set}" = set; then :
   $as_echo_n "(cached) " >&6
 else
     libc_cv_cc_submachine=no
-  for opt in "-march=$submachine" "-mcpu=$submachine"; do
+  for opt in "-march=$submachine" "-mtune=$submachine"; do
     if { ac_try='${CC-cc} $opt -xc /dev/null -S -o /dev/null'
   { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
   (eval $ac_try) 2>&5
