@@ -1,0 +1,9 @@
+case "$base_machine" in
+x86_64)
+  case "$CC $CFLAGS $CPPFLAGS " in
+  *" -mx32"*)
+    machine=x86_64/x32
+    libc_cv_slibdir="/lib32"
+    ;;
+  esac
+esac

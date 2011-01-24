@@ -1,5 +1,15 @@
 2011-01-24  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* configure.in: Add sysdeps preconfigure fragment support.
+	* configure: Regenerated.
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/sysdep.h: New.
+	* sysdeps/x86_64/preconfigure: Likewise.
+
+	* sysdeps/x86_64/configure: Remove -mx32 check.
+
+2011-01-24  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* configure.in: Replace -mcpu= with "-mtune=.
 	* configure: Regenerated.
 

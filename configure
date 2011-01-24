@@ -4106,6 +4106,14 @@ if test "$base_machine" = "i386"; then
 
 fi
 
+# Now run sysdeps preconfigure fragment.
+preconfigure=$srcdir/sysdeps/$base_machine/preconfigure
+if test -r $preconfigure; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: running preconfigure fragment for $base_machine" >&5
+$as_echo "running preconfigure fragment for $base_machine" >&6; }
+  . $preconfigure
+fi
+
 # For the multi-arch option we need support in the assembler.
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for assembler gnu_indirect_function symbol type support" >&5
 $as_echo_n "checking for assembler gnu_indirect_function symbol type support... " >&6; }
