@@ -1,3 +1,8 @@
+2011-01-26  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/x86_64/x32/__longjmp.S: New.
+	* sysdeps/x86_64/x32/setjmp.S: Likewise.
+
 2011-01-24  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* configure.in: Add sysdeps preconfigure fragment support.
