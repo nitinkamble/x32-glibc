@@ -23,16 +23,20 @@
 #define CURRENT_STACK_FRAME \
   ({ char *frame; asm ("movl %%esp, %0" : "=r" (frame)); frame; })
 
+#ifdef PIC
+# define PTHREADDEF_EBX_LOAD	"xchgl %1, %%ebx\n\t"
+# define PTHREADDEF_EBX_REG	"D"
+#else
+# define PTHREADDEF_EBX_LOAD
+# define PTHREADDEF_EBX_REG	"b"
+#endif
+
 /* XXX Until we have a better place keep the definitions here.  */
 
 /* While there is no such syscall.  */
 #undef __exit_thread_inline
-#ifdef PIC
 # define __exit_thread_inline(val) 					\
-  asm volatile ("xchgl %1, %%ebx\n\t"					\
+  asm volatile (PTHREADDEF_EBX_LOAD					\
 		"int $0x80\n\t"						\
-		"xchgl %%ebx, %1" :: "a" (__NR_exit), "r" (val))
-#else
-# define __exit_thread_inline(val)					\
-  asm volatile ("int $0x80" :: "a" (__NR_exit), "b" (val))
-#endif
+		PTHREADDEF_EBX_LOAD					\
+		:: "a" (__NR_exit), PTHREADDEF_EBX_REG (val))
