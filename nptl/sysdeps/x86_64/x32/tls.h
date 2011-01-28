@@ -25,7 +25,7 @@
 #ifndef __ASSEMBLER__
 
 # ifdef PIC
-#  define TLS_EBX_LOAD	"xchgl %2, %%ebx\n"
+#  define TLS_EBX_LOAD	"xchgl %1, %%ebx\n"
 #  define TLS_EBX_REG	"D"
 # else
 #  define TLS_EBX_LOAD
