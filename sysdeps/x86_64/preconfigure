@@ -5,5 +5,8 @@ x86_64)
     machine=x86_64/x32
     libc_cv_slibdir="/lib32"
     ;;
+  *)
+    machine=x86_64/lp64
+    ;;
   esac
 esac

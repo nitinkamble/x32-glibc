@@ -1,3 +1,16 @@
+2011-01-28  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/Implies: Moved to ...
+	* sysdeps/unix/sysv/linux/x86_64/lp64/Implies: Here. 
+
+	* sysdeps/x86_64/preconfigure: Set machine to x86_64/lp64 for
+	LP64.
+
+	* sysdeps/x86_64/Implies: Moved to ...
+	* sysdeps/x86_64/lp64/Implies: Here.  Prepend x86_64/fpu.
+
+	* sysdeps/x86_64/x32/Implies: New.
+
 2011-01-27  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/unix/sysv/linux/x86_64/x32/sysdep.h
