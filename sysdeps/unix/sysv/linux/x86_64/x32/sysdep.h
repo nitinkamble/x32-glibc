@@ -42,7 +42,7 @@
 0:						\
   movq SYSCALL_ERROR_ERRNO@GOTTPOFF(%rip), %rcx;\
   xorl %edx, %edx;				\
-  subq %eax, %edx;				\
+  subl %eax, %edx;				\
   movl %edx, %fs:(%rcx);			\
   orl $-1, %eax;				\
   jmp L(pseudo_end);
@@ -182,7 +182,9 @@
   ({									      \
     register unsigned int resultvar;					      \
     asm volatile (							      \
+    LOADARGS_##nr							      \
     "int $0x80\n\t"							      \
+    LOADARGS_##nr							      \
     : "=a" (resultvar)							      \
     : "0" (name) ASMFMT_##nr(args) : "memory", "cc");			      \
     (int) resultvar; })
@@ -198,17 +200,45 @@
 # define INTERNAL_VSYSCALL(name, err, nr, args...) \
   INTERNAL_SYSCALL (name, err, nr, ##args)
 
+# define LOADARGS_0
+# ifdef __PIC__
+#  define LOADARGS_1	"xchgq %q1, %%rbx\n"
+#  define LOADARGS_2	LOADARGS_1
+#  define LOADARGS_3	LOADARGS_1
+#  define LOADARGS_4	LOADARGS_1
+#  define LOADARGS_5	LOADARGS_1
+# else
+#  define LOADARGS_1
+#  define LOADARGS_2
+#  define LOADARGS_3
+#  define LOADARGS_4
+#  define LOADARGS_5
+# endif
+
 # define ASMFMT_0()
-# define ASMFMT_1(arg1) \
+# ifdef __PIC__
+#  define ASMFMT_1(arg1) \
+	, "cd" (arg1)
+#  define ASMFMT_2(arg1, arg2) \
+	, "d" (arg1), "c" (arg2)
+#  define ASMFMT_3(arg1, arg2, arg3) \
+	, "D" (arg1), "c" (arg2), "d" (arg3)
+#  define ASMFMT_4(arg1, arg2, arg3, arg4) \
+	, "D" (arg1), "c" (arg2), "d" (arg3), "S" (arg4)
+#  define ASMFMT_5(arg1, arg2, arg3, arg4, arg5) \
+	, "r9" (arg1), "c" (arg2), "d" (arg3), "S" (arg4), "D" (arg5)
+# else
+#  define ASMFMT_1(arg1) \
 	, "b" (arg1)
-# define ASMFMT_2(arg1, arg2) \
+#  define ASMFMT_2(arg1, arg2) \
 	, "b" (arg1), "c" (arg2)
-# define ASMFMT_3(arg1, arg2, arg3) \
+#  define ASMFMT_3(arg1, arg2, arg3) \
 	, "b" (arg1), "c" (arg2), "d" (arg3)
-# define ASMFMT_4(arg1, arg2, arg3, arg4) \
+#  define ASMFMT_4(arg1, arg2, arg3, arg4) \
 	, "b" (arg1), "c" (arg2), "d" (arg3), "S" (arg4)
-# define ASMFMT_5(arg1, arg2, arg3, arg4, arg5) \
+#  define ASMFMT_5(arg1, arg2, arg3, arg4, arg5) \
 	, "b" (arg1), "c" (arg2), "d" (arg3), "S" (arg4), "D" (arg5)
+# endif
 
 #endif	/* __ASSEMBLER__ */
 

@@ -1,5 +1,22 @@
 2011-01-27  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/unix/sysv/linux/x86_64/x32/sysdep.h
+	(SYSCALL_ERROR_HANDLER): Fix a typo.
+	(INTERNAL_SYSCALL_NCS): Add LOADARGS_##nr.
+	(LOADARGS_0): New.
+	(LOADARGS_1): Likewise.
+	(LOADARGS_2): Likewise.
+	(LOADARGS_3): Likewise.
+	(LOADARGS_4): Likewise.
+	(LOADARGS_5): Likewise.
+	(ASMFMT_1): Support PIC.
+	(ASMFMT_2): Likewise.
+	(ASMFMT_3): Likewise.
+	(ASMFMT_4): Likewise.
+	(ASMFMT_5): Likewise.
+
+2011-01-27  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/unix/sysv/linux/x86_64/x32/sysdep.h (POPARGS_1): Fix
 	typo.
 	(_PUSHARGS_1): Likewise.
