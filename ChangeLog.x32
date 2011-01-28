@@ -1,5 +1,9 @@
 2011-01-28  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/x86_64/x32/Implies: Add wordsize-32.
+
+2011-01-28  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/unix/sysv/linux/x86_64/Implies: Moved to ...
 	* sysdeps/unix/sysv/linux/x86_64/lp64/Implies: Here. 
 
