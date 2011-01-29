@@ -114,4 +114,7 @@ lose:									      \
 # endif
 #endif
 
+/* Assembler address directive. */
+#define ASM_ADDR .quad
+
 #endif	/* __ASSEMBLER__ */

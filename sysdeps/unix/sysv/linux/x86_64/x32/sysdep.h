@@ -21,6 +21,7 @@
 
 /* There is some commonality.  */
 #include <sysdeps/unix/sysv/linux/x86_64/sysdep.h>
+#include <sysdeps/x86_64/x32/sysdep.h>
 
 #ifdef __ASSEMBLER__
 

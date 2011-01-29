@@ -1,3 +1,16 @@
+2011-01-29  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/gettimeofday.S: New.
+	* sysdeps/x86_64/x32/sysdep.h: Likewise.
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/sysdep.h: Include
+	<sysdeps/x86_64/x32/sysdep.h>.
+
+	* sysdeps/x86_64/memset.S: Replace .quad with ASM_ADDR.
+	(SSE_pre): Support load L(SSExDx) for x32.
+
+	* sysdeps/x86_64/sysdep.h (ASM_ADDR): New.
+
 2011-01-28  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/x86_64/x32/Implies: Add wordsize-32.
