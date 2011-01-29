@@ -130,14 +130,14 @@
 #define _DOARGS_0(n)	/* No arguments to frob.  */
 #define	_POPARGS_0	/* No arguments to pop.  */
 
-#define PUSHARGS_1	movq %rbx, %r9; L(SAVEBX1): PUSHARGS_0
+#define PUSHARGS_1	movq %rbx, %r9; PUSHARGS_0
 #define	DOARGS_1	_DOARGS_1 (4)
-#define	POPARGS_1	POPARGS_0; movq %r9, %rbx; L(RESTBX1):
+#define	POPARGS_1	POPARGS_0; movq %r9, %rbx;
 #define	_PUSHARGS_1	pushq %rbx; cfi_adjust_cfa_offset (8); \
-			cfi_rel_offset (rbx, 0); L(PUSHBX1): _PUSHARGS_0
+			cfi_rel_offset (rbx, 0); _PUSHARGS_0
 #define _DOARGS_1(n)	movl %edi, %ebx; _DOARGS_0(n-4)
 #define	_POPARGS_1	_POPARGS_0; popq %rbx; cfi_adjust_cfa_offset (-8); \
-			cfi_restore (rbx); L(POPBX1):
+			cfi_restore (rbx);
 
 #define PUSHARGS_2	PUSHARGS_1
 #define	DOARGS_2	_DOARGS_2 (8)

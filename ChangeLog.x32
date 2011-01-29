@@ -1,5 +1,15 @@
 2011-01-29  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/unix/sysv/linux/x86_64/x32/sysdep.h (PUSHARGS_1): Remove
+	L(SAVEBX1) label.
+	(POPARGS_1): Remove L(RESTBX1) label.
+	(_PUSHARGS_1): Remove L(PUSHBX1) label.
+	(_POPARGS_1): Remove L(POPBX1) label.
+
+	* sysdeps/x86_64/x32/stackinfo.h: New.
+
+2011-01-29  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/unix/sysv/linux/x86_64/x32/gettimeofday.S: New.
 	* sysdeps/x86_64/x32/sysdep.h: Likewise.
 
