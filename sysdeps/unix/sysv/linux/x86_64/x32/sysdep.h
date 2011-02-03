@@ -140,7 +140,7 @@
 			cfi_rel_offset (rbx, 0); _PUSHARGS_0
 #define _DOARGS_1(n)	movl %edi, %ebx; _DOARGS_0(n-4)
 #define	_POPARGS_1	_POPARGS_0; popq %rbx; cfi_adjust_cfa_offset (-8); \
-			cfi_restore (rbx);
+			cfi_restore (rbx)
 
 #define PUSHARGS_2	PUSHARGS_1
 #define	DOARGS_2	_DOARGS_2 (8)
@@ -174,10 +174,10 @@
 #define DOARGS_6	_DOARGS_6 (40)
 #define POPARGS_6	_POPARGS_6
 #define _PUSHARGS_6	pushq %rbp; cfi_adjust_cfa_offset (8); \
-			cfi_rel_offset (rbp, 0); L(PUSHBP1): _PUSHARGS_5
+			cfi_rel_offset (rbp, 0); _PUSHARGS_5
 #define _DOARGS_6(n)	movl %r9d, %ebp; _DOARGS_5 (n-4)
 #define _POPARGS_6	_POPARGS_5; popq %rbp; cfi_adjust_cfa_offset (-8); \
-			cfi_restore (rbp); L(POPBP1):
+			cfi_restore (rbp)
 
 #else	/* !__ASSEMBLER__ */
 
