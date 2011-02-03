@@ -23,6 +23,9 @@
 #include <sysdeps/unix/sysv/linux/x86_64/sysdep.h>
 #include <sysdeps/x86_64/x32/sysdep.h>
 
+#undef __NR_pread 
+#undef __NR_pwrite
+
 #ifdef __ASSEMBLER__
 
 # ifndef PIC
@@ -202,21 +205,22 @@
   INTERNAL_SYSCALL (name, err, nr, ##args)
 
 # define LOADARGS_0
+# define LOADARGS_5
 # ifdef __PIC__
 #  define LOADARGS_1	"xchgq %q1, %%rbx\n"
 #  define LOADARGS_2	LOADARGS_1
 #  define LOADARGS_3	LOADARGS_1
 #  define LOADARGS_4	LOADARGS_1
-#  define LOADARGS_5	LOADARGS_1
 # else
 #  define LOADARGS_1
 #  define LOADARGS_2
 #  define LOADARGS_3
 #  define LOADARGS_4
-#  define LOADARGS_5
 # endif
 
 # define ASMFMT_0()
+# define ASMFMT_5(arg1, arg2, arg3, arg4, arg5) \
+	, "b" (arg1), "c" (arg2), "d" (arg3), "S" (arg4), "D" (arg5)
 # ifdef __PIC__
 #  define ASMFMT_1(arg1) \
 	, "cd" (arg1)
@@ -226,8 +230,6 @@
 	, "D" (arg1), "c" (arg2), "d" (arg3)
 #  define ASMFMT_4(arg1, arg2, arg3, arg4) \
 	, "D" (arg1), "c" (arg2), "d" (arg3), "S" (arg4)
-#  define ASMFMT_5(arg1, arg2, arg3, arg4, arg5) \
-	, "r9" (arg1), "c" (arg2), "d" (arg3), "S" (arg4), "D" (arg5)
 # else
 #  define ASMFMT_1(arg1) \
 	, "b" (arg1)
@@ -237,8 +239,6 @@
 	, "b" (arg1), "c" (arg2), "d" (arg3)
 #  define ASMFMT_4(arg1, arg2, arg3, arg4) \
 	, "b" (arg1), "c" (arg2), "d" (arg3), "S" (arg4)
-#  define ASMFMT_5(arg1, arg2, arg3, arg4, arg5) \
-	, "b" (arg1), "c" (arg2), "d" (arg3), "S" (arg4), "D" (arg5)
 # endif
 
 #endif	/* __ASSEMBLER__ */

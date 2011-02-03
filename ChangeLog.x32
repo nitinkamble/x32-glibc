@@ -1,3 +1,10 @@
+2011-02-03  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/sysdep.h (__NR_pread): Undef.
+	(__NR_pwrite): Likewise.
+	(LOADARGS_5): Remove PIC version.
+	(ASMFMT_5): Likewise.
+
 2011-01-29  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/unix/sysv/linux/x86_64/x32/sysdep.h (PUSHARGS_1): Remove
