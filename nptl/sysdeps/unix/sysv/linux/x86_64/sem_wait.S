@@ -179,5 +179,5 @@ sem_wait_cleanup:
 	.type	DW.ref.__gcc_personality_v0, @object
 	.size	DW.ref.__gcc_personality_v0, 8
 DW.ref.__gcc_personality_v0:
-	.quad	__gcc_personality_v0
+	ASM_ADDR __gcc_personality_v0
 #endif
