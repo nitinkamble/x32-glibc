@@ -22,21 +22,3 @@
 /* Location of current stack frame.  The frame pointer is not usable.  */
 #define CURRENT_STACK_FRAME \
   ({ char *frame; asm ("movl %%esp, %0" : "=r" (frame)); frame; })
-
-#ifdef PIC
-# define PTHREADDEF_EBX_LOAD	"xchgl %1, %%ebx\n\t"
-# define PTHREADDEF_EBX_REG	"D"
-#else
-# define PTHREADDEF_EBX_LOAD
-# define PTHREADDEF_EBX_REG	"b"
-#endif
-
-/* XXX Until we have a better place keep the definitions here.  */
-
-/* While there is no such syscall.  */
-#undef __exit_thread_inline
-# define __exit_thread_inline(val) 					\
-  asm volatile (PTHREADDEF_EBX_LOAD					\
-		"int $0x80\n\t"						\
-		PTHREADDEF_EBX_LOAD					\
-		:: "a" (__NR_exit), PTHREADDEF_EBX_REG (val))
