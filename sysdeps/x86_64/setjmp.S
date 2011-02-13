@@ -25,7 +25,7 @@ ENTRY (__sigsetjmp)
 	/* Save registers.  */
 	movq %rbx, (JB_RBX*8)(%rdi)
 #ifdef PTR_MANGLE
-	movq %rbp, %rax
+	mov %RBP, %RAX
 	PTR_MANGLE (%RAX)
 	movq %rax, (JB_RBP*8)(%rdi)
 #else
@@ -40,7 +40,7 @@ ENTRY (__sigsetjmp)
 	PTR_MANGLE (%RDX)
 #endif
 	movq %rdx, (JB_RSP*8)(%rdi)
-	movq (%rsp), %rax	/* Save PC we are returning to now.  */
+	mov (%rsp), %RAX	/* Save PC we are returning to now.  */
 #ifdef PTR_MANGLE
 	PTR_MANGLE (%RAX)
 #endif

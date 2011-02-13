@@ -89,11 +89,13 @@
 #undef PTR_DEMANGLE
 
 #undef RAX
+#undef RBP
 #undef RDX
 #undef R8
 #undef R9
 
 #define RAX	eax
+#define RBP	ebp
 #define RDX	edx
 #define R8	r8d
 #define R9	r9d

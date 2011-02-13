@@ -371,6 +371,7 @@
 
 /* Pointer mangling support.  */
 #define RAX	rax
+#define RBP	rbp
 #define RDX	rdx
 #define R8	r8
 #define R9	r9

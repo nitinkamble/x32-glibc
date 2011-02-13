@@ -450,8 +450,8 @@ __pthread_cond_timedwait:
 	   kernel.  */
 	leaq	32(%rsp), %rsi
 #  ifdef SHARED
-	movq	__vdso_clock_gettime@GOTPCREL(%rip), %rax
-	movq	(%rax), %rax
+	mov	__vdso_clock_gettime@GOTPCREL(%rip), %RAX
+	mov	(%rax), %RAX
 	PTR_DEMANGLE (%RAX)
 	jz	26f
 	call	*%rax
