@@ -30,9 +30,9 @@ ENTRY(__longjmp)
 	movq (JB_RBP*8)(%rdi),%r9
 	movq (JB_PC*8)(%rdi),%rdx
 #ifdef PTR_DEMANGLE
-	PTR_DEMANGLE (%r8)
-	PTR_DEMANGLE (%r9)
-	PTR_DEMANGLE (%rdx)
+	PTR_DEMANGLE (%R8)
+	PTR_DEMANGLE (%R9)
+	PTR_DEMANGLE (%RDX)
 #endif
 	/* We add unwind information for the target here.  */
 	cfi_def_cfa(%rdi, 0)

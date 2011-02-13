@@ -88,6 +88,16 @@
 #undef PTR_MANGLE
 #undef PTR_DEMANGLE
 
+#undef RAX
+#undef RDX
+#undef R8
+#undef R9
+
+#define RAX	eax
+#define RDX	edx
+#define R8	r8d
+#define R9	r9d
+
 #if defined NOT_IN_libc && defined IS_IN_rtld
 /* We cannot use the thread descriptor because in ld.so we use setjmp
    earlier than the descriptor is initialized.  */

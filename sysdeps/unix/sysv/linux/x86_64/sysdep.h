@@ -370,6 +370,11 @@
 
 
 /* Pointer mangling support.  */
+#define RAX	rax
+#define RDX	rdx
+#define R8	r8
+#define R9	r9
+
 #if defined NOT_IN_libc && defined IS_IN_rtld
 /* We cannot use the thread descriptor because in ld.so we use setjmp
    earlier than the descriptor is initialized.  */

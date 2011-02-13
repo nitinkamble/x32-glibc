@@ -452,7 +452,7 @@ __pthread_cond_timedwait:
 #  ifdef SHARED
 	movq	__vdso_clock_gettime@GOTPCREL(%rip), %rax
 	movq	(%rax), %rax
-	PTR_DEMANGLE (%rax)
+	PTR_DEMANGLE (%RAX)
 	jz	26f
 	call	*%rax
 	jmp	27f
@@ -813,5 +813,5 @@ __condvar_cleanup2:
 	.type	DW.ref.__gcc_personality_v0, @object
 	.size	DW.ref.__gcc_personality_v0, 8
 DW.ref.__gcc_personality_v0:
-	.quad	__gcc_personality_v0
+	ASM_ADDR __gcc_personality_v0
 #endif

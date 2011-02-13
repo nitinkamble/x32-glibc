@@ -1,5 +1,25 @@
 2011-02-12  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/unix/sysv/linux/x86_64/____longjmp_chk.S: Use
+	register macros in PTR_DEMANGLE/PTR_MANGLE.
+	* sysdeps/x86_64/__longjmp.S: Likewise.
+	* sysdeps/x86_64/setjmp.S: Likewise.
+
+	* sysdeps/unix/sysv/linux/x86_64/sysdep.h (RAX): New.
+	(RDX): Likewise.
+	(R8): Likewise.
+	(R9): Likewise.
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/sysdep.h (RAX): New.
+	(RDX): Likewise.
+	(R8): Likewise.
+	(R9): Likewise.
+
+	* sysdeps/x86_64/x32/__longjmp.S: Removed.
+	* sysdeps/x86_64/x32/setjmp.S: Likewise.
+
+2011-02-12  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/unix/sysv/linux/x86_64/x32/kernel_stat.h: New.
 	* sysdeps/unix/sysv/linux/x86_64/x32/syscalls.list: Likewise.
 
