@@ -76,7 +76,7 @@ elf_machine_load_address (void)
   asm ("leaq _dl_start(%%rip), %0\n\t"
        "subq 1f(%%rip), %0\n\t"
        ".section\t.data.rel.ro\n"
-       "1:\t.quad _dl_start\n\t"
+       "1:\t" ASM_ADDR " _dl_start\n\t"
        ".previous\n\t"
        : "=r" (addr) : : "cc");
 

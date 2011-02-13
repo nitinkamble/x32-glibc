@@ -1,5 +1,10 @@
 2011-02-13  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/x86_64/dl-machine.h (elf_machine_load_address): Use
+	ASM_ADDR.
+
+2011-02-13  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/x86_64/sysdep.h (ASM_ADDR): Define C version.
 	* sysdeps/x86_64/x32/sysdep.h (ASM_ADDR): Likewise.
 
