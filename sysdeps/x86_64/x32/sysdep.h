@@ -17,9 +17,14 @@
    Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
    02111-1307 USA.  */
 
+#undef ASM_ADDR
+
 #ifdef	__ASSEMBLER__
 
-#undef ASM_ADDR
-#define ASM_ADDR .long
+# define ASM_ADDR .long
+
+#else	/* __ASSEMBLER__ */
+
+# define ASM_ADDR ".long"
 
 #endif	/* __ASSEMBLER__ */

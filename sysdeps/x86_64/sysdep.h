@@ -117,4 +117,9 @@ lose:									      \
 /* Assembler address directive. */
 #define ASM_ADDR .quad
 
+#else	/* __ASSEMBLER__ */
+
+/* Assembler address directive. */
+#define ASM_ADDR ".quad"
+
 #endif	/* __ASSEMBLER__ */
