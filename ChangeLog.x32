@@ -1,5 +1,11 @@
 2011-02-14  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/unix/sysv/linux/x86_64/x32/sysdep.h (__NR_pread): Don't
+	undef.
+	(__NR_pwrite): Likewise.
+
+2011-02-14  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/unix/sysv/linux/x86_64/x32/sysdep.h (PSEUDO): New.
 	(SYSCALL_ERROR_HANDLER): Fix a typo.
 	

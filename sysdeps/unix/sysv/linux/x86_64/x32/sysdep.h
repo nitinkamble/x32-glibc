@@ -23,9 +23,6 @@
 #include <sysdeps/unix/sysv/linux/x86_64/sysdep.h>
 #include <sysdeps/x86_64/x32/sysdep.h>
 
-#undef __NR_pread 
-#undef __NR_pwrite
-
 #ifdef __ASSEMBLER__
 
 # undef	PSEUDO
