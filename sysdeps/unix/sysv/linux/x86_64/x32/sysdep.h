@@ -28,13 +28,22 @@
 
 #ifdef __ASSEMBLER__
 
+# undef	PSEUDO
+# define PSEUDO(name, syscall_name, args)				      \
+  .text;								      \
+  ENTRY (name)								      \
+    DO_CALL (syscall_name, args);					      \
+    cmp $-4095, %eax;							      \
+    jae SYSCALL_ERROR_LABEL;						      \
+  L(pseudo_end):
+
 # ifndef PIC
 /* Nothing here.  */
 # elif RTLD_PRIVATE_ERRNO
 #  undef SYSCALL_ERROR_HANDLER
 #  define SYSCALL_ERROR_HANDLER			\
 0:						\
-  leaq rtld_errno(%rip), %ecx;			\
+  lea rtld_errno(%rip), %ecx;			\
   xorl %edx, %edx;				\
   subl %eax, %edx;				\
   movl %edx, (%rcx);				\
