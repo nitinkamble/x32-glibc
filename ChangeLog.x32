@@ -1,5 +1,13 @@
 2011-02-14  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/unix/sysv/linux/x86_64/x32/mmap64.c: New.
+	* sysdeps/unix/sysv/linux/x86_64/x32/pread64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/pwrite64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/sendfile64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/truncate64.c: Likewise.
+
+2011-02-14  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/unix/sysv/linux/x86_64/x32/sysdep.h (__NR_pread): Don't
 	undef.
 	(__NR_pwrite): Likewise.
