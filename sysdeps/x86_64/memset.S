@@ -56,66 +56,17 @@ L(now_dw_aligned):
 	jg     L(ck_mem_ops_method)
 L(now_dw_aligned_small):
 	add    %r8,%rdi
-#ifndef PIC
-	lea    L(setPxQx)(%rip),%r11
-	jmpq   *(%r11,%r8,8)
-#else
 	lea    L(Got0)(%rip),%r11
 	lea    L(setPxQx)(%rip),%rcx
 	movswq (%rcx,%r8,2),%rcx
 	lea    (%rcx,%r11,1),%r11
 	jmpq   *%r11
-#endif
 
 L(Got0):
 	retq
 
 	.pushsection .rodata
 	.balign     16
-#ifndef PIC
-L(setPxQx):
-	ASM_ADDR       L(Got0), L(P1Q0), L(P2Q0), L(P3Q0)
-	ASM_ADDR       L(P4Q0), L(P5Q0), L(P6Q0), L(P7Q0)
-	ASM_ADDR       L(P0Q1), L(P1Q1), L(P2Q1), L(P3Q1)
-	ASM_ADDR       L(P4Q1), L(P5Q1), L(P6Q1), L(P7Q1)
-	ASM_ADDR       L(P0Q2), L(P1Q2), L(P2Q2), L(P3Q2)
-	ASM_ADDR       L(P4Q2), L(P5Q2), L(P6Q2), L(P7Q2)
-	ASM_ADDR       L(P0Q3), L(P1Q3), L(P2Q3), L(P3Q3)
-	ASM_ADDR       L(P4Q3), L(P5Q3), L(P6Q3), L(P7Q3)
-	ASM_ADDR       L(P0Q4), L(P1Q4), L(P2Q4), L(P3Q4)
-	ASM_ADDR       L(P4Q4), L(P5Q4), L(P6Q4), L(P7Q4)
-	ASM_ADDR       L(P0Q5), L(P1Q5), L(P2Q5), L(P3Q5)
-	ASM_ADDR       L(P4Q5), L(P5Q5), L(P6Q5), L(P7Q5)
-	ASM_ADDR       L(P0Q6), L(P1Q6), L(P2Q6), L(P3Q6)
-	ASM_ADDR       L(P4Q6), L(P5Q6), L(P6Q6), L(P7Q6)
-	ASM_ADDR       L(P0Q7), L(P1Q7), L(P2Q7), L(P3Q7)
-	ASM_ADDR       L(P4Q7), L(P5Q7), L(P6Q7), L(P7Q7)
-	ASM_ADDR       L(P0Q8), L(P1Q8), L(P2Q8), L(P3Q8)
-	ASM_ADDR       L(P4Q8), L(P5Q8), L(P6Q8), L(P7Q8)
-	ASM_ADDR       L(P0Q9), L(P1Q9), L(P2Q9), L(P3Q9)
-	ASM_ADDR       L(P4Q9), L(P5Q9), L(P6Q9), L(P7Q9)
-	ASM_ADDR       L(P0QA), L(P1QA), L(P2QA), L(P3QA)
-	ASM_ADDR       L(P4QA), L(P5QA), L(P6QA), L(P7QA)
-	ASM_ADDR       L(P0QB), L(P1QB), L(P2QB), L(P3QB)
-	ASM_ADDR       L(P4QB), L(P5QB), L(P6QB), L(P7QB)
-	ASM_ADDR       L(P0QC), L(P1QC), L(P2QC), L(P3QC)
-	ASM_ADDR       L(P4QC), L(P5QC), L(P6QC), L(P7QC)
-	ASM_ADDR       L(P0QD), L(P1QD), L(P2QD), L(P3QD)
-	ASM_ADDR       L(P4QD), L(P5QD), L(P6QD), L(P7QD)
-	ASM_ADDR       L(P0QE), L(P1QE), L(P2QE), L(P3QE)
-	ASM_ADDR       L(P4QE), L(P5QE), L(P6QE), L(P7QE)
-	ASM_ADDR       L(P0QF), L(P1QF), L(P2QF), L(P3QF)
-	ASM_ADDR       L(P4QF), L(P5QF), L(P6QF), L(P7QF)
-	ASM_ADDR       L(P0QG), L(P1QG), L(P2QG), L(P3QG)
-	ASM_ADDR       L(P4QG), L(P5QG), L(P6QG), L(P7QG)
-	ASM_ADDR       L(P0QH), L(P1QH), L(P2QH), L(P3QH)
-	ASM_ADDR       L(P4QH), L(P5QH), L(P6QH), L(P7QH)
-	ASM_ADDR       L(P0QI)
-# ifdef USE_EXTRA_TABLE
-	ASM_ADDR       L(P1QI), L(P2QI), L(P3QI), L(P4QI)
-	ASM_ADDR       L(P5QI), L(P6QI), L(P7QI)
-# endif
-#else
 L(setPxQx):
 	.short     L(Got0)-L(Got0)
 	.short     L(P1Q0)-L(Got0)
@@ -280,7 +231,7 @@ L(setPxQx):
 	.short     L(P7QH)-L(Got0)
 
 	.short     L(P0QI)-L(Got0)
-# ifdef USE_EXTRA_TABLE
+#ifdef USE_EXTRA_TABLE
 	.short     L(P1QI)-L(Got0)
 	.short     L(P2QI)-L(Got0)
 	.short     L(P3QI)-L(Got0)
@@ -288,7 +239,6 @@ L(setPxQx):
 	.short     L(P5QI)-L(Got0)
 	.short     L(P6QI)-L(Got0)
 	.short     L(P7QI)-L(Got0)
-# endif
 #endif
 	.popsection
 
@@ -508,26 +458,14 @@ L(ck_mem_ops_method):
 	and    $0xf,%r10
 	add    %r10,%rdi
 	sub    %r10,%r8
-#ifndef PIC
-	lea    L(AliPxQx)(%rip),%r11
-	jmpq   *(%r11,%r10,8)
-#else
 	lea    L(aligned_now)(%rip), %r11
 	lea    L(AliPxQx)(%rip),%rcx
 	movswq (%rcx,%r10,2),%rcx
 	lea    (%rcx,%r11,1),%r11
 	jmpq   *%r11
-#endif
 
 	.pushsection .rodata
 	.balign     16
-#ifndef PIC
-L(AliPxQx):
-	ASM_ADDR       L(aligned_now), L(A1Q0), L(A2Q0), L(A3Q0)
-	ASM_ADDR	    L(A4Q0), L(A5Q0), L(A6Q0), L(A7Q0)
-	ASM_ADDR       L(A0Q1), L(A1Q1), L(A2Q1), L(A3Q1)
-	ASM_ADDR       L(A4Q1), L(A5Q1), L(A6Q1), L(A7Q1)
-#else
 L(AliPxQx):
 	.short     L(aligned_now)-L(aligned_now)
 	.short     L(A1Q0)-L(aligned_now)
@@ -546,7 +484,6 @@ L(AliPxQx):
 	.short     L(A5Q1)-L(aligned_now)
 	.short     L(A6Q1)-L(aligned_now)
 	.short     L(A7Q1)-L(aligned_now)
-#endif
 	.popsection
 
 	.balign     16
@@ -606,29 +543,11 @@ L(SSE_pre):
 	 jge    L(byte32sse2_pre)
 
 	 add    %r8,%rdi
-#ifndef PIC
-# ifdef __LP64__
-	 lea    L(SSExDx)(%rip),%r9
-	 jmpq   *(%r9,%r8,8)
-# else
-	 lea    L(SSExDx)(%rip),%r9d
-	 lea 	(%r9,%r8,8), %r9d
-	 jmpq	*%r9
-# endif
-#else
-# ifdef __LP64__
 	 lea    L(SSE0Q0)(%rip),%r9
 	 lea    L(SSExDx)(%rip),%rcx
 	 movswq (%rcx,%r8,2),%rcx
 	 lea    (%rcx,%r9,1),%r9
-# else
-	 lea    L(SSE0Q0)(%rip),%r9d
-	 lea    L(SSExDx)(%rip),%ecx
-	 movswq (%rcx,%r8,2),%rcx
-	 lea    (%rcx,%r9,1),%r9d
-# endif
 	 jmpq   *%r9
-#endif
 
 L(SSE0QB):  movdqa %xmm0,-0xb0(%rdi)
 L(SSE0QA):  movdqa %xmm0,-0xa0(%rdi)
@@ -894,16 +813,11 @@ L(byte32sse2):
 	lea    0x80(%rdi),%rdi
 	jge    L(byte32sse2)
 	add    %r8,%rdi
-#ifndef PIC
-	lea    L(SSExDx)(%rip),%r11
-	jmpq   *(%r11,%r8,8)
-#else
 	lea    L(SSE0Q0)(%rip),%r11
 	lea    L(SSExDx)(%rip),%rcx
 	movswq (%rcx,%r8,2),%rcx
 	lea    (%rcx,%r11,1),%r11
 	jmpq   *%r11
-#endif
 
 	.balign     16
 L(sse2_nt_move_pre):
@@ -929,70 +843,14 @@ L(sse2_nt_move):
 	jge    L(sse2_nt_move)
 	sfence
 	add    %r8,%rdi
-#ifndef PIC
-	lea    L(SSExDx)(%rip),%r11
-	jmpq   *(%r11,%r8,8)
-#else
 	lea    L(SSE0Q0)(%rip),%r11
 	lea    L(SSExDx)(%rip),%rcx
 	movswq (%rcx,%r8,2),%rcx
 	lea   (%rcx,%r11,1),%r11
 	jmpq   *%r11
-#endif
 
 	.pushsection .rodata
 	.balign     16
-#ifndef PIC
-L(SSExDx):
-	ASM_ADDR       L(SSE0Q0), L(SSE1Q0), L(SSE2Q0), L(SSE3Q0)
-	ASM_ADDR       L(SSE4Q0), L(SSE5Q0), L(SSE6Q0), L(SSE7Q0)
-	ASM_ADDR       L(SSE8Q0), L(SSE9Q0), L(SSE10Q0), L(SSE11Q0)
-	ASM_ADDR       L(SSE12Q0), L(SSE13Q0), L(SSE14Q0), L(SSE15Q0)
-	ASM_ADDR       L(SSE0Q1), L(SSE1Q1), L(SSE2Q1), L(SSE3Q1)
-	ASM_ADDR       L(SSE4Q1), L(SSE5Q1), L(SSE6Q1), L(SSE7Q1)
-	ASM_ADDR       L(SSE8Q1), L(SSE9Q1), L(SSE10Q1), L(SSE11Q1)
-	ASM_ADDR       L(SSE12Q1), L(SSE13Q1), L(SSE14Q1), L(SSE15Q1)
-	ASM_ADDR       L(SSE0Q2), L(SSE1Q2), L(SSE2Q2), L(SSE3Q2)
-	ASM_ADDR       L(SSE4Q2), L(SSE5Q2), L(SSE6Q2), L(SSE7Q2)
-	ASM_ADDR       L(SSE8Q2), L(SSE9Q2), L(SSE10Q2), L(SSE11Q2)
-	ASM_ADDR       L(SSE12Q2), L(SSE13Q2), L(SSE14Q2), L(SSE15Q2)
-	ASM_ADDR       L(SSE0Q3), L(SSE1Q3), L(SSE2Q3), L(SSE3Q3)
-	ASM_ADDR       L(SSE4Q3), L(SSE5Q3), L(SSE6Q3), L(SSE7Q3)
-	ASM_ADDR       L(SSE8Q3), L(SSE9Q3), L(SSE10Q3), L(SSE11Q3)
-	ASM_ADDR       L(SSE12Q3), L(SSE13Q3), L(SSE14Q3), L(SSE15Q3)
-	ASM_ADDR       L(SSE0Q4), L(SSE1Q4), L(SSE2Q4), L(SSE3Q4)
-	ASM_ADDR       L(SSE4Q4), L(SSE5Q4), L(SSE6Q4), L(SSE7Q4)
-	ASM_ADDR       L(SSE8Q4), L(SSE9Q4), L(SSE10Q4), L(SSE11Q4)
-	ASM_ADDR       L(SSE12Q4), L(SSE13Q4), L(SSE14Q4), L(SSE15Q4)
-	ASM_ADDR       L(SSE0Q5), L(SSE1Q5), L(SSE2Q5), L(SSE3Q5)
-	ASM_ADDR       L(SSE4Q5), L(SSE5Q5), L(SSE6Q5), L(SSE7Q5)
-	ASM_ADDR       L(SSE8Q5), L(SSE9Q5), L(SSE10Q5), L(SSE11Q5)
-	ASM_ADDR       L(SSE12Q5), L(SSE13Q5), L(SSE14Q5), L(SSE15Q5)
-	ASM_ADDR       L(SSE0Q6), L(SSE1Q6), L(SSE2Q6), L(SSE3Q6)
-	ASM_ADDR       L(SSE4Q6), L(SSE5Q6), L(SSE6Q6), L(SSE7Q6)
-	ASM_ADDR       L(SSE8Q6), L(SSE9Q6), L(SSE10Q6), L(SSE11Q6)
-	ASM_ADDR       L(SSE12Q6), L(SSE13Q6), L(SSE14Q6), L(SSE15Q6)
-	ASM_ADDR       L(SSE0Q7), L(SSE1Q7), L(SSE2Q7), L(SSE3Q7)
-	ASM_ADDR       L(SSE4Q7), L(SSE5Q7), L(SSE6Q7), L(SSE7Q7)
-	ASM_ADDR       L(SSE8Q7), L(SSE9Q7), L(SSE10Q7), L(SSE11Q7)
-	ASM_ADDR       L(SSE12Q7), L(SSE13Q7), L(SSE14Q7), L(SSE15Q7)
-	ASM_ADDR       L(SSE0Q8), L(SSE1Q8), L(SSE2Q8), L(SSE3Q8)
-	ASM_ADDR       L(SSE4Q8), L(SSE5Q8), L(SSE6Q8), L(SSE7Q8)
-	ASM_ADDR       L(SSE8Q8), L(SSE9Q8), L(SSE10Q8), L(SSE11Q8)
-	ASM_ADDR       L(SSE12Q8), L(SSE13Q8), L(SSE14Q8), L(SSE15Q8)
-	ASM_ADDR       L(SSE0Q9), L(SSE1Q9), L(SSE2Q9), L(SSE3Q9)
-	ASM_ADDR       L(SSE4Q9), L(SSE5Q9), L(SSE6Q9), L(SSE7Q9)
-	ASM_ADDR       L(SSE8Q9), L(SSE9Q9), L(SSE10Q9), L(SSE11Q9)
-	ASM_ADDR       L(SSE12Q9), L(SSE13Q9), L(SSE14Q9), L(SSE15Q9)
-	ASM_ADDR       L(SSE0QA), L(SSE1QA), L(SSE2QA), L(SSE3QA)
-	ASM_ADDR       L(SSE4QA), L(SSE5QA), L(SSE6QA), L(SSE7QA)
-	ASM_ADDR       L(SSE8QA), L(SSE9QA), L(SSE10QA), L(SSE11QA)
-	ASM_ADDR       L(SSE12QA), L(SSE13QA), L(SSE14QA), L(SSE15QA)
-	ASM_ADDR       L(SSE0QB), L(SSE1QB), L(SSE2QB), L(SSE3QB)
-	ASM_ADDR       L(SSE4QB), L(SSE5QB), L(SSE6QB), L(SSE7QB)
-	ASM_ADDR       L(SSE8QB), L(SSE9QB), L(SSE10QB), L(SSE11QB)
-	ASM_ADDR       L(SSE12QB), L(SSE13QB), L(SSE14QB), L(SSE15QB)
-#else
 L(SSExDx):
 	.short     L(SSE0Q0) -L(SSE0Q0)
 	.short     L(SSE1Q0) -L(SSE0Q0)
@@ -1209,7 +1067,6 @@ L(SSExDx):
 	.short     L(SSE13QB)-L(SSE0Q0)
 	.short     L(SSE14QB)-L(SSE0Q0)
 	.short     L(SSE15QB)-L(SSE0Q0)
-#endif
 	.popsection
 #endif /* !defined USE_MULTIARCH || defined USE_SSE2  */
 
@@ -1261,16 +1118,11 @@ L(8byte_move_skip):
 	andl	$127,%r8d
 	lea    	(%rdi,%r8,1),%rdi
 
-#ifndef PIC
-	lea    	L(setPxQx)(%rip),%r11
-	jmpq   	*(%r11,%r8,8) # old scheme remained for nonPIC
-#else
 	lea    	L(Got0)(%rip),%r11
 	lea	L(setPxQx)(%rip),%rcx
 	movswq	(%rcx,%r8,2),%rcx
 	lea    	(%rcx,%r11,1),%r11
 	jmpq   	*%r11
-#endif
 
 	.balign     16
 L(8byte_stos_try):
@@ -1304,16 +1156,11 @@ L(8byte_stos_skip):
 
 	andl	$7,%r8d
 	lea    	(%rdi,%r8,1),%rdi
-#ifndef PIC
-	lea    	L(setPxQx)(%rip),%r11
-	jmpq   	*(%r11,%r8,8) # old scheme remained for nonPIC
-#else
 	lea    	L(Got0)(%rip),%r11
 	lea     L(setPxQx)(%rip),%rcx
 	movswq	(%rcx,%r8,2),%rcx
 	lea	(%rcx,%r11,1),%r11
 	jmpq   	*%r11
-#endif
 
 	.balign     16
 L(8byte_nt_move):
@@ -1352,16 +1199,11 @@ L(8byte_nt_move_skip):
 	andl	$127,%r8d
 
 	lea    	(%rdi,%r8,1),%rdi
-#ifndef PIC
-	lea    	L(setPxQx)(%rip),%r11
-	jmpq   	*(%r11,%r8,8) # old scheme remained for nonPIC
-#else
 	lea    	L(Got0)(%rip),%r11
 	lea     L(setPxQx)(%rip),%rcx
 	movswq	(%rcx,%r8,2),%rcx
 	lea    	(%rcx,%r11,1),%r11
 	jmpq   	*%r11
-#endif
 
 END (memset)
 libc_hidden_builtin_def (memset)
