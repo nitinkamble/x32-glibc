@@ -89,7 +89,7 @@ elf_machine_load_address (void)
 static inline int __attribute__ ((unused, always_inline))
 elf_machine_runtime_setup (struct link_map *l, int lazy, int profile)
 {
-  ElfW(Addr) *got;
+  Elf64_Addr *got;
   extern void _dl_runtime_resolve (ElfW(Word)) attribute_hidden;
   extern void _dl_runtime_profile (ElfW(Word)) attribute_hidden;
 
@@ -99,7 +99,7 @@ elf_machine_runtime_setup (struct link_map *l, int lazy, int profile)
 	 in.  Their initial contents will arrange when called to push an
 	 offset into the .rel.plt section, push _GLOBAL_OFFSET_TABLE_[1],
 	 and then jump to _GLOBAL_OFFSET_TABLE[2].  */
-      got = (ElfW(Addr) *) D_PTR (l, l_info[DT_PLTGOT]);
+      got = (Elf64_Addr *) D_PTR (l, l_info[DT_PLTGOT]);
       /* If a library is prelinked but we have to relocate anyway,
 	 we have to be able to undo the prelinking of .got.plt.
 	 The prelinker saved us here address of .plt + 0x16.  */
@@ -108,7 +108,8 @@ elf_machine_runtime_setup (struct link_map *l, int lazy, int profile)
 	  l->l_mach.plt = got[1] + l->l_addr;
 	  l->l_mach.gotplt = (ElfW(Addr)) &got[3];
 	}
-      got[1] = (ElfW(Addr)) l;	/* Identify this shared object.  */
+      /* Identify this shared object.  */
+      *(ElfW(Addr) *) (got + 1) = (ElfW(Addr)) l;
 
       /* The got[2] entry contains the address of a function which gets
 	 called to get the address of a so far unresolved function and
@@ -118,7 +119,7 @@ elf_machine_runtime_setup (struct link_map *l, int lazy, int profile)
 	 end in this function.  */
       if (__builtin_expect (profile, 0))
 	{
-	  got[2] = (ElfW(Addr)) &_dl_runtime_profile;
+	  *(ElfW(Addr) *) (got + 2) = (ElfW(Addr)) &_dl_runtime_profile;
 
 	  if (GLRO(dl_profile) != NULL
 	      && _dl_name_match_p (GLRO(dl_profile), l))
@@ -129,7 +130,7 @@ elf_machine_runtime_setup (struct link_map *l, int lazy, int profile)
       else
 	/* This function will get called to fix up the GOT entry indicated by
 	   the offset on the stack, and then jump to the resolved address.  */
-	got[2] = (ElfW(Addr)) &_dl_runtime_resolve;
+	*(ElfW(Addr) *) (got + 2) = (ElfW(Addr)) &_dl_runtime_resolve;
     }
 
   if (l->l_info[ADDRIDX (DT_TLSDESC_GOT)] && lazy)

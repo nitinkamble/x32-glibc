@@ -54,6 +54,7 @@
 					NULL
 */
 
+#include <sysdep.h>
 #include "bp-sym.h"
 
 	.text
@@ -78,12 +79,12 @@ _start:
 	rtld_fini:	%r9
 	stack_end:	stack.	*/
 
-	movq %rdx, %r9		/* Address of the shared library termination
+	mov %RDX, %R9		/* Address of the shared library termination
 				   function.  */
 	popq %rsi		/* Pop the argument count.  */
-	movq %rsp, %rdx		/* argv starts just at the current stack top.  */
+	mov %RSP, %RDX		/* argv starts just at the current stack top.  */
 	/* Align the stack to a 16 byte boundary to follow the ABI.  */
-	andq  $~15, %rsp
+	and  $~15, %RSP
 
 	pushq %rax		/* Push garbage because we push 8 more bytes.  */
 
@@ -93,20 +94,20 @@ _start:
 
 #ifdef SHARED
 	/* Pass address of our own entry points to .fini and .init.  */
-	movq __libc_csu_fini@GOTPCREL(%rip), %r8
-	movq __libc_csu_init@GOTPCREL(%rip), %rcx
+	mov __libc_csu_fini@GOTPCREL(%rip), %R8
+	mov __libc_csu_init@GOTPCREL(%rip), %RCX
 
-	movq BP_SYM (main)@GOTPCREL(%rip), %rdi
+	mov BP_SYM (main)@GOTPCREL(%rip), %RDI
 
 	/* Call the user's main function, and exit with its value.
 	   But let the libc call main.	  */
 	call BP_SYM (__libc_start_main)@PLT
 #else
 	/* Pass address of our own entry points to .fini and .init.  */
-	movq $__libc_csu_fini, %r8
-	movq $__libc_csu_init, %rcx
+	mov $__libc_csu_fini, %R8
+	mov $__libc_csu_init, %RCX
 
-	movq $BP_SYM (main), %rdi
+	mov $BP_SYM (main), %RDI
 
 	/* Call the user's main function, and exit with its value.
 	   But let the libc call main.	  */

@@ -21,6 +21,26 @@
 
 #ifdef	__ASSEMBLER__
 
+#undef RAX
+#undef RBP
+#undef RCX
+#undef RDI
+#undef RDX
+#undef RSP
+#undef R8
+#undef R9
+#undef R11
+
+#define RAX	eax
+#define RBP	ebp
+#define RCX	ecx
+#define RDI	edi
+#define RDX	edx
+#define RSP	esp
+#define R8	r8d
+#define R9	r9d
+#define R11	r11d
+
 # define ASM_ADDR .long
 
 #else	/* __ASSEMBLER__ */

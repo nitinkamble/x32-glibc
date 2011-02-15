@@ -117,6 +117,16 @@ lose:									      \
 /* Assembler address directive. */
 #define ASM_ADDR .quad
 
+#define RAX	rax
+#define RBP	rbp
+#define RCX	rcx
+#define RDI	rdi
+#define RDX	rdx
+#define RSP	rsp
+#define R8	r8
+#define R9	r9
+#define R11	r11
+
 #else	/* __ASSEMBLER__ */
 
 /* Assembler address directive. */
