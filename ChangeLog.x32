@@ -1,3 +1,9 @@
+2011-02-15  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/x86_64/dl-machine.h (elf_machine_rela): For x32,
+	sign extend relocation result to 64bit for R_X86_64_DTPOFF64
+	and R_X86_64_TPOFF64, and don't process R_X86_64_64.
+
 2011-02-14  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/unix/sysv/linux/x86_64/sysdep.h (RAX..R9): Removed.
