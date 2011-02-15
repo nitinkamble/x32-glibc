@@ -97,7 +97,7 @@
 
 ENTRY2 (__strcasecmp)
 	movq	__libc_tsd_LOCALE@gottpoff(%rip),%rax
-	movq	%fs:(%rax),%rdx
+	mov	%fs:(%rax),%RDX
 
 	// XXX 5 byte should be before the function
 	/* 5-byte NOP.  */
@@ -116,7 +116,7 @@ libc_hidden_def (__strcasecmp)
 
 ENTRY2 (__strncasecmp)
 	movq	__libc_tsd_LOCALE@gottpoff(%rip),%rax
-	movq	%fs:(%rax),%rcx
+	mov	%fs:(%rax),%RCX
 
 	// XXX 5 byte should be before the function
 	/* 5-byte NOP.  */
@@ -153,7 +153,7 @@ END (BP_SYM (STRCMP))
 	/* We have to fall back on the C implementation for locales
 	   with encodings not matching ASCII for single bytes.  */
 #  if LOCALE_T___LOCALES != 0 || LC_CTYPE != 0
-	movq	LOCALE_T___LOCALES+LC_CTYPE*8(%rdx), %rax
+	movq	LOCALE_T___LOCALES+LC_CTYPE*POINTER_SIZE(%rdx), %rax
 #  else
 	movq	(%rdx), %rax
 #  endif
@@ -163,7 +163,7 @@ END (BP_SYM (STRCMP))
 	/* We have to fall back on the C implementation for locales
 	   with encodings not matching ASCII for single bytes.  */
 #  if LOCALE_T___LOCALES != 0 || LC_CTYPE != 0
-	movq	LOCALE_T___LOCALES+LC_CTYPE*8(%rcx), %rax
+	movq	LOCALE_T___LOCALES+LC_CTYPE*POINTER_SIZE(%rcx), %rax
 #  else
 	movq	(%rcx), %rax
 #  endif
