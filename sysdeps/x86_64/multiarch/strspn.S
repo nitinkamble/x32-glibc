@@ -33,10 +33,10 @@ ENTRY(strspn)
 	cmpl	$0, __cpu_features+KIND_OFFSET(%rip)
 	jne	1f
 	call	__init_cpu_features
-1:	leaq	__strspn_sse2(%rip), %rax
+1:	lea	__strspn_sse2(%rip), %RAX
 	testl	$bit_SSE4_2, __cpu_features+CPUID_OFFSET+index_SSE4_2(%rip)
 	jz	2f
-	leaq	__strspn_sse42(%rip), %rax
+	lea	__strspn_sse42(%rip), %RAX
 2:	ret
 END(strspn)
 

@@ -62,10 +62,10 @@ ENTRY(STRCPY)
 	cmpl	$0, __cpu_features+KIND_OFFSET(%rip)
 	jne	1f
 	call	__init_cpu_features
-1:	leaq	STRCPY_SSE2(%rip), %rax
+1:	lea	STRCPY_SSE2(%rip), %RAX
 	testl	$bit_SSSE3, __cpu_features+CPUID_OFFSET+index_SSSE3(%rip)
 	jz	2f
-	leaq	STRCPY_SSSE3(%rip), %rax
+	lea	STRCPY_SSSE3(%rip), %RAX
 2:	ret
 END(STRCPY)
 

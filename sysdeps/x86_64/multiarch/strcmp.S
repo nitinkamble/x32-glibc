@@ -90,13 +90,13 @@ ENTRY(STRCMP)
 	jne	1f
 	call	__init_cpu_features
 1:
-	leaq	STRCMP_SSE42(%rip), %rax
+	lea	STRCMP_SSE42(%rip), %RAX
 	testl	$bit_SSE4_2, __cpu_features+CPUID_OFFSET+index_SSE4_2(%rip)
 	jnz	2f
-	leaq	STRCMP_SSSE3(%rip), %rax
+	lea	STRCMP_SSSE3(%rip), %RAX
 	testl	$bit_SSSE3, __cpu_features+CPUID_OFFSET+index_SSSE3(%rip)
 	jnz	2f
-	leaq	STRCMP_SSE2(%rip), %rax
+	lea	STRCMP_SSE2(%rip), %RAX
 2:	ret
 END(STRCMP)
 
@@ -107,13 +107,13 @@ ENTRY(__strcasecmp)
 	jne	1f
 	call	__init_cpu_features
 1:
-	leaq	__strcasecmp_sse42(%rip), %rax
+	lea	__strcasecmp_sse42(%rip), %RAX
 	testl	$bit_SSE4_2, __cpu_features+CPUID_OFFSET+index_SSE4_2(%rip)
 	jnz	2f
-	leaq	__strcasecmp_ssse3(%rip), %rax
+	lea	__strcasecmp_ssse3(%rip), %RAX
 	testl	$bit_SSSE3, __cpu_features+CPUID_OFFSET+index_SSSE3(%rip)
 	jnz	2f
-	leaq	__strcasecmp_sse2(%rip), %rax
+	lea	__strcasecmp_sse2(%rip), %RAX
 2:	ret
 END(__strcasecmp)
 weak_alias (__strcasecmp, strcasecmp)
@@ -125,13 +125,13 @@ ENTRY(__strncasecmp)
 	jne	1f
 	call	__init_cpu_features
 1:
-	leaq	__strncasecmp_sse42(%rip), %rax
+	lea	__strncasecmp_sse42(%rip), %RAX
 	testl	$bit_SSE4_2, __cpu_features+CPUID_OFFSET+index_SSE4_2(%rip)
 	jnz	2f
-	leaq	__strncasecmp_ssse3(%rip), %rax
+	lea	__strncasecmp_ssse3(%rip), %RAX
 	testl	$bit_SSSE3, __cpu_features+CPUID_OFFSET+index_SSSE3(%rip)
 	jnz	2f
-	leaq	__strncasecmp_sse2(%rip), %rax
+	lea	__strncasecmp_sse2(%rip), %RAX
 2:	ret
 END(__strncasecmp)
 weak_alias (__strncasecmp, strncasecmp)
