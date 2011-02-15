@@ -1,5 +1,10 @@
 2011-02-15  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/x86_64/preconfigure (libdir): Set to
+	'${exec_prefix}/lib32' if -mx32 is used.
+
+2011-02-15  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/x86_64/dl-machine.h (elf_machine_rela): For x32,
 	sign extend relocation result to 64bit for R_X86_64_DTPOFF64
 	and R_X86_64_TPOFF64, and don't process R_X86_64_64.
