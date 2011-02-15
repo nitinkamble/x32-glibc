@@ -4,7 +4,11 @@ x86_64)
   *" -mx32"*)
     machine=x86_64/x32
     libc_cv_slibdir="/lib32"
-    libdir='${exec_prefix}/lib32'
+    if test "$libdir" = '${exec_prefix}/lib'; then
+      libdir='${exec_prefix}/lib32';
+      # Locale data can be shared.
+      libc_cv_localedir='${exec_prefix}/lib/locale'
+    fi
     ;;
   *)
     machine=x86_64/lp64
