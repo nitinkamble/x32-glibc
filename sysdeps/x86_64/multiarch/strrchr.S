@@ -100,7 +100,7 @@ __strrchr_sse42:
 	je	L(loop)
 
 /* Handle unaligned string using psrldq.  */
-	leaq	L(psrldq_table)(%rip), %rdx
+	lea	L(psrldq_table)(%rip), %RDX
 	andq	$-16, %r8
 	movslq	(%rdx,%rsi,4),%r9
 	movdqa	(%r8), %xmm0

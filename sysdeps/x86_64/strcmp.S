@@ -153,9 +153,9 @@ END (BP_SYM (STRCMP))
 	/* We have to fall back on the C implementation for locales
 	   with encodings not matching ASCII for single bytes.  */
 #  if LOCALE_T___LOCALES != 0 || LC_CTYPE != 0
-	movq	LOCALE_T___LOCALES+LC_CTYPE*POINTER_SIZE(%rdx), %rax
+	mov	LOCALE_T___LOCALES+LC_CTYPE*POINTER_SIZE(%rdx), %RAX
 #  else
-	movq	(%rdx), %rax
+	mov	(%rdx), %RAX
 #  endif
 	testl	$0, LOCALE_DATA_VALUES+_NL_CTYPE_NONASCII_CASE*SIZEOF_VALUES(%rax)
 	jne	__strcasecmp_l_nonascii
@@ -163,9 +163,9 @@ END (BP_SYM (STRCMP))
 	/* We have to fall back on the C implementation for locales
 	   with encodings not matching ASCII for single bytes.  */
 #  if LOCALE_T___LOCALES != 0 || LC_CTYPE != 0
-	movq	LOCALE_T___LOCALES+LC_CTYPE*POINTER_SIZE(%rcx), %rax
+	mov	LOCALE_T___LOCALES+LC_CTYPE*POINTER_SIZE(%rcx), %RAX
 #  else
-	movq	(%rcx), %rax
+	mov	(%rcx), %RAX
 #  endif
 	testl	$0, LOCALE_DATA_VALUES+_NL_CTYPE_NONASCII_CASE*SIZEOF_VALUES(%rax)
 	jne	__strncasecmp_l_nonascii
@@ -2258,7 +2258,7 @@ LABEL(less16bytes):
 	movzbl	(%rdi, %rdx), %eax
 
 # if defined USE_AS_STRCASECMP_L || defined USE_AS_STRNCASECMP_L
-	leaq	_nl_C_LC_CTYPE_tolower+128*4(%rip), %rdx
+	lea	_nl_C_LC_CTYPE_tolower+128*4(%rip), %RDX
 	movl	(%rdx,%rcx,4), %ecx
 	movl	(%rdx,%rax,4), %eax
 # endif
@@ -2276,7 +2276,7 @@ LABEL(Byte0):
 	movzx	(%rdi), %eax
 
 # if defined USE_AS_STRCASECMP_L || defined USE_AS_STRNCASECMP_L
-	leaq	_nl_C_LC_CTYPE_tolower+128*4(%rip), %rdx
+	lea	_nl_C_LC_CTYPE_tolower+128*4(%rip), %RDX
 	movl	(%rdx,%rcx,4), %ecx
 	movl	(%rdx,%rax,4), %eax
 # endif

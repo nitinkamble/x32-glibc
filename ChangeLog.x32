@@ -1,5 +1,19 @@
 2011-02-15  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/x86_64/memcpy.S: Load cache sizes into R8/R11.
+
+	* sysdeps/x86_64/multiarch/strcmp.S: Load pointers into RAX/RCX.
+
+	* sysdeps/x86_64/multiarch/strlen.S: Load __strlen_no_bsf into
+	RAX.
+
+	* sysdeps/x86_64/multiarch/strrchr.S: Load psrldq_table into
+	RDX.
+
+	* sysdeps/x86_64/strcmp.S: Load pointers into RAX/RDX.
+
+2011-02-15  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/unix/sysv/linux/x86_64/ldconfig.h
 	(SYSDEP_KNOWN_INTERPRETER_NAMES): Add /lib32/ld-linux-x32.so.2.
 

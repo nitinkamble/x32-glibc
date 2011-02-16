@@ -212,7 +212,7 @@ STRCMP_SSE42:
 	/* We have to fall back on the C implementation for locales
 	   with encodings not matching ASCII for single bytes.  */
 #  if LOCALE_T___LOCALES != 0 || LC_CTYPE != 0
-	movq	LOCALE_T___LOCALES+LC_CTYPE*POINTER_SIZE(%rcx), %RAX
+	mov	LOCALE_T___LOCALES+LC_CTYPE*POINTER_SIZE(%rcx), %RAX
 #  else
 	mov	(%rcx), %RAX
 #  endif
@@ -402,7 +402,7 @@ LABEL(ashr_0_use_sse4_2_exit):
 	movzbl	(%rdi, %rcx), %eax
 	movzbl	(%rsi, %rcx), %edx
 # if defined USE_AS_STRCASECMP_L || defined USE_AS_STRNCASECMP_L
-	leaq	_nl_C_LC_CTYPE_tolower+128*4(%rip), %rcx
+	lea	_nl_C_LC_CTYPE_tolower+128*4(%rip), %RCX
 	movl	(%rcx,%rax,4), %eax
 	movl	(%rcx,%rdx,4), %edx
 # endif
@@ -1832,7 +1832,7 @@ LABEL(use_sse4_2_exit):
 	xchg	%eax, %edx
 LABEL(use_sse4_2_ret_sse4_2):
 # if defined USE_AS_STRCASECMP_L || defined USE_AS_STRNCASECMP_L
-	leaq	_nl_C_LC_CTYPE_tolower+128*4(%rip), %rcx
+	lea	_nl_C_LC_CTYPE_tolower+128*4(%rip), %RCX
 	movl	(%rcx,%rdx,4), %edx
 	movl	(%rcx,%rax,4), %eax
 # endif
@@ -1860,7 +1860,7 @@ LABEL(less16bytes_sse4_2):
 	movzbl	(%rdi, %rdx), %eax
 
 # if defined USE_AS_STRCASECMP_L || defined USE_AS_STRNCASECMP_L
-	leaq	_nl_C_LC_CTYPE_tolower+128*4(%rip), %rdx
+	lea	_nl_C_LC_CTYPE_tolower+128*4(%rip), %RDX
 	movl	(%rdx,%rcx,4), %ecx
 	movl	(%rdx,%rax,4), %eax
 # endif
@@ -1879,7 +1879,7 @@ LABEL(Byte0_sse4_2):
 	movzx	(%rdi), %eax
 
 # if defined USE_AS_STRCASECMP_L || defined USE_AS_STRNCASECMP_L
-	leaq	_nl_C_LC_CTYPE_tolower+128*4(%rip), %rdx
+	lea	_nl_C_LC_CTYPE_tolower+128*4(%rip), %RDX
 	movl	(%rdx,%rcx,4), %ecx
 	movl	(%rdx,%rax,4), %eax
 # endif
