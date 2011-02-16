@@ -1,5 +1,14 @@
 2011-02-16  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/unix/sysv/linux/x86_64/ldconfig.h
+	(SYSDEP_KNOWN_INTERPRETER_NAMES): Update x32 ld.so path.
+
+	* sysdeps/x86_64/preconfigure (libc_cv_slibdir): Set to
+	"/libx32" if -mx32 is used.
+	(libdir): Set to '${exec_prefix}/libx32' if -mx32 is used.
+
+2011-02-16  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/x86_64/bits/wordsize.h: Moved to ...
 	* sysdeps/x86_64/lp64/bits/wordsize.h: This.
 
