@@ -1,5 +1,10 @@
 2011-02-15  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/unix/sysv/linux/x86_64/ldconfig.h
+	(SYSDEP_KNOWN_INTERPRETER_NAMES): Add /lib32/ld-linux-x32.so.2.
+
+2011-02-15  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* elf/stackguard-macros.h (STACK_CHK_GUARD): Add x32 version.
 
 2011-02-15  H.J. Lu  <hongjiu.lu@intel.com>
