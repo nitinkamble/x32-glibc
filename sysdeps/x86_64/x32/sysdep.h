@@ -21,6 +21,9 @@
 
 #ifdef	__ASSEMBLER__
 
+# undef POINTER_SIZE
+# define POINTER_SIZE 4
+
 # define ASM_ADDR .long
 
 # undef RAX
