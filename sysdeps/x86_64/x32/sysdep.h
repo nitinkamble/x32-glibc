@@ -31,6 +31,7 @@
 # undef RSP
 # undef R8
 # undef R9
+# undef R10
 # undef R11
 
 # define RAX	eax
@@ -41,6 +42,7 @@
 # define RSP	esp
 # define R8	r8d
 # define R9	r9d
+# define R10	r10d
 # define R11	r11d
 
 #else	/* __ASSEMBLER__ */

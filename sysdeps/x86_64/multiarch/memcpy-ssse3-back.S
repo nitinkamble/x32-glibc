@@ -42,7 +42,7 @@
    relative offsets.  INDEX is a register contains the index into the
    jump table.  SCALE is the scale of INDEX.  */
 #define BRANCH_TO_JMPTBL_ENTRY(TABLE, INDEX, SCALE)		\
-  lea		TABLE(%rip), %r11;				\
+  lea		TABLE(%rip), %R11;				\
   movslq	(%r11, INDEX, SCALE), INDEX;			\
   lea		(%r11, INDEX), INDEX;				\
   jmp		*INDEX;						\
@@ -107,13 +107,13 @@ L(144bytesormore):
 	and	$0xf, %r9
 	jz	L(shl_0)
 #ifdef DATA_CACHE_SIZE
-	mov	$DATA_CACHE_SIZE, %rcx
+	mov	$DATA_CACHE_SIZE, %RCX
 #else
-	mov	__x86_64_data_cache_size(%rip), %rcx
+	mov	__x86_64_data_cache_size(%rip), %RCX
 #endif
 	cmp	%rcx, %rdx
 	jae	L(gobble_mem_fwd)
-	lea    	L(shl_table_fwd)(%rip), %r11
+	lea    	L(shl_table_fwd)(%rip), %R11
 	sub	$0x80, %rdx
 	movslq	(%r11, %r9, 4), %r9
 	add	%r11, %r9
@@ -123,9 +123,9 @@ L(144bytesormore):
 	ALIGN (4)
 L(copy_backward):
 #ifdef DATA_CACHE_SIZE
-	mov	$DATA_CACHE_SIZE, %rcx
+	mov	$DATA_CACHE_SIZE, %RCX
 #else
-	mov	__x86_64_data_cache_size(%rip), %rcx
+	mov	__x86_64_data_cache_size(%rip), %RCX
 #endif
 	shl	$1, %rcx
 	cmp	%rcx, %rdx
@@ -143,7 +143,7 @@ L(copy_backward):
 	mov	%rsi, %r9
 	and	$0xf, %r9
 	jz	L(shl_0_bwd)
-	lea    	L(shl_table_bwd)(%rip), %r11
+	lea    	L(shl_table_bwd)(%rip), %R11
 	sub	$0x80, %rdx
 	movslq	(%r11, %r9, 4), %r9
 	add	%r11, %r9
@@ -157,9 +157,9 @@ L(shl_0):
 	shr	$8, %r9
 	add	%rdx, %r9
 #ifdef DATA_CACHE_SIZE
-	cmp	$DATA_CACHE_SIZE_HALF, %r9
+	cmp	$DATA_CACHE_SIZE_HALF, %R9
 #else
-	cmp	__x86_64_data_cache_size_half(%rip), %r9
+	cmp	__x86_64_data_cache_size_half(%rip), %R9
 #endif
 	jae	L(gobble_mem_fwd)
 	sub	$0x80, %rdx
@@ -1479,9 +1479,9 @@ L(gobble_mem_fwd):
 	add	$16, %rdi
 
 #ifdef SHARED_CACHE_SIZE_HALF
-	mov	$SHARED_CACHE_SIZE_HALF, %rcx
+	mov	$SHARED_CACHE_SIZE_HALF, %RCX
 #else
-	mov	__x86_64_shared_cache_size_half(%rip), %rcx
+	mov	__x86_64_shared_cache_size_half(%rip), %RCX
 #endif
 #ifdef USE_AS_MEMMOVE
 	mov	%rsi, %r9
@@ -1586,9 +1586,9 @@ L(gobble_mem_bwd):
 
 
 #ifdef SHARED_CACHE_SIZE_HALF
-	mov	$SHARED_CACHE_SIZE_HALF, %rcx
+	mov	$SHARED_CACHE_SIZE_HALF, %RCX
 #else
-	mov	__x86_64_shared_cache_size_half(%rip), %rcx
+	mov	__x86_64_shared_cache_size_half(%rip), %RCX
 #endif
 #ifdef USE_AS_MEMMOVE
 	mov	%rdi, %r9

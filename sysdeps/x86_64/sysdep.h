@@ -125,6 +125,7 @@ lose:									      \
 #define RSP	rsp
 #define R8	r8
 #define R9	r9
+#define R10	r10
 #define R11	r11
 
 #else	/* __ASSEMBLER__ */

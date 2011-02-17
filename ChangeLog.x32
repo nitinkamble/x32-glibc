@@ -1,5 +1,18 @@
 2011-02-16  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/x86_64/strcmp.S: Load ponters and integers into
+	RCX..R11.
+	* sysdeps/x86_64/multiarch/memcmp-sse4.S: Likewise.
+	* sysdeps/x86_64/multiarch/memcpy-ssse3-back.S: Likewise.
+	* sysdeps/x86_64/multiarch/memcpy-ssse3.S: Likewise.
+	* sysdeps/x86_64/multiarch/strcmp.S: Likewise.
+	* sysdeps/x86_64/multiarch/strcpy.S: Likewise.
+
+	* sysdeps/x86_64/sysdep.h (R10): New.
+	* sysdeps/x86_64/x32/sysdep.h (R10): Likewise.
+
+2011-02-16  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/unix/sysv/linux/x86_64/ldd-rewrite.sed: Support x32.
 
 2007-11-30  Daniel Jacobowitz  <dan@codesourcery.com>

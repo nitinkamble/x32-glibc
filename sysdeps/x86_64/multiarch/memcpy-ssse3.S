@@ -42,7 +42,7 @@
    relative offsets.  INDEX is a register contains the index into the
    jump table.  SCALE is the scale of INDEX.  */
 #define BRANCH_TO_JMPTBL_ENTRY(TABLE, INDEX, SCALE)		\
-  lea		TABLE(%rip), %r11;				\
+  lea		TABLE(%rip), %R11;				\
   movslq	(%r11, INDEX, SCALE), INDEX;			\
   lea		(%r11, INDEX), INDEX;				\
   jmp		*INDEX;						\
@@ -72,7 +72,7 @@ ENTRY (MEMCPY)
 L(copy_forward):
 #endif
 	cmp	$79, %rdx
-	lea     L(table_less_80bytes)(%rip), %r11
+	lea     L(table_less_80bytes)(%rip), %R11
 	ja	L(80bytesormore)
 	movslq	(%r11, %rdx, 4), %r9
 	add	%rdx, %rsi
@@ -98,9 +98,9 @@ L(80bytesormore):
 	sub	%rcx, %rsi
 
 #ifdef SHARED_CACHE_SIZE_HALF
-	mov	$SHARED_CACHE_SIZE_HALF, %rcx
+	mov	$SHARED_CACHE_SIZE_HALF, %RCX
 #else
-	mov	__x86_64_shared_cache_size_half(%rip), %rcx
+	mov	__x86_64_shared_cache_size_half(%rip), %RCX
 #endif
 	cmp	%rcx, %rdx
 	mov	%rsi, %r9
@@ -108,9 +108,9 @@ L(80bytesormore):
 	and	$0xf, %r9
 	jz	L(shl_0)
 #ifdef DATA_CACHE_SIZE_HALF
-	mov	$DATA_CACHE_SIZE_HALF, %rcx
+	mov	$DATA_CACHE_SIZE_HALF, %RCX
 #else
-	mov	__x86_64_data_cache_size_half(%rip), %rcx
+	mov	__x86_64_data_cache_size_half(%rip), %RCX
 #endif
 	BRANCH_TO_JMPTBL_ENTRY (L(shl_table), %r9, 4)
 
@@ -128,9 +128,9 @@ L(copy_backward):
 	sub	%rcx, %rsi
 
 #ifdef SHARED_CACHE_SIZE_HALF
-	mov	$SHARED_CACHE_SIZE_HALF, %rcx
+	mov	$SHARED_CACHE_SIZE_HALF, %RCX
 #else
-	mov	__x86_64_shared_cache_size_half(%rip), %rcx
+	mov	__x86_64_shared_cache_size_half(%rip), %RCX
 #endif
 
 	cmp	%rcx, %rdx
@@ -139,9 +139,9 @@ L(copy_backward):
 	and	$0xf, %r9
 	jz	L(shl_0_bwd)
 #ifdef DATA_CACHE_SIZE_HALF
-	mov	$DATA_CACHE_SIZE_HALF, %rcx
+	mov	$DATA_CACHE_SIZE_HALF, %RCX
 #else
-	mov	__x86_64_data_cache_size_half(%rip), %rcx
+	mov	__x86_64_data_cache_size_half(%rip), %RCX
 #endif
 	BRANCH_TO_JMPTBL_ENTRY (L(shl_table_bwd), %r9, 4)
 
@@ -176,9 +176,9 @@ L(shl_0_less_64bytes):
 	ALIGN (4)
 L(shl_0_gobble):
 #ifdef DATA_CACHE_SIZE_HALF
-	cmp	$DATA_CACHE_SIZE_HALF, %rdx
+	cmp	$DATA_CACHE_SIZE_HALF, %RDX
 #else
-	cmp	__x86_64_data_cache_size_half(%rip), %rdx
+	cmp	__x86_64_data_cache_size_half(%rip), %RDX
 #endif
 	lea	-128(%rdx), %rdx
 	jae	L(shl_0_gobble_mem_loop)
@@ -317,9 +317,9 @@ L(shl_0_less_64bytes_bwd):
 	ALIGN (4)
 L(shl_0_gobble_bwd):
 #ifdef DATA_CACHE_SIZE_HALF
-	cmp	$DATA_CACHE_SIZE_HALF, %rdx
+	cmp	$DATA_CACHE_SIZE_HALF, %RDX
 #else
-	cmp	__x86_64_data_cache_size_half(%rip), %rdx
+	cmp	__x86_64_data_cache_size_half(%rip), %RDX
 #endif
 	lea	-128(%rdx), %rdx
 	jae	L(shl_0_gobble_mem_bwd_loop)

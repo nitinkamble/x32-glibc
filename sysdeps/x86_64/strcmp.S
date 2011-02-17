@@ -270,7 +270,7 @@ LABEL(crosscache):
 LABEL(bigger):
 	lea	15(%rax), %r9
 	sub	%rcx, %r9
-	lea	LABEL(unaligned_table)(%rip), %r10
+	lea	LABEL(unaligned_table)(%rip), %R10
 	movslq	(%r10, %r9,4), %r9
 	lea	(%r10, %r9), %r10
 	jmp	*%r10				/* jump to corresponding case */

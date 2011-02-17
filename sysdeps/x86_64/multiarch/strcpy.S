@@ -155,7 +155,7 @@ STRCPY_SSSE3:
 	lea	-16(%rcx), %r10
 	mov	%rcx, %r9
 	neg	%r10
-	lea	LABEL(unaligned_table)(%rip), %r11
+	lea	LABEL(unaligned_table)(%rip), %R11
 	movslq  (%r11, %rcx,4), %rcx
 	lea	(%r11, %rcx), %rcx
 	jmp	*%rcx
@@ -1102,7 +1102,7 @@ LABEL(aligned_16bytes):
 LABEL(strncpy_tail):
 #endif
 	bsf	%rdx, %rcx		/*If a least significant 1 bit in %rdx is found, its bit index is stored in %rcx*/
-	lea	LABEL(tail_table)(%rip), %r11
+	lea	LABEL(tail_table)(%rip), %R11
 	movslq	(%r11, %rcx,4), %rcx
 	lea	(%r11, %rcx), %rcx
 	jmp	*%rcx
@@ -1118,7 +1118,7 @@ LABEL(strncpy_truncation_aligned):
 	add      %rcx, %rsi
 	add     $16, %r8
 	lea     -1(%r8), %rcx
-	lea     LABEL(tail_table)(%rip), %r11
+	lea     LABEL(tail_table)(%rip), %R11
 	movslq  (%r11, %rcx,4), %rcx
 	lea     (%r11, %rcx), %rcx
 	jmp     *%rcx
