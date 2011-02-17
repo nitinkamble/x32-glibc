@@ -45,13 +45,13 @@
 		before this code runs.
 
    %rsp		The stack contains the arguments and environment:
-		0(%rsp)			argc
-		8(%rsp)			argv[0]
+		0(%rsp)				argc
+		POINTER_SIZE(%rsp)		argv[0]
 		...
-		(8*argc)(%rsp)		NULL
-		(8*(argc+1))(%rsp)	envp[0]
+		(POINTER_SIZE*argc)(%rsp)	NULL
+		(POINTER_SIZE*(argc+1))(%rsp)	envp[0]
 		...
-					NULL
+						NULL
 */
 
 #include <sysdep.h>
@@ -79,9 +79,14 @@ _start:
 	rtld_fini:	%r9
 	stack_end:	stack.	*/
 
-	mov %RDX, %R9		/* Address of the shared library termination
+#ifdef __LP64__
+	movq %rdx, %r9		/* Address of the shared library termination
 				   function.  */
 	popq %rsi		/* Pop the argument count.  */
+#else
+	mov (%rsp),%edi		/* Simulate popping 4byte argument count.  */
+	addl $4,%esp
+#endif
 	mov %RSP, %RDX		/* argv starts just at the current stack top.  */
 	/* Align the stack to a 16 byte boundary to follow the ABI.  */
 	and  $~15, %RSP
