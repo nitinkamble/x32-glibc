@@ -84,7 +84,7 @@ _start:
 #ifdef __LP64__
 	popq %rsi		/* Pop the argument count.  */
 #else
-	mov (%rsp),%edi		/* Simulate popping 4byte argument count.  */
+	mov (%rsp),%esi		/* Simulate popping 4byte argument count.  */
 	addl $4,%esp
 #endif
 	mov %RSP, %RDX		/* argv starts just at the current stack top.  */
