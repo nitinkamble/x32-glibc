@@ -1,3 +1,7 @@
+2011-02-16  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/ldd-rewrite.sed: Support x32.
+
 2007-11-30  Daniel Jacobowitz  <dan@codesourcery.com>
 
 	* malloc/malloc.c (MALLOC_ALIGNMENT): Use __alignof__ (long double).
