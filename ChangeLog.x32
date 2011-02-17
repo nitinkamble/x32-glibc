@@ -1,5 +1,19 @@
 2011-02-17  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* elf/cache.c (print_entry): Handle FLAG_X8664_LIBX32.
+
+	* sysdeps/generic/ldconfig.h (FLAG_X8664_LIBX32): New.
+
+	* sysdeps/unix/sysv/linux/i386/readelflib.c (process_elf_file):
+	Handle x32 libraries.
+	* sysdeps/unix/sysv/linux/x86_64/readelflib.c (process_elf_file):
+	Likewise.
+
+	* sysdeps/unix/sysv/linux/x86_64/dl-cache.h (add_system_dir): New
+	Don't include <sysdeps/unix/sysv/linux/sparc/dl-cache.h>.
+
+2011-02-17  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/x86_64/elf/start.S: Fix a typo.
 
 2011-02-16  H.J. Lu  <hongjiu.lu@intel.com>
