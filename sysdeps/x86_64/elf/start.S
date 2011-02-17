@@ -79,9 +79,9 @@ _start:
 	rtld_fini:	%r9
 	stack_end:	stack.	*/
 
-#ifdef __LP64__
-	movq %rdx, %r9		/* Address of the shared library termination
+	mov %RDX, %R9		/* Address of the shared library termination
 				   function.  */
+#ifdef __LP64__
 	popq %rsi		/* Pop the argument count.  */
 #else
 	mov (%rsp),%edi		/* Simulate popping 4byte argument count.  */
