@@ -50,7 +50,7 @@
 /* Declare local types.  */
 struct base_table_t
 {
-#if (UDIV_TIME > 2 * UMUL_TIME)
+#if (UDIV_TIME > 2 * UMUL_TIME) || (BITS_PER_MP_LIMB == 64)
   mp_limb_t base_multiplier;
 #endif
   char flag;
