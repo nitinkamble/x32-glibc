@@ -1,3 +1,10 @@
+2011-02-21  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/lowlevellock.h
+	(LLL_STUB_UNWIND_INFO_START): Replace 8byte data alignment with
+	POINTER_SIZE alignment.
+	(LLL_STUB_UNWIND_INFO_END): Likewise.
+
 2011-02-13  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/unix/sysv/linux/x86_64/pthread_cond_timedwait.S: Load

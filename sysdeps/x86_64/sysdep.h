@@ -133,6 +133,9 @@ lose:									      \
 
 #else	/* __ASSEMBLER__ */
 
+/* Pointer size in bytes.  */
+#define POINTER_SIZE "8"
+
 /* Assembler address directive. */
 #define ASM_ADDR ".quad"
 

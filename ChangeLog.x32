@@ -1,3 +1,11 @@
+2011-02-21  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/sigaction.c (RESTORE2): Replace
+	8byte data alignment with POINTER_SIZE alignment.
+
+	* sysdeps/x86_64/sysdep.h (POINTER_SIZE): Define C version.
+	* sysdeps/x86_64/x32/sysdep.h (POINTER_SIZE): Likewise.
+
 2011-02-20  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* stdlib/longlong.h (count_leading_zeros): Use long long builtin

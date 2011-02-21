@@ -113,14 +113,14 @@
 	".byte	0x1	# CIE Version\n\t" 			\
 	".ascii \"zR\\0\"	# CIE Augmentation\n\t" 	\
 	".uleb128 0x1	# CIE Code Alignment Factor\n\t" 	\
-	".sleb128 -8	# CIE Data Alignment Factor\n\t" 	\
+	".sleb128 -" POINTER_SIZE " # CIE Data Alignment Factor\n\t" \
 	".byte	0x10	# CIE RA Column\n\t" 			\
 	".uleb128 0x1	# Augmentation size\n\t" 		\
 	".byte	0x1b	# FDE Encoding (pcrel sdata4)\n\t" 	\
 	".byte	0x12	# DW_CFA_def_cfa_sf\n\t" 		\
 	".uleb128 0x7\n\t" 					\
 	".sleb128 16\n\t" 					\
-	".align 8\n" 						\
+	".align " POINTER_SIZE "\n"				\
 "9:\t"	".long	23f-10f	# FDE Length\n" 			\
 "10:\t"	".long	10b-7b	# FDE CIE offset\n\t" 			\
 	".long	1b-.	# FDE initial location\n\t" 		\
@@ -167,7 +167,7 @@
 	".uleb128 22f-21f\n" 					\
 "21:\t"	".byte	0x80	# DW_OP_breg16\n\t" 			\
 	".sleb128 4b-5b\n" 					\
-"22:\t"	".align 8\n" 						\
+"22:\t"	".align " POINTER_SIZE "\n" 				\
 "23:\t"	".previous\n"
 
 /* Unwind info for

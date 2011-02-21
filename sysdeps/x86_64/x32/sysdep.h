@@ -18,10 +18,10 @@
    02111-1307 USA.  */
 
 #undef ASM_ADDR
+#undef POINTER_SIZE
 
 #ifdef	__ASSEMBLER__
 
-# undef POINTER_SIZE
 # define POINTER_SIZE 4
 
 # define ASM_ADDR .long
@@ -49,6 +49,8 @@
 # define R11	r11d
 
 #else	/* __ASSEMBLER__ */
+
+# define POINTER_SIZE "4"
 
 # define ASM_ADDR ".long"
 
