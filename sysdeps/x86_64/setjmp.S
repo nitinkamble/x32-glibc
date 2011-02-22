@@ -27,24 +27,24 @@ ENTRY (__sigsetjmp)
 #ifdef PTR_MANGLE
 	mov %RBP, %RAX
 	PTR_MANGLE (%RAX)
-	movq %rax, (JB_RBP*8)(%rdi)
+	mov %RAX, (JB_RBP*8)(%rdi)
 #else
-	movq %rbp, (JB_RBP*8)(%rdi)
+	mov %RBP, (JB_RBP*8)(%rdi)
 #endif
 	movq %r12, (JB_R12*8)(%rdi)
 	movq %r13, (JB_R13*8)(%rdi)
 	movq %r14, (JB_R14*8)(%rdi)
 	movq %r15, (JB_R15*8)(%rdi)
-	leaq 8(%rsp), %rdx	/* Save SP as it will be after we return.  */
+	lea 8(%rsp), %RDX	/* Save SP as it will be after we return.  */
 #ifdef PTR_MANGLE
 	PTR_MANGLE (%RDX)
 #endif
-	movq %rdx, (JB_RSP*8)(%rdi)
+	mov %RAX, (JB_RSP*8)(%rdi)
 	mov (%rsp), %RAX	/* Save PC we are returning to now.  */
 #ifdef PTR_MANGLE
 	PTR_MANGLE (%RAX)
 #endif
-	movq %rax, (JB_PC*8)(%rdi)
+	mov %RAX, (JB_PC*8)(%rdi)
 
 #if defined NOT_IN_libc && defined IS_IN_rtld
 	/* In ld.so we never save the signal mask.  */
