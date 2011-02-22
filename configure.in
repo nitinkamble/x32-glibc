@@ -2273,6 +2273,11 @@ AC_SUBST(DEFINES)
 dnl See sysdeps/mach/configure.in for this variable.
 AC_SUBST(mach_interface_list)
 
+if test -z "${stubs_biarch_h}"; then
+  stubs_biarch_h=include/stubs-biarch.h
+fi
+AC_SUBST(stubs_biarch_h)
+
 if test "`(cd $srcdir; pwd)`" = "`pwd`"; then
   config_makefile=
 else

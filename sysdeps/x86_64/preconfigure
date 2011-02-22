@@ -1,5 +1,6 @@
 case "$base_machine" in
 x86_64)
+  stubs_biarch_h=stubs-triarch.h
   case "$CC $CFLAGS $CPPFLAGS " in
   *" -mx32"*)
     machine=x86_64/x32

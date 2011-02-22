@@ -78,6 +78,8 @@ no-whole-archive = @no_whole_archive@
 exceptions = @exceptions@
 multi-arch = @multi_arch@
 
+stubs-biarch_h = @stubs_biarch_h@
+
 mach-interface-list = @mach_interface_list@
 
 have-bash2 = @libc_cv_have_bash2@

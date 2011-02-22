@@ -1,5 +1,21 @@
 2011-02-22  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* Makefile ($(inst_includedir)/gnu/stubs.h): Depend on
+	$(stubs-biarch_h) instead of include/stubs-biarch.h.
+
+	* config.make.in (stubs-biarch_h): New.
+
+	* configure.in (stubs_biarch_h): Set to include/stubs-biarch.h
+	if not set.  Substitute.
+	* configure: Regenerated.
+
+	* sysdeps/unix/sysv/linux/x86_64/stubs-triarch.h: New.
+
+	* sysdeps/x86_64/preconfigure (stubs_biarch_h): Set to
+	stubs-triarch.h.
+
+2011-02-22  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/x86_64/__longjmp.S: Avoid REX prefix for x32.
 	* sysdeps/x86_64/setjmp.S: Likewise.
 

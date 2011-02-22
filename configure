@@ -599,6 +599,7 @@ ac_subst_vars='LTLIBOBJS
 LIBOBJS
 RELEASE
 VERSION
+stubs_biarch_h
 mach_interface_list
 DEFINES
 nopic_initfini
@@ -7738,6 +7739,11 @@ $as_echo "$libc_cv_pic_default" >&6; }
 
 
 
+
+
+if test -z "${stubs_biarch_h}"; then
+  stubs_biarch_h=include/stubs-biarch.h
+fi
 
 
 if test "`(cd $srcdir; pwd)`" = "`pwd`"; then
