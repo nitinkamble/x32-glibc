@@ -39,7 +39,7 @@ ENTRY (__sigsetjmp)
 #ifdef PTR_MANGLE
 	PTR_MANGLE (%RDX)
 #endif
-	mov %RAX, (JB_RSP*8)(%rdi)
+	mov %RDX, (JB_RSP*8)(%rdi)
 	mov (%rsp), %RAX	/* Save PC we are returning to now.  */
 #ifdef PTR_MANGLE
 	PTR_MANGLE (%RAX)
