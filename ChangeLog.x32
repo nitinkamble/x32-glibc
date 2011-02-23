@@ -1,5 +1,12 @@
 2011-02-22  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/unix/sysv/linux/x86_64/x32/fxstat.c: New.
+	* sysdeps/unix/sysv/linux/x86_64/x32/fxstatat.c: Likewsie.
+	* sysdeps/unix/sysv/linux/x86_64/x32/lxstat.c: Likewsie.
+	* sysdeps/unix/sysv/linux/x86_64/x32/xstat.c: Likewsie.
+
+2011-02-22  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* Makefile ($(inst_includedir)/gnu/stubs.h): Depend on
 	$(stubs-biarch_h) instead of include/stubs-biarch.h.
 
