@@ -1,5 +1,11 @@
 2011-02-22  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/unix/sysv/linux/configure.in: Require kernel 2.6.35
+	or above for x32.
+	* sysdeps/unix/sysv/linux/configure: Regenerated.
+
+2011-02-22  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/unix/sysv/linux/x86_64/x32/fxstat.c: New.
 	* sysdeps/unix/sysv/linux/x86_64/x32/fxstatat.c: Likewsie.
 	* sysdeps/unix/sysv/linux/x86_64/x32/lxstat.c: Likewsie.
