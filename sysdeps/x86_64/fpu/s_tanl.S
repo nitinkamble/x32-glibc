@@ -39,7 +39,7 @@ ENTRY(__tanl)
 	fstp	%st(0)
 	ret
 3:	call	__errno_location@PLT
-	movl	$EDOM, (%rax)
+	movl	$EDOM, (%RAX)
 	jmp	4b
 END (__tanl)
 weak_alias (__tanl, tanl)
