@@ -60,7 +60,7 @@ __pthread_cond_broadcast:
 	incl	broadcast_seq-cond_futex(%rdi)
 
 	/* Get the address of the mutex used.  */
-	movq	dep_mutex-cond_futex(%rdi), %r8
+	mov	dep_mutex-cond_futex(%rdi), %R8
 
 	/* Unlock.  */
 	LOCK
@@ -129,7 +129,7 @@ __pthread_cond_broadcast:
 #if cond_lock != 0
 	addq	$cond_lock, %rdi
 #endif
-	cmpq	$-1, dep_mutex-cond_lock(%rdi)
+	CMPPTR	$-1, dep_mutex-cond_lock(%rdi)
 	movl	$LLL_PRIVATE, %eax
 	movl	$LLL_SHARED, %esi
 	cmovne	%eax, %esi
@@ -141,7 +141,7 @@ __pthread_cond_broadcast:
 
 	/* Unlock in loop requires wakeup.  */
 5:	addq	$cond_lock-cond_futex, %rdi
-	cmpq	$-1, dep_mutex-cond_lock(%rdi)
+	CMPPTR	$-1, dep_mutex-cond_lock(%rdi)
 	movl	$LLL_PRIVATE, %eax
 	movl	$LLL_SHARED, %esi
 	cmovne	%eax, %esi

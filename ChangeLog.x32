@@ -1,5 +1,10 @@
 2011-02-23  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/x86_64/sysdep.h (CMPPTR): New.
+	* sysdeps/x86_64/x32/sysdep.h (CMPPTR): Likewise.
+
+2011-02-23  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/x86_64/fpu/s_cosl.S (__cosl): Use RAX as return
 	from __errno_location@PLT.
 	* sysdeps/x86_64/fpu/s_sinl.S (__sinl): Likewise.

@@ -117,6 +117,9 @@ lose:									      \
 /* Pointer size in bytes.  */
 #define POINTER_SIZE	8
 
+/* Instruction to compare against pointers.  */
+#define CMPPTR cmpq
+
 /* Assembler address directive. */
 #define ASM_ADDR .quad
 

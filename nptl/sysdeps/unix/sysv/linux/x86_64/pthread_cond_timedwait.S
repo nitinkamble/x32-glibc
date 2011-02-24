@@ -93,7 +93,7 @@ __pthread_cond_timedwait:
 		    +--------------------------+
 	*/
 
-	cmpq	$-1, dep_mutex(%rdi)
+	CMPPTR	$-1, dep_mutex(%rdi)
 
 	/* Prepare structure passed to cancellation handler.  */
 	movq	%rdi, 8(%rsp)
@@ -101,7 +101,7 @@ __pthread_cond_timedwait:
 	movq	%rdx, %r13
 
 	je	22f
-	movq	%rsi, dep_mutex(%rdi)
+	mov	%RSI, dep_mutex(%rdi)
 
 22:
 #ifndef __ASSUME_FUTEX_CLOCK_REALTIME
@@ -165,10 +165,10 @@ __pthread_cond_timedwait:
 
 	movq	%r13, %r10
 	movl	$FUTEX_WAIT_BITSET, %esi
-	cmpq	$-1, dep_mutex(%rdi)
+	CMPPTR	$-1, dep_mutex(%rdi)
 	je	60f
 
-	movq	dep_mutex(%rdi), %r8
+	mov	dep_mutex(%rdi), %R8
 	/* Requeue to a non-robust PI mutex if the PI bit is set and
 	the robust bit is not set.  */
 	movl	MUTEX_KIND(%r8), %eax
@@ -270,7 +270,7 @@ __pthread_cond_timedwait:
 	jne	55f
 
 	addq	$cond_nwaiters, %rdi
-	cmpq	$-1, dep_mutex-cond_nwaiters(%rdi)
+	CMPPTR	$-1, dep_mutex-cond_nwaiters(%rdi)
 	movl	$1, %edx
 #ifdef __ASSUME_PRIVATE_FUTEX
 	movl	$FUTEX_WAKE, %eax
@@ -333,7 +333,7 @@ __pthread_cond_timedwait:
 #if cond_lock != 0
 	addq	$cond_lock, %rdi
 #endif
-	cmpq	$-1, dep_mutex-cond_lock(%rdi)
+	CMPPTR	$-1, dep_mutex-cond_lock(%rdi)
 	movl	$LLL_PRIVATE, %eax
 	movl	$LLL_SHARED, %esi
 	cmovne	%eax, %esi
@@ -345,7 +345,7 @@ __pthread_cond_timedwait:
 #if cond_lock != 0
 	addq	$cond_lock, %rdi
 #endif
-	cmpq	$-1, dep_mutex-cond_lock(%rdi)
+	CMPPTR	$-1, dep_mutex-cond_lock(%rdi)
 	movl	$LLL_PRIVATE, %eax
 	movl	$LLL_SHARED, %esi
 	cmovne	%eax, %esi
@@ -357,7 +357,7 @@ __pthread_cond_timedwait:
 #if cond_lock != 0
 	addq	$cond_lock, %rdi
 #endif
-	cmpq	$-1, dep_mutex-cond_lock(%rdi)
+	CMPPTR	$-1, dep_mutex-cond_lock(%rdi)
 	movl	$LLL_PRIVATE, %eax
 	movl	$LLL_SHARED, %esi
 	cmovne	%eax, %esi
@@ -372,7 +372,7 @@ __pthread_cond_timedwait:
 #if cond_lock != 0
 	addq	$cond_lock, %rdi
 #endif
-	cmpq	$-1, dep_mutex-cond_lock(%rdi)
+	CMPPTR	$-1, dep_mutex-cond_lock(%rdi)
 	movl	$LLL_PRIVATE, %eax
 	movl	$LLL_SHARED, %esi
 	cmovne	%eax, %esi
@@ -393,7 +393,7 @@ __pthread_cond_timedwait:
 #if cond_lock != 0
 	addq	$cond_lock, %rdi
 #endif
-	cmpq	$-1, dep_mutex-cond_lock(%rdi)
+	CMPPTR	$-1, dep_mutex-cond_lock(%rdi)
 	movl	$LLL_PRIVATE, %eax
 	movl	$LLL_SHARED, %esi
 	cmovne	%eax, %esi
@@ -513,7 +513,7 @@ __pthread_cond_timedwait:
 	movl	%eax, (%rsp)
 
 	leaq	32(%rsp), %r10
-	cmpq	$-1, dep_mutex(%rdi)
+	CMPPTR	$-1, dep_mutex(%rdi)
 	movq	%r12, %rdx
 # ifdef __ASSUME_PRIVATE_FUTEX
 	movl	$FUTEX_WAIT, %eax
@@ -573,7 +573,7 @@ __pthread_cond_timedwait:
 # if cond_lock != 0
 	addq	$cond_lock, %rdi
 # endif
-	cmpq	$-1, dep_mutex-cond_lock(%rdi)
+	CMPPTR	$-1, dep_mutex-cond_lock(%rdi)
 	movl	$LLL_PRIVATE, %eax
 	movl	$LLL_SHARED, %esi
 	cmovne	%eax, %esi
@@ -585,7 +585,7 @@ __pthread_cond_timedwait:
 # if cond_lock != 0
 	addq	$cond_lock, %rdi
 # endif
-	cmpq	$-1, dep_mutex-cond_lock(%rdi)
+	CMPPTR	$-1, dep_mutex-cond_lock(%rdi)
 	movl	$LLL_PRIVATE, %eax
 	movl	$LLL_SHARED, %esi
 	cmovne	%eax, %esi
@@ -597,7 +597,7 @@ __pthread_cond_timedwait:
 # if cond_lock != 0
 	addq	$cond_lock, %rdi
 # endif
-	cmpq	$-1, dep_mutex-cond_lock(%rdi)
+	CMPPTR	$-1, dep_mutex-cond_lock(%rdi)
 	movl	$LLL_PRIVATE, %eax
 	movl	$LLL_SHARED, %esi
 	cmovne	%eax, %esi
@@ -679,7 +679,7 @@ __condvar_cleanup2:
 #if cond_lock != 0
 	addq	$cond_lock, %rdi
 #endif
-	cmpq	$-1, dep_mutex-cond_lock(%rdi)
+	CMPPTR	$-1, dep_mutex-cond_lock(%rdi)
 	movl	$LLL_PRIVATE, %eax
 	movl	$LLL_SHARED, %esi
 	cmovne	%eax, %esi
@@ -712,7 +712,7 @@ __condvar_cleanup2:
 	andl	$~((1 << nwaiters_shift) - 1), %eax
 	jne	4f
 
-	cmpq	$-1, dep_mutex(%rdi)
+	CMPPTR	$-1, dep_mutex(%rdi)
 	leaq	cond_nwaiters(%rdi), %rdi
 	movl	$1, %edx
 #ifdef __ASSUME_PRIVATE_FUTEX
@@ -740,7 +740,7 @@ __condvar_cleanup2:
 #if cond_lock != 0
 	addq	$cond_lock, %rdi
 #endif
-	cmpq	$-1, dep_mutex-cond_lock(%rdi)
+	CMPPTR	$-1, dep_mutex-cond_lock(%rdi)
 	movl	$LLL_PRIVATE, %eax
 	movl	$LLL_SHARED, %esi
 	cmovne	%eax, %esi
@@ -750,7 +750,7 @@ __condvar_cleanup2:
 2:	testq	%r12, %r12
 	jnz	5f
 	addq	$cond_futex, %rdi
-	cmpq	$-1, dep_mutex-cond_futex(%rdi)
+	CMPPTR	$-1, dep_mutex-cond_futex(%rdi)
 	movl	$0x7fffffff, %edx
 #ifdef __ASSUME_PRIVATE_FUTEX
 	movl	$FUTEX_WAKE, %eax

@@ -24,6 +24,9 @@
 
 # define POINTER_SIZE 4
 
+# undef CMPPTR
+# define CMPPTR cmpl
+
 # define ASM_ADDR .long
 
 # undef RAX
