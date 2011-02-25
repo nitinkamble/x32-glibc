@@ -36,7 +36,7 @@ ENTRY(__sinl)
 	fsin
 	ret
 3:	call	__errno_location@PLT
-	movl	$EDOM, (%RAX)
+	movl	$EDOM, (%rax)
 	jmp	4b
 END (__sinl)
 weak_alias (__sinl, sinl)
