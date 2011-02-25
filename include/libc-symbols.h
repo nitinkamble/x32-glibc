@@ -601,10 +601,14 @@ for linking")
 #  define hidden_data_def(name)	strong_data_alias (name, __GI_##name)
 #  define hidden_data_weak(name)	hidden_data_def (name)
 #  define hidden_data_ver(local, name) strong_data_alias (local, __GI_##name)
-#  ifdef HAVE_ASM_GLOBAL_DOT_NAME
-#   define HIDDEN_JUMPTARGET(name) .__GI_##name
+#  ifdef NOT_IN_libc
+#    define HIDDEN_JUMPTARGET(name) name
 #  else
-#   define HIDDEN_JUMPTARGET(name) __GI_##name
+#   ifdef HAVE_ASM_GLOBAL_DOT_NAME
+#    define HIDDEN_JUMPTARGET(name) .__GI_##name
+#   else
+#    define HIDDEN_JUMPTARGET(name) __GI_##name
+#   endif
 #  endif
 # endif
 #else

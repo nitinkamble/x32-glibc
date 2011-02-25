@@ -25,6 +25,12 @@
 
 #ifdef __ASSEMBLER__
 
+# ifdef SYSCALL_RETURN_INT64
+#  define SYSCALL_SET_ERROR_RETURN orq $-1, %rax
+# else
+#  define SYSCALL_SET_ERROR_RETURN orl $-1, %eax
+# endif
+
 # undef	PSEUDO
 # define PSEUDO(name, syscall_name, args)				      \
   .text;								      \
@@ -44,7 +50,7 @@
   xorl %edx, %edx;				\
   subl %eax, %edx;				\
   movl %edx, (%rcx);				\
-  orl $-1, %eax;				\
+  SYSCALL_SET_ERROR_RETURN;			\
   jmp L(pseudo_end);
 # elif USE___THREAD
 #  undef SYSCALL_ERROR_HANDLER
@@ -54,7 +60,7 @@
   xorl %edx, %edx;				\
   subl %eax, %edx;				\
   movl %edx, %fs:(%rcx);			\
-  orl $-1, %eax;				\
+  SYSCALL_SET_ERROR_RETURN;			\
   jmp L(pseudo_end);
 # elif defined _LIBC_REENTRANT
 /* Store (- %eax) into errno through the GOT.
@@ -72,7 +78,7 @@
   popq %rdx;					\
   cfi_adjust_cfa_offset(-8);			\
   movl %edx, (%rax);				\
-  orl $-1, %eax;				\
+  SYSCALL_SET_ERROR_RETURN;			\
   jmp L(pseudo_end);
 
 /* A quick note: it is assumed that the call to `__errno_location' does
@@ -84,7 +90,7 @@
   xorl %edx, %edx;				\
   subl %eax, %edx;				\
   movl %edx, (%rcx);				\
-  orl $-1, %eax;				\
+  SYSCALL_SET_ERROR_RETURN;			\
   jmp L(pseudo_end);
 # endif	/* PIC */
 
