@@ -30,6 +30,10 @@
 	llseek and lseek.  Don't alias XXX64 system calls with
 	off64_t argument to XXX.
 
+	* sysdeps/unix/sysv/linux/x86_64/x32/sysdep.h
+	(SYSCALL_SET_ERROR_RETURN): New.
+	(SYSCALL_ERROR_HANDLER): Use it.
+
 2011-02-23  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/x86_64/sysdep.h (CMPPTR): New.
