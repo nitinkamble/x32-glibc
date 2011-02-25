@@ -1,5 +1,12 @@
 2011-02-25  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/x86_64/x32/divdi3.c: New.
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/symbol-hacks.h: Moved to ...
+	* sysdeps/x86_64/x32/symbol-hacks.h: Here.
+
+2011-02-25  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* include/libc-symbols.h (HIDDEN_JUMPTARGET): Don't add __GI_
 	prefix if NOT_IN_libc is defined.
 
