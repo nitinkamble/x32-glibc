@@ -1,2 +1,2 @@
-# We must use GLIBC_2.2.5 to match malloc/free version on libc.so.
-x86_64-.*-linux.*	ld=ld-linux-x32.so.2	GLIBC_2.2.5
+x86_64-.*-linux.*       DEFAULT			GLIBC_2.13
+x86_64-.*-linux.*	ld=ld-linux-x32.so.2	GLIBC_2.13

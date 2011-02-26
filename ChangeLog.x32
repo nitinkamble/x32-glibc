@@ -1,3 +1,26 @@
+2011-02-26  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* shlib-versions: Move x86_64 default to ...
+	* sysdeps/x86_64/lp64/shlib-versions: Here.
+
+	* sysdeps/x86_64/x32/shlib-versions: Use GLIBC_2.13 for x32.
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/syscalls.list: Replace
+	__libc_truncate64/__libc_sendfile64 with __truncate64/ __sendfile64.
+	* sysdeps/unix/sysv/linux/x86_64/x32/sendfile.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/truncate.S: Likewise.
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/fallocate.S: New.
+	* sysdeps/unix/sysv/linux/x86_64/x32/fallocate64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/posix_fadvise.S: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/posix_fadvise64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/posix_fallocate.S: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/posix_fallocate64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/preadv.S: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/preadv64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/pwritev.S: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/pwritev64.c: Likewise.
+
 2011-02-25  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/unix/sysv/linux/x86_64/x32/dl-cache.h: New.

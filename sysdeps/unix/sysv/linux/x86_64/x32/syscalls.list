@@ -4,9 +4,9 @@ pread64		-	pread		Ci:ibni	__libc_pread64	__pread64 pread64
 pwrite64	-	pwrite		Ci:ibni	__libc_pwrite64	__pwrite64 pwrite64
 mmap64		-	mmap		b:aniiii __mmap64	mmap64
 ftruncate64	-	ftruncate	i:ii	__ftruncate64	ftruncate64
-truncate64	-	truncate	i:si	__libc_truncate64	truncate64
+truncate64	-	truncate	i:si	__truncate64	truncate64
 readahead	-	readahead	i:iii	__readahead	readahead
-sendfile64	-	sendfile	i:iipi	__libc_sendfile64	sendfile64
+sendfile64	-	sendfile	i:iipi	__sendfile64	sendfile64
 sync_file_range	-	sync_file_range	i:iiii	sync_file_range
 creat		-	creat		Ci:si	__libc_creat	creat creat64
 prlimit64	EXTRA	prlimit64	i:iipp	prlimit64

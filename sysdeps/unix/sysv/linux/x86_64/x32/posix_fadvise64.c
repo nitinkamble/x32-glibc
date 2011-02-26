@@ -16,22 +16,25 @@
    Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
    02111-1307 USA.  */
 
-#include <sys/types.h>
-#include <sys/sendfile.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <sysdep.h>
 
-extern ssize_t __sendfile64 (int, int, off64_t *, size_t);
+extern int __posix_fadvise64 (int, off64_t, off64_t, int);
+libc_hidden_proto(__posix_fadvise64)
 
-/* Sign extend offset to 64bit.  */
+/* Advice the system about the expected behaviour of the application with
+   respect to the file associated with FD.  */
 
-ssize_t sendfile (int out_fd, int in_fd, off_t *offset, size_t count)
+int
+__posix_fadvise64 (int fd, off64_t offset, off64_t len, int advise)
 {
-  if (offset)
-    {
-      off64_t offset64 = *offset;
-      ssize_t ret = __sendfile64 (out_fd, in_fd, &offset64, count);
-      *offset = offset64;
-      return ret;
-    }
- 
-  return __sendfile64 (out_fd, in_fd, (off64_t *) offset, count);
+  INTERNAL_SYSCALL_DECL (err);
+  int ret = INTERNAL_SYSCALL (fadvise64, err, 4, fd, offset, len, advise);
+  if (INTERNAL_SYSCALL_ERROR_P (ret, err))
+    return INTERNAL_SYSCALL_ERRNO (ret, err);
+  return 0;
 }
+
+libc_hidden_def (__posix_fadvise64)
+weak_alias (__posix_fadvise64, posix_fadvise64)

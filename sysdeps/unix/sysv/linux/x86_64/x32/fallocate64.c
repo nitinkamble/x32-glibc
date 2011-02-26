@@ -16,22 +16,19 @@
    Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
    02111-1307 USA.  */
 
-#include <sys/types.h>
-#include <sys/sendfile.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <sysdep.h>
 
-extern ssize_t __sendfile64 (int, int, off64_t *, size_t);
+extern int __fallocate64 (int, int, __off64_t, __off64_t);
+libc_hidden_proto(__fallocate64)
 
-/* Sign extend offset to 64bit.  */
-
-ssize_t sendfile (int out_fd, int in_fd, off_t *offset, size_t count)
+/* Reserve storage for the data of the file associated with FD.  */
+int
+__fallocate64 (int fd, int mode, __off64_t offset, __off64_t len)
 {
-  if (offset)
-    {
-      off64_t offset64 = *offset;
-      ssize_t ret = __sendfile64 (out_fd, in_fd, &offset64, count);
-      *offset = offset64;
-      return ret;
-    }
- 
-  return __sendfile64 (out_fd, in_fd, (off64_t *) offset, count);
+  return INLINE_SYSCALL (fallocate, 4, fd, mode, offset, len);
 }
+
+libc_hidden_def (__fallocate64)
+weak_alias (__fallocate64, fallocate64)

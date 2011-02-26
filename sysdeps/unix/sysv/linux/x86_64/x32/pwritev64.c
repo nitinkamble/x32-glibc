@@ -16,22 +16,33 @@
    Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
    02111-1307 USA.  */
 
-#include <sys/types.h>
-#include <sys/sendfile.h>
+#include <errno.h>
+#include <stddef.h>
+#include <sys/param.h>
+#include <sys/uio.h>
+#include <sysdep-cancel.h>
+#include <sys/syscall.h>
 
-extern ssize_t __sendfile64 (int, int, off64_t *, size_t);
+extern ssize_t __pwritev64 (int, const struct iovec *, int, off64_t);
+libc_hidden_proto(__pwritev64)
 
-/* Sign extend offset to 64bit.  */
-
-ssize_t sendfile (int out_fd, int in_fd, off_t *offset, size_t count)
+ssize_t
+__pwritev64 (int fd, const struct iovec *vector, int count, off64_t offset)
 {
-  if (offset)
+  ssize_t result;
+
+  if (SINGLE_THREAD_P)
+    result = INLINE_SYSCALL (pwritev, 5, fd, vector, count, offset, 0);
+  else
     {
-      off64_t offset64 = *offset;
-      ssize_t ret = __sendfile64 (out_fd, in_fd, &offset64, count);
-      *offset = offset64;
-      return ret;
+      int oldtype = LIBC_CANCEL_ASYNC ();
+
+      result = INLINE_SYSCALL (pwritev, 5, fd, vector, count, offset, 0);
+
+      LIBC_CANCEL_RESET (oldtype);
     }
- 
-  return __sendfile64 (out_fd, in_fd, (off64_t *) offset, count);
+  return result;
 }
+
+libc_hidden_def (__pwritev64);
+weak_alias (__pwritev64, pwritev64)

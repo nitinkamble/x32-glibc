@@ -16,22 +16,10 @@
    Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
    02111-1307 USA.  */
 
-#include <sys/types.h>
-#include <sys/sendfile.h>
-
-extern ssize_t __sendfile64 (int, int, off64_t *, size_t);
+#include <sysdep.h>
 
 /* Sign extend offset to 64bit.  */
-
-ssize_t sendfile (int out_fd, int in_fd, off_t *offset, size_t count)
-{
-  if (offset)
-    {
-      off64_t offset64 = *offset;
-      ssize_t ret = __sendfile64 (out_fd, in_fd, &offset64, count);
-      *offset = offset64;
-      return ret;
-    }
- 
-  return __sendfile64 (out_fd, in_fd, (off64_t *) offset, count);
-}
+ENTRY(pwritev)
+	movslq	%ecx, %rcx
+	jmp	HIDDEN_JUMPTARGET(__pwritev64)
+END(pwritev)
