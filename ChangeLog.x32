@@ -107,12 +107,6 @@
 
 2011-02-20  H.J. Lu  <hongjiu.lu@intel.com>
 
-	* stdio-common/_itoa.c (base_table_t): Also check
-	BITS_PER_MP_LIMB == 64 for base_multiplier field.
-	* stdio-common/_itowa.c (base_table_t): Likewise.
-
-2011-02-20  H.J. Lu  <hongjiu.lu@intel.com>
-
 	* sysdeps/x86_64/x32/shlib-versions: Replace GLIBC_2.13 with
 	GLIBC_2.2.5.
 
