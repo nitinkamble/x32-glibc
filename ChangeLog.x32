@@ -1,5 +1,10 @@
 2011-02-27  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/x86_64/x32/ffs.c: New.
+	* sysdeps/x86_64/x32/ffsll.c: Likewise.
+
+2011-02-27  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/unix/sysv/linux/x86_64/sigcontextinfo.h: Include
 	<stdint.h>.
 	(GET_PC): Cast to uintptr_t first.
