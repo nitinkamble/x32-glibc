@@ -1,3 +1,12 @@
+2011-02-27  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/pthread_cond_broadcast.S: Use
+	CMP_LP instead of CMPPTR to compare against pointers.
+	* sysdeps/unix/sysv/linux/x86_64/pthread_cond_signal.S: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/pthread_cond_timedwait.S:
+	Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/pthread_cond_wait.S: Likewise.
+
 2011-02-26  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/x86_64/x32/pthreaddef.h: Don't include it more then

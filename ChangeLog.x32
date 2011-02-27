@@ -1,5 +1,11 @@
 2011-02-27  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/x86_64/sysdep.h (CMPPTR): Renamed to ...
+	(CMP_LP): This.
+	* sysdeps/x86_64/x32/sysdep.h: Likewise.
+
+2011-02-27  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/unix/sysv/linux/x86_64/getcontext.S: Support 32bit
 	stack register.
 	* sysdeps/unix/sysv/linux/x86_64/swapcontext.S: Likewise.

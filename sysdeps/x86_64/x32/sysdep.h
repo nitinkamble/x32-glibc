@@ -24,8 +24,8 @@
 
 # define POINTER_SIZE 4
 
-# undef CMPPTR
-# define CMPPTR cmpl
+# undef CMP_LP
+# define CMP_LP cmpl
 
 # define ASM_ADDR .long
 

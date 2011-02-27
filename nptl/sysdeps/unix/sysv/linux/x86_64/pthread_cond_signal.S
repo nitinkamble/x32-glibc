@@ -56,7 +56,7 @@ __pthread_cond_signal:
 	addl	$1, (%rdi)
 
 	/* Wake up one thread.  */
-	CMPPTR	$-1, dep_mutex(%r8)
+	CMP_LP	$-1, dep_mutex(%r8)
 	movl	$FUTEX_WAKE_OP, %esi
 	movl	$1, %edx
 	movl	$SYS_futex, %eax
@@ -135,7 +135,7 @@ __pthread_cond_signal:
 #if cond_lock != 0
 	addq	$cond_lock, %rdi
 #endif
-	CMPPTR	$-1, dep_mutex-cond_lock(%rdi)
+	CMP_LP	$-1, dep_mutex-cond_lock(%rdi)
 	movl	$LLL_PRIVATE, %eax
 	movl	$LLL_SHARED, %esi
 	cmovne	%eax, %esi
@@ -151,7 +151,7 @@ __pthread_cond_signal:
 #if cond_lock != 0
 	addq	$cond_lock, %rdi
 #endif
-	CMPPTR	$-1, dep_mutex-cond_lock(%rdi)
+	CMP_LP	$-1, dep_mutex-cond_lock(%rdi)
 	movl	$LLL_PRIVATE, %eax
 	movl	$LLL_SHARED, %esi
 	cmovne	%eax, %esi
