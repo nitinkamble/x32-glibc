@@ -114,8 +114,8 @@ lose:									      \
 # endif
 #endif
 
-/* Pointer size in bytes.  */
-#define POINTER_SIZE	8
+/* Long and pointer size in bytes.  */
+#define LP_SIZE	8
 
 /* Instruction to compare against long and pointer.  */
 #define CMP_LP cmpq
@@ -136,8 +136,8 @@ lose:									      \
 
 #else	/* __ASSEMBLER__ */
 
-/* Pointer size in bytes.  */
-#define POINTER_SIZE "8"
+/* Long and pointer size in bytes.  */
+#define LP_SIZE "8"
 
 /* Assembler address directive. */
 #define ASM_ADDR ".quad"

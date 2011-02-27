@@ -46,10 +46,10 @@
 
    %rsp		The stack contains the arguments and environment:
 		0(%rsp)				argc
-		POINTER_SIZE(%rsp)		argv[0]
+		LP_SIZE(%rsp)			argv[0]
 		...
-		(POINTER_SIZE*argc)(%rsp)	NULL
-		(POINTER_SIZE*(argc+1))(%rsp)	envp[0]
+		(LP_SIZE*argc)(%rsp)		NULL
+		(LP_SIZE*(argc+1))(%rsp)	envp[0]
 		...
 						NULL
 */

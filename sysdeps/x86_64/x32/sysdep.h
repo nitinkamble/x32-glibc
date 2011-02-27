@@ -18,11 +18,11 @@
    02111-1307 USA.  */
 
 #undef ASM_ADDR
-#undef POINTER_SIZE
+#undef LP_SIZE
 
 #ifdef	__ASSEMBLER__
 
-# define POINTER_SIZE 4
+# define LP_SIZE 4
 
 # undef CMP_LP
 # define CMP_LP cmpl
@@ -53,7 +53,7 @@
 
 #else	/* __ASSEMBLER__ */
 
-# define POINTER_SIZE "4"
+# define LP_SIZE "4"
 
 # define ASM_ADDR ".long"
 

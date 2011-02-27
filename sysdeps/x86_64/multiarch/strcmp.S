@@ -201,7 +201,7 @@ STRCMP_SSE42:
 	/* We have to fall back on the C implementation for locales
 	   with encodings not matching ASCII for single bytes.  */
 #  if LOCALE_T___LOCALES != 0 || LC_CTYPE != 0
-	mov	LOCALE_T___LOCALES+LC_CTYPE*POINTER_SIZE(%rdx), %RAX
+	mov	LOCALE_T___LOCALES+LC_CTYPE*LP_SIZE(%rdx), %RAX
 #  else
 	mov	(%rdx), %RAX
 #  endif
@@ -212,7 +212,7 @@ STRCMP_SSE42:
 	/* We have to fall back on the C implementation for locales
 	   with encodings not matching ASCII for single bytes.  */
 #  if LOCALE_T___LOCALES != 0 || LC_CTYPE != 0
-	mov	LOCALE_T___LOCALES+LC_CTYPE*POINTER_SIZE(%rcx), %RAX
+	mov	LOCALE_T___LOCALES+LC_CTYPE*LP_SIZE(%rcx), %RAX
 #  else
 	mov	(%rcx), %RAX
 #  endif

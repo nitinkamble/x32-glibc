@@ -1,5 +1,17 @@
 2011-02-27  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/x86_64/sysdep.h (POINTER_SIZE): Renamed to ...
+	(LP_SIZE): This.
+	* sysdeps/x86_64/x32/sysdep.h: Likewise.
+
+	* sysdeps/unix/sysv/linux/x86_64/sigaction.c (RESTORE2): Replace
+	POINTER_SIZE with LP_SIZE.
+	* sysdeps/x86_64/elf/start.S: Likewise.
+	* sysdeps/x86_64/multiarch/strcmp.S: Likewise.
+	* sysdeps/x86_64/strcmp.S: Likewise.
+
+2011-02-27  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/x86_64/x32/ffs.c: New.
 	* sysdeps/x86_64/x32/ffsll.c: Likewise.
 
