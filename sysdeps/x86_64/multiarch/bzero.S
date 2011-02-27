@@ -26,10 +26,10 @@ ENTRY(__bzero)
 	cmpl	$0, __cpu_features+KIND_OFFSET(%rip)
 	jne	1f
 	call	__init_cpu_features
-1:	lea	__bzero_x86_64(%rip), %RAX
+1:	lea	__bzero_x86_64(%rip), %RAX_LP
 	testl	$bit_Prefer_SSE_for_memop, __cpu_features+FEATURE_OFFSET+index_Prefer_SSE_for_memop(%rip)
 	jz	2f
-	lea	__bzero_sse2(%rip), %RAX
+	lea	__bzero_sse2(%rip), %RAX_LP
 2:	ret
 END(__bzero)
 

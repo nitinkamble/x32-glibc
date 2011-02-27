@@ -31,10 +31,10 @@ ENTRY(strrchr)
 	cmpl	$0, __cpu_features+KIND_OFFSET(%rip)
 	jne	1f
 	call	__init_cpu_features
-1:	lea	__strrchr_sse2(%rip), %RAX
+1:	lea	__strrchr_sse2(%rip), %RAX_LP
 	testl	$bit_SSE4_2, __cpu_features+CPUID_OFFSET+index_SSE4_2(%rip)
 	jz	2f
-	lea	__strrchr_sse42(%rip), %RAX
+	lea	__strrchr_sse42(%rip), %RAX_LP
 2:	ret
 END(strrchr)
 
@@ -100,7 +100,7 @@ __strrchr_sse42:
 	je	L(loop)
 
 /* Handle unaligned string using psrldq.  */
-	lea	L(psrldq_table)(%rip), %RDX
+	lea	L(psrldq_table)(%rip), %RDX_LP
 	andq	$-16, %r8
 	movslq	(%rdx,%rsi,4),%r9
 	movdqa	(%r8), %xmm0

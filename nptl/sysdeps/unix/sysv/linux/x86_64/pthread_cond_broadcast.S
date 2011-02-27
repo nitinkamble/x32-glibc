@@ -60,7 +60,7 @@ __pthread_cond_broadcast:
 	incl	broadcast_seq-cond_futex(%rdi)
 
 	/* Get the address of the mutex used.  */
-	mov	dep_mutex-cond_futex(%rdi), %R8
+	mov	dep_mutex-cond_futex(%rdi), %R8_LP
 
 	/* Unlock.  */
 	LOCK

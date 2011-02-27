@@ -86,7 +86,7 @@
 # else /* Not _LIBC_REENTRANT.  */
 #  undef SYSCALL_ERROR_HANDLER
 #  define SYSCALL_ERROR_HANDLER			\
-0:movq errno@GOTPCREL(%RIP), %rcx;		\
+0:movq errno@GOTPCREL(%rip), %rcx;		\
   xorl %edx, %edx;				\
   subl %eax, %edx;				\
   movl %edx, (%rcx);				\

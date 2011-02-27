@@ -62,10 +62,10 @@ ENTRY(STRCPY)
 	cmpl	$0, __cpu_features+KIND_OFFSET(%rip)
 	jne	1f
 	call	__init_cpu_features
-1:	lea	STRCPY_SSE2(%rip), %RAX
+1:	lea	STRCPY_SSE2(%rip), %RAX_LP
 	testl	$bit_SSSE3, __cpu_features+CPUID_OFFSET+index_SSSE3(%rip)
 	jz	2f
-	lea	STRCPY_SSSE3(%rip), %RAX
+	lea	STRCPY_SSSE3(%rip), %RAX_LP
 2:	ret
 END(STRCPY)
 
@@ -155,7 +155,7 @@ STRCPY_SSSE3:
 	lea	-16(%rcx), %r10
 	mov	%rcx, %r9
 	neg	%r10
-	lea	LABEL(unaligned_table)(%rip), %R11
+	lea	LABEL(unaligned_table)(%rip), %R11_LP
 	movslq  (%r11, %rcx,4), %rcx
 	lea	(%r11, %rcx), %rcx
 	jmp	*%rcx
@@ -1102,7 +1102,7 @@ LABEL(aligned_16bytes):
 LABEL(strncpy_tail):
 #endif
 	bsf	%rdx, %rcx		/*If a least significant 1 bit in %rdx is found, its bit index is stored in %rcx*/
-	lea	LABEL(tail_table)(%rip), %R11
+	lea	LABEL(tail_table)(%rip), %R11_LP
 	movslq	(%r11, %rcx,4), %rcx
 	lea	(%r11, %rcx), %rcx
 	jmp	*%rcx
@@ -1118,7 +1118,7 @@ LABEL(strncpy_truncation_aligned):
 	add      %rcx, %rsi
 	add     $16, %r8
 	lea     -1(%r8), %rcx
-	lea     LABEL(tail_table)(%rip), %R11
+	lea     LABEL(tail_table)(%rip), %R11_LP
 	movslq  (%r11, %rcx,4), %rcx
 	lea     (%r11, %rcx), %rcx
 	jmp     *%rcx

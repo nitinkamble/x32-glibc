@@ -63,7 +63,7 @@ __pthread_cond_signal:
 	je	8f
 
 	/* Get the address of the mutex used.  */
-	mov     dep_mutex(%r8), %RCX
+	mov     dep_mutex(%r8), %RCX_LP
 	movl	MUTEX_KIND(%rcx), %r11d
 	andl	$(ROBUST_BIT|PI_BIT), %r11d
 	cmpl	$PI_BIT, %r11d

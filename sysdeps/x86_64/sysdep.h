@@ -123,16 +123,23 @@ lose:									      \
 /* Assembler address directive. */
 #define ASM_ADDR .quad
 
-#define RAX	rax
-#define RBP	rbp
-#define RCX	rcx
-#define RDI	rdi
-#define RDX	rdx
-#define RSP	rsp
-#define R8	r8
-#define R9	r9
-#define R10	r10
-#define R11	r11
+/* Registers to hold long and pointer.  */
+#define RAX_LP	rax
+#define RBP_LP	rbp
+#define RBX_LP	rbx
+#define RCX_LP	rcx
+#define RDI_LP	rdi
+#define RDX_LP	rdx
+#define RSI_LP	rsi
+#define RSP_LP	rsp
+#define R8_LP	r8
+#define R9_LP	r9
+#define R10_LP	r10
+#define R11_LP	r11
+#define R12_LP	r12
+#define R13_LP	r13
+#define R14_LP	r14
+#define R15_LP	r15
 
 #else	/* __ASSEMBLER__ */
 
@@ -141,5 +148,23 @@ lose:									      \
 
 /* Assembler address directive. */
 #define ASM_ADDR ".quad"
+
+/* Registers to hold long and pointer.  */
+#define RAX_LP	"rax"
+#define RBP_LP	"rbp"
+#define RBX_LP	"rbx"
+#define RCX_LP	"rcx"
+#define RDI_LP	"rdi"
+#define RDX_LP	"rdx"
+#define RSI_LP	"rsi"
+#define RSP_LP	"rsp"
+#define R8_LP	"r8"
+#define R9_LP	"r9"
+#define R10_LP	"r10"
+#define R11_LP	"r11"
+#define R12_LP	"r12"
+#define R13_LP	"r13"
+#define R14_LP	"r14"
+#define R15_LP	"r15"
 
 #endif	/* __ASSEMBLER__ */

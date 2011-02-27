@@ -90,13 +90,13 @@ ENTRY(STRCMP)
 	jne	1f
 	call	__init_cpu_features
 1:
-	lea	STRCMP_SSE42(%rip), %RAX
+	lea	STRCMP_SSE42(%rip), %RAX_LP
 	testl	$bit_SSE4_2, __cpu_features+CPUID_OFFSET+index_SSE4_2(%rip)
 	jnz	2f
-	lea	STRCMP_SSSE3(%rip), %RAX
+	lea	STRCMP_SSSE3(%rip), %RAX_LP
 	testl	$bit_SSSE3, __cpu_features+CPUID_OFFSET+index_SSSE3(%rip)
 	jnz	2f
-	lea	STRCMP_SSE2(%rip), %RAX
+	lea	STRCMP_SSE2(%rip), %RAX_LP
 2:	ret
 END(STRCMP)
 
@@ -107,13 +107,13 @@ ENTRY(__strcasecmp)
 	jne	1f
 	call	__init_cpu_features
 1:
-	lea	__strcasecmp_sse42(%rip), %RAX
+	lea	__strcasecmp_sse42(%rip), %RAX_LP
 	testl	$bit_SSE4_2, __cpu_features+CPUID_OFFSET+index_SSE4_2(%rip)
 	jnz	2f
-	lea	__strcasecmp_ssse3(%rip), %RAX
+	lea	__strcasecmp_ssse3(%rip), %RAX_LP
 	testl	$bit_SSSE3, __cpu_features+CPUID_OFFSET+index_SSSE3(%rip)
 	jnz	2f
-	lea	__strcasecmp_sse2(%rip), %RAX
+	lea	__strcasecmp_sse2(%rip), %RAX_LP
 2:	ret
 END(__strcasecmp)
 weak_alias (__strcasecmp, strcasecmp)
@@ -125,13 +125,13 @@ ENTRY(__strncasecmp)
 	jne	1f
 	call	__init_cpu_features
 1:
-	lea	__strncasecmp_sse42(%rip), %RAX
+	lea	__strncasecmp_sse42(%rip), %RAX_LP
 	testl	$bit_SSE4_2, __cpu_features+CPUID_OFFSET+index_SSE4_2(%rip)
 	jnz	2f
-	lea	__strncasecmp_ssse3(%rip), %RAX
+	lea	__strncasecmp_ssse3(%rip), %RAX_LP
 	testl	$bit_SSSE3, __cpu_features+CPUID_OFFSET+index_SSSE3(%rip)
 	jnz	2f
-	lea	__strncasecmp_sse2(%rip), %RAX
+	lea	__strncasecmp_sse2(%rip), %RAX_LP
 2:	ret
 END(__strncasecmp)
 weak_alias (__strncasecmp, strncasecmp)
@@ -170,7 +170,7 @@ weak_alias (__strncasecmp, strncasecmp)
 # ifdef USE_AS_STRCASECMP_L
 ENTRY (__strcasecmp_sse42)
 	movq	__libc_tsd_LOCALE@gottpoff(%rip),%rax
-	mov	%fs:(%rax),%RDX
+	mov	%fs:(%rax),%RDX_LP
 
 	// XXX 5 byte should be before the function
 	/* 5-byte NOP.  */
@@ -181,7 +181,7 @@ END (__strcasecmp_sse42)
 # ifdef USE_AS_STRNCASECMP_L
 ENTRY (__strncasecmp_sse42)
 	movq	__libc_tsd_LOCALE@gottpoff(%rip),%rax
-	mov	%fs:(%rax),%RCX
+	mov	%fs:(%rax),%RCX_LP
 
 	// XXX 5 byte should be before the function
 	/* 5-byte NOP.  */
@@ -201,9 +201,9 @@ STRCMP_SSE42:
 	/* We have to fall back on the C implementation for locales
 	   with encodings not matching ASCII for single bytes.  */
 #  if LOCALE_T___LOCALES != 0 || LC_CTYPE != 0
-	mov	LOCALE_T___LOCALES+LC_CTYPE*LP_SIZE(%rdx), %RAX
+	mov	LOCALE_T___LOCALES+LC_CTYPE*LP_SIZE(%rdx), %RAX_LP
 #  else
-	mov	(%rdx), %RAX
+	mov	(%rdx), %RAX_LP
 #  endif
 	testl	$0, LOCALE_DATA_VALUES+_NL_CTYPE_NONASCII_CASE*SIZEOF_VALUES(%rax)
 	jne	__strcasecmp_l_nonascii
@@ -212,9 +212,9 @@ STRCMP_SSE42:
 	/* We have to fall back on the C implementation for locales
 	   with encodings not matching ASCII for single bytes.  */
 #  if LOCALE_T___LOCALES != 0 || LC_CTYPE != 0
-	mov	LOCALE_T___LOCALES+LC_CTYPE*LP_SIZE(%rcx), %RAX
+	mov	LOCALE_T___LOCALES+LC_CTYPE*LP_SIZE(%rcx), %RAX_LP
 #  else
-	mov	(%rcx), %RAX
+	mov	(%rcx), %RAX_LP
 #  endif
 	testl	$0, LOCALE_DATA_VALUES+_NL_CTYPE_NONASCII_CASE*SIZEOF_VALUES(%rax)
 	jne	__strncasecmp_l_nonascii
@@ -314,7 +314,7 @@ LABEL(crosscache_sse4_2):
 LABEL(bigger_sse4_2):
 	lea	15(%rax), %r9
 	sub	%rcx, %r9
-	lea	LABEL(unaligned_table_sse4_2)(%rip), %R10
+	lea	LABEL(unaligned_table_sse4_2)(%rip), %R10_LP
 	movslq	(%r10, %r9,4), %r9
 	lea	(%r10, %r9), %r10
 	jmp	*%r10				/* jump to corresponding case */
@@ -402,7 +402,7 @@ LABEL(ashr_0_use_sse4_2_exit):
 	movzbl	(%rdi, %rcx), %eax
 	movzbl	(%rsi, %rcx), %edx
 # if defined USE_AS_STRCASECMP_L || defined USE_AS_STRNCASECMP_L
-	lea	_nl_C_LC_CTYPE_tolower+128*4(%rip), %RCX
+	lea	_nl_C_LC_CTYPE_tolower+128*4(%rip), %RCX_LP
 	movl	(%rcx,%rax,4), %eax
 	movl	(%rcx,%rdx,4), %edx
 # endif
@@ -1832,7 +1832,7 @@ LABEL(use_sse4_2_exit):
 	xchg	%eax, %edx
 LABEL(use_sse4_2_ret_sse4_2):
 # if defined USE_AS_STRCASECMP_L || defined USE_AS_STRNCASECMP_L
-	lea	_nl_C_LC_CTYPE_tolower+128*4(%rip), %RCX
+	lea	_nl_C_LC_CTYPE_tolower+128*4(%rip), %RCX_LP
 	movl	(%rcx,%rdx,4), %edx
 	movl	(%rcx,%rax,4), %eax
 # endif
@@ -1860,7 +1860,7 @@ LABEL(less16bytes_sse4_2):
 	movzbl	(%rdi, %rdx), %eax
 
 # if defined USE_AS_STRCASECMP_L || defined USE_AS_STRNCASECMP_L
-	lea	_nl_C_LC_CTYPE_tolower+128*4(%rip), %RDX
+	lea	_nl_C_LC_CTYPE_tolower+128*4(%rip), %RDX_LP
 	movl	(%rdx,%rcx,4), %ecx
 	movl	(%rdx,%rax,4), %eax
 # endif
@@ -1879,7 +1879,7 @@ LABEL(Byte0_sse4_2):
 	movzx	(%rdi), %eax
 
 # if defined USE_AS_STRCASECMP_L || defined USE_AS_STRNCASECMP_L
-	lea	_nl_C_LC_CTYPE_tolower+128*4(%rip), %RDX
+	lea	_nl_C_LC_CTYPE_tolower+128*4(%rip), %RDX_LP
 	movl	(%rdx,%rcx,4), %ecx
 	movl	(%rdx,%rax,4), %eax
 # endif

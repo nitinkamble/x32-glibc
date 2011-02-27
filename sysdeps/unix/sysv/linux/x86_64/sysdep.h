@@ -160,7 +160,7 @@
    not modify the stack!  */
 # else /* Not _LIBC_REENTRANT.  */
 #  define SYSCALL_ERROR_HANDLER			\
-0:movq errno@GOTPCREL(%RIP), %rcx;		\
+0:movq errno@GOTPCREL(%rip), %rcx;		\
   xorl %edx, %edx;				\
   subq %rax, %rdx;				\
   movl %edx, (%rcx);				\

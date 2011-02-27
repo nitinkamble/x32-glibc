@@ -72,7 +72,7 @@ __pthread_cond_wait:
 	movq	%rsi, 16(%rsp)
 
 	je	15f
-	mov	%RSI, dep_mutex(%rdi)
+	mov	%RSI_LP, dep_mutex(%rdi)
 
 	/* Get internal lock.  */
 15:	movl	$1, %esi
@@ -125,7 +125,7 @@ __pthread_cond_wait:
 	movl	$FUTEX_WAIT, %esi
 	je	60f
 
-	mov	dep_mutex-cond_futex(%rdi), %R8
+	mov	dep_mutex-cond_futex(%rdi), %R8_LP
 	/* Requeue to a non-robust PI mutex if the PI bit is set and
 	the robust bit is not set.  */
 	movl	MUTEX_KIND(%r8), %eax

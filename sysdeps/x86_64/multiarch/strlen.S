@@ -32,14 +32,14 @@ ENTRY(strlen)
 	cmpl	$0, __cpu_features+KIND_OFFSET(%rip)
 	jne	1f
 	call	__init_cpu_features
-1:	lea	__strlen_sse2(%rip), %RAX
+1:	lea	__strlen_sse2(%rip), %RAX_LP
 	testl	$bit_SSE4_2, __cpu_features+CPUID_OFFSET+index_SSE4_2(%rip)
 	jz	2f
-	lea	__strlen_sse42(%rip), %RAX
+	lea	__strlen_sse42(%rip), %RAX_LP
 	ret
 2:	testl	$bit_Slow_BSF, __cpu_features+FEATURE_OFFSET+index_Slow_BSF(%rip)
 	jz	3f
-	lea    __strlen_no_bsf(%rip), %RAX
+	lea    __strlen_no_bsf(%rip), %RAX_LP
 3:	ret
 END(strlen)
 

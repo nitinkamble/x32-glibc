@@ -1,5 +1,14 @@
 2011-02-27  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/unix/sysv/linux/x86_64/pthread_cond_broadcast.S: Replace
+	%RXX with %RXX_LP.
+	* sysdeps/unix/sysv/linux/x86_64/pthread_cond_signal.S: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/pthread_cond_timedwait.S: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/pthread_cond_wait.S: Likewise.
+	* : Likewise.
+
+2011-02-27  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* allocatestack.c (__reclaim_stacks): Cast UINTMAX_C to
 	uintptr_t.
 

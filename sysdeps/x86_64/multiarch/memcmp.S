@@ -29,10 +29,10 @@ ENTRY(memcmp)
 	cmpl	$0, KIND_OFFSET+__cpu_features(%rip)
 	jne	1f
 	call	__init_cpu_features
-1:	lea	__memcmp_sse2(%rip), %RAX
+1:	lea	__memcmp_sse2(%rip), %RAX_LP
 	testl	$bit_SSE4_1, __cpu_features+CPUID_OFFSET+index_SSE4_1(%rip)
 	jz	2f
-	lea	__memcmp_sse4_1(%rip), %RAX
+	lea	__memcmp_sse4_1(%rip), %RAX_LP
 2:	ret
 END(memcmp)
 

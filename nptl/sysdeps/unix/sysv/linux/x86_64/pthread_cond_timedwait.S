@@ -101,7 +101,7 @@ __pthread_cond_timedwait:
 	movq	%rdx, %r13
 
 	je	22f
-	mov	%RSI, dep_mutex(%rdi)
+	mov	%RSI_LP, dep_mutex(%rdi)
 
 22:
 #ifndef __ASSUME_FUTEX_CLOCK_REALTIME
@@ -168,7 +168,7 @@ __pthread_cond_timedwait:
 	CMP_LP	$-1, dep_mutex(%rdi)
 	je	60f
 
-	mov	dep_mutex(%rdi), %R8
+	mov	dep_mutex(%rdi), %R8_LP
 	/* Requeue to a non-robust PI mutex if the PI bit is set and
 	the robust bit is not set.  */
 	movl	MUTEX_KIND(%r8), %eax
@@ -450,9 +450,9 @@ __pthread_cond_timedwait:
 	   kernel.  */
 	leaq	32(%rsp), %rsi
 #  ifdef SHARED
-	mov	__vdso_clock_gettime@GOTPCREL(%rip), %RAX
-	mov	(%rax), %RAX
-	PTR_DEMANGLE (%RAX)
+	mov	__vdso_clock_gettime@GOTPCREL(%rip), %RAX_LP
+	mov	(%rax), %RAX_LP
+	PTR_DEMANGLE (%RAX_LP)
 	jz	26f
 	call	*%rax
 	jmp	27f

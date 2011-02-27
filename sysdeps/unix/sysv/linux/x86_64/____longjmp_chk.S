@@ -53,9 +53,9 @@ ENTRY(____longjmp_chk)
 	movq	(JB_RBP*8)(%rdi), %r9
 	movq	(JB_PC*8)(%rdi), %rdx
 #ifdef PTR_DEMANGLE
-	PTR_DEMANGLE (%R8)
-	PTR_DEMANGLE (%R9)
-	PTR_DEMANGLE (%RDX)
+	PTR_DEMANGLE (%R8_LP)
+	PTR_DEMANGLE (%R9_LP)
+	PTR_DEMANGLE (%RDX_LP)
 #endif
 
 	cmpq	%r8, %rsp

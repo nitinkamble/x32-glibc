@@ -48,10 +48,10 @@ ENTRY(STRCSPN)
 	cmpl	$0, __cpu_features+KIND_OFFSET(%rip)
 	jne	1f
 	call	__init_cpu_features
-1:	lea	STRCSPN_SSE2(%rip), %RAX
+1:	lea	STRCSPN_SSE2(%rip), %RAX_LP
 	testl	$bit_SSE4_2, __cpu_features+CPUID_OFFSET+index_SSE4_2(%rip)
 	jz	2f
-	lea	STRCSPN_SSE42(%rip), %RAX
+	lea	STRCSPN_SSE42(%rip), %RAX_LP
 2:	ret
 END(STRCSPN)
 

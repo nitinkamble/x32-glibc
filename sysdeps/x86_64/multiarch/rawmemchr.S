@@ -29,10 +29,10 @@ ENTRY(rawmemchr)
 	cmpl	$0, __cpu_features+KIND_OFFSET(%rip)
 	jne	1f
 	call	__init_cpu_features
-1:	lea	__rawmemchr_sse2(%rip), %RAX
+1:	lea	__rawmemchr_sse2(%rip), %RAX_LP
 	testl	$bit_SSE4_2, __cpu_features+CPUID_OFFSET+index_SSE4_2(%rip)
 	jz	2f
-	lea	__rawmemchr_sse42(%rip), %RAX
+	lea	__rawmemchr_sse42(%rip), %RAX_LP
 2:	ret
 END(rawmemchr)
 strong_alias (rawmemchr, __rawmemchr)

@@ -97,7 +97,7 @@
 
 ENTRY2 (__strcasecmp)
 	movq	__libc_tsd_LOCALE@gottpoff(%rip),%rax
-	mov	%fs:(%rax),%RDX
+	mov	%fs:(%rax),%RDX_LP
 
 	// XXX 5 byte should be before the function
 	/* 5-byte NOP.  */
@@ -116,7 +116,7 @@ libc_hidden_def (__strcasecmp)
 
 ENTRY2 (__strncasecmp)
 	movq	__libc_tsd_LOCALE@gottpoff(%rip),%rax
-	mov	%fs:(%rax),%RCX
+	mov	%fs:(%rax),%RCX_LP
 
 	// XXX 5 byte should be before the function
 	/* 5-byte NOP.  */
@@ -153,9 +153,9 @@ END (BP_SYM (STRCMP))
 	/* We have to fall back on the C implementation for locales
 	   with encodings not matching ASCII for single bytes.  */
 #  if LOCALE_T___LOCALES != 0 || LC_CTYPE != 0
-	mov	LOCALE_T___LOCALES+LC_CTYPE*LP_SIZE(%rdx), %RAX
+	mov	LOCALE_T___LOCALES+LC_CTYPE*LP_SIZE(%rdx), %RAX_LP
 #  else
-	mov	(%rdx), %RAX
+	mov	(%rdx), %RAX_LP
 #  endif
 	testl	$0, LOCALE_DATA_VALUES+_NL_CTYPE_NONASCII_CASE*SIZEOF_VALUES(%rax)
 	jne	__strcasecmp_l_nonascii
@@ -163,9 +163,9 @@ END (BP_SYM (STRCMP))
 	/* We have to fall back on the C implementation for locales
 	   with encodings not matching ASCII for single bytes.  */
 #  if LOCALE_T___LOCALES != 0 || LC_CTYPE != 0
-	mov	LOCALE_T___LOCALES+LC_CTYPE*LP_SIZE(%rcx), %RAX
+	mov	LOCALE_T___LOCALES+LC_CTYPE*LP_SIZE(%rcx), %RAX_LP
 #  else
-	mov	(%rcx), %RAX
+	mov	(%rcx), %RAX_LP
 #  endif
 	testl	$0, LOCALE_DATA_VALUES+_NL_CTYPE_NONASCII_CASE*SIZEOF_VALUES(%rax)
 	jne	__strncasecmp_l_nonascii
@@ -270,7 +270,7 @@ LABEL(crosscache):
 LABEL(bigger):
 	lea	15(%rax), %r9
 	sub	%rcx, %r9
-	lea	LABEL(unaligned_table)(%rip), %R10
+	lea	LABEL(unaligned_table)(%rip), %R10_LP
 	movslq	(%r10, %r9,4), %r9
 	lea	(%r10, %r9), %r10
 	jmp	*%r10				/* jump to corresponding case */
@@ -2258,7 +2258,7 @@ LABEL(less16bytes):
 	movzbl	(%rdi, %rdx), %eax
 
 # if defined USE_AS_STRCASECMP_L || defined USE_AS_STRNCASECMP_L
-	lea	_nl_C_LC_CTYPE_tolower+128*4(%rip), %RDX
+	lea	_nl_C_LC_CTYPE_tolower+128*4(%rip), %RDX_LP
 	movl	(%rdx,%rcx,4), %ecx
 	movl	(%rdx,%rax,4), %eax
 # endif
@@ -2276,7 +2276,7 @@ LABEL(Byte0):
 	movzx	(%rdi), %eax
 
 # if defined USE_AS_STRCASECMP_L || defined USE_AS_STRNCASECMP_L
-	lea	_nl_C_LC_CTYPE_tolower+128*4(%rip), %RDX
+	lea	_nl_C_LC_CTYPE_tolower+128*4(%rip), %RDX_LP
 	movl	(%rdx,%rcx,4), %ecx
 	movl	(%rdx,%rax,4), %eax
 # endif

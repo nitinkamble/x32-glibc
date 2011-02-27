@@ -31,13 +31,13 @@ ENTRY(memcpy)
 	cmpl	$0, KIND_OFFSET+__cpu_features(%rip)
 	jne	1f
 	call	__init_cpu_features
-1:	lea	__memcpy_sse2(%rip), %RAX
+1:	lea	__memcpy_sse2(%rip), %RAX_LP
 	testl	$bit_SSSE3, __cpu_features+CPUID_OFFSET+index_SSSE3(%rip)
 	jz	2f
-	lea	__memcpy_ssse3(%rip), %RAX
+	lea	__memcpy_ssse3(%rip), %RAX_LP
 	testl	$bit_Fast_Copy_Backward, __cpu_features+FEATURE_OFFSET+index_Fast_Copy_Backward(%rip)
 	jz	2f
-	lea	__memcpy_ssse3_back(%rip), %RAX
+	lea	__memcpy_ssse3_back(%rip), %RAX_LP
 2:	ret
 END(memcpy)
 

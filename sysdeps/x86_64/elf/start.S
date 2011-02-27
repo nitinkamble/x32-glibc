@@ -79,7 +79,7 @@ _start:
 	rtld_fini:	%r9
 	stack_end:	stack.	*/
 
-	mov %RDX, %R9		/* Address of the shared library termination
+	mov %RDX_LP, %R9_LP	/* Address of the shared library termination
 				   function.  */
 #ifdef __LP64__
 	popq %rsi		/* Pop the argument count.  */
@@ -87,9 +87,9 @@ _start:
 	mov (%rsp),%esi		/* Simulate popping 4byte argument count.  */
 	addl $4,%esp
 #endif
-	mov %RSP, %RDX		/* argv starts just at the current stack top.  */
+	mov %RSP_LP, %RDX_LP	/* argv starts just at the current stack top.  */
 	/* Align the stack to a 16 byte boundary to follow the ABI.  */
-	and  $~15, %RSP
+	and  $~15, %RSP_LP
 
 	pushq %rax		/* Push garbage because we push 8 more bytes.  */
 
@@ -99,20 +99,20 @@ _start:
 
 #ifdef SHARED
 	/* Pass address of our own entry points to .fini and .init.  */
-	mov __libc_csu_fini@GOTPCREL(%rip), %R8
-	mov __libc_csu_init@GOTPCREL(%rip), %RCX
+	mov __libc_csu_fini@GOTPCREL(%rip), %R8_LP
+	mov __libc_csu_init@GOTPCREL(%rip), %RCX_LP
 
-	mov BP_SYM (main)@GOTPCREL(%rip), %RDI
+	mov BP_SYM (main)@GOTPCREL(%rip), %RDI_LP
 
 	/* Call the user's main function, and exit with its value.
 	   But let the libc call main.	  */
 	call BP_SYM (__libc_start_main)@PLT
 #else
 	/* Pass address of our own entry points to .fini and .init.  */
-	mov $__libc_csu_fini, %R8
-	mov $__libc_csu_init, %RCX
+	mov $__libc_csu_fini, %R8_LP
+	mov $__libc_csu_init, %RCX_LP
 
-	mov $BP_SYM (main), %RDI
+	mov $BP_SYM (main), %RDI_LP
 
 	/* Call the user's main function, and exit with its value.
 	   But let the libc call main.	  */

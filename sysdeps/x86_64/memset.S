@@ -56,8 +56,8 @@ L(now_dw_aligned):
 	jg     L(ck_mem_ops_method)
 L(now_dw_aligned_small):
 	add    %r8,%rdi
-	lea    L(Got0)(%rip),%R11
-	lea    L(setPxQx)(%rip),%RCX
+	lea    L(Got0)(%rip),%R11_LP
+	lea    L(setPxQx)(%rip),%RCX_LP
 	movswq (%rcx,%r8,2),%rcx
 	lea    (%rcx,%r11,1),%r11
 	jmpq   *%r11
@@ -458,8 +458,8 @@ L(ck_mem_ops_method):
 	and    $0xf,%r10
 	add    %r10,%rdi
 	sub    %r10,%r8
-	lea    L(aligned_now)(%rip), %R11
-	lea    L(AliPxQx)(%rip),%RCX
+	lea    L(aligned_now)(%rip), %R11_LP
+	lea    L(AliPxQx)(%rip),%RCX_LP
 	movswq (%rcx,%r10,2),%rcx
 	lea    (%rcx,%r11,1),%r11
 	jmpq   *%r11
@@ -543,8 +543,8 @@ L(SSE_pre):
 	 jge    L(byte32sse2_pre)
 
 	 add    %r8,%rdi
-	 lea    L(SSE0Q0)(%rip),%R9
-	 lea    L(SSExDx)(%rip),%RCX
+	 lea    L(SSE0Q0)(%rip),%R9_LP
+	 lea    L(SSExDx)(%rip),%RCX_LP
 	 movswq (%rcx,%r8,2),%rcx
 	 lea    (%rcx,%r9,1),%r9
 	 jmpq   *%r9
@@ -813,8 +813,8 @@ L(byte32sse2):
 	lea    0x80(%rdi),%rdi
 	jge    L(byte32sse2)
 	add    %r8,%rdi
-	lea    L(SSE0Q0)(%rip),%R11
-	lea    L(SSExDx)(%rip),%RCX
+	lea    L(SSE0Q0)(%rip),%R11_LP
+	lea    L(SSExDx)(%rip),%RCX_LP
 	movswq (%rcx,%r8,2),%rcx
 	lea    (%rcx,%r11,1),%r11
 	jmpq   *%r11
@@ -843,8 +843,8 @@ L(sse2_nt_move):
 	jge    L(sse2_nt_move)
 	sfence
 	add    %r8,%rdi
-	lea    L(SSE0Q0)(%rip),%R11
-	lea    L(SSExDx)(%rip),%RCX
+	lea    L(SSE0Q0)(%rip),%R11_LP
+	lea    L(SSExDx)(%rip),%RCX_LP
 	movswq (%rcx,%r8,2),%rcx
 	lea   (%rcx,%r11,1),%r11
 	jmpq   *%r11
@@ -1118,8 +1118,8 @@ L(8byte_move_skip):
 	andl	$127,%r8d
 	lea    	(%rdi,%r8,1),%rdi
 
-	lea    	L(Got0)(%rip),%R11
-	lea	L(setPxQx)(%rip),%RCX
+	lea    	L(Got0)(%rip),%R11_LP
+	lea	L(setPxQx)(%rip),%RCX_LP
 	movswq	(%rcx,%r8,2),%rcx
 	lea    	(%rcx,%r11,1),%r11
 	jmpq   	*%r11
@@ -1156,8 +1156,8 @@ L(8byte_stos_skip):
 
 	andl	$7,%r8d
 	lea    	(%rdi,%r8,1),%rdi
-	lea    	L(Got0)(%rip),%R11
-	lea     L(setPxQx)(%rip),%RCX
+	lea    	L(Got0)(%rip),%R11_LP
+	lea     L(setPxQx)(%rip),%RCX_LP
 	movswq	(%rcx,%r8,2),%rcx
 	lea	(%rcx,%r11,1),%r11
 	jmpq   	*%r11
@@ -1199,8 +1199,8 @@ L(8byte_nt_move_skip):
 	andl	$127,%r8d
 
 	lea    	(%rdi,%r8,1),%rdi
-	lea    	L(Got0)(%rip),%R11
-	lea     L(setPxQx)(%rip),%RCX
+	lea    	L(Got0)(%rip),%R11_LP
+	lea     L(setPxQx)(%rip),%RCX_LP
 	movswq	(%rcx,%r8,2),%rcx
 	lea    	(%rcx,%r11,1),%r11
 	jmpq   	*%r11
