@@ -1,5 +1,10 @@
 2011-02-27  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* unwind.c (unwind_stop): Cast _Unwind_GetCFA return to
+	_Unwind_Ptr first.
+
+2011-02-27  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/unix/sysv/linux/x86_64/pthread_cond_broadcast.S: Use
 	CMP_LP instead of CMPPTR to compare against pointers.
 	* sysdeps/unix/sysv/linux/x86_64/pthread_cond_signal.S: Likewise.

@@ -1,5 +1,18 @@
 2011-02-27  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/unix/sysv/linux/x86_64/sigcontextinfo.h: Include
+	<stdint.h>.
+	(GET_PC): Cast to uintptr_t first.
+	(GET_FRAME): Likewise.
+	(GET_STACK): Likewise.
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/dl-cache.h: Fix a typo.
+
+	* sysdeps/x86_64/jmpbuf-unwind.h (_JMPBUF_CFA_UNWINDS_ADJ): Cast
+	_Unwind_GetCFA return to _Unwind_Ptr first.
+
+2011-02-27  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/x86_64/sysdep.h (CMPPTR): Renamed to ...
 	(CMP_LP): This.
 	* sysdeps/x86_64/x32/sysdep.h: Likewise.

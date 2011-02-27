@@ -17,7 +17,7 @@
    Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
    02111-1307 USA.  */
 
-#include <sysdeps/unix/sysv/linux/x86_64/dl-cache.h>>
+#include <sysdeps/unix/sysv/linux/x86_64/dl-cache.h>
 
 #undef _DL_CACHE_DEFAULT_ID
 #define _DL_CACHE_DEFAULT_ID	0x803
