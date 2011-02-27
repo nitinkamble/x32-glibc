@@ -1,3 +1,12 @@
+2011-02-27  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/getcontext.S: Support 32bit
+	stack register.
+	* sysdeps/unix/sysv/linux/x86_64/swapcontext.S: Likewise.
+
+	* sysdeps/unix/sysv/linux/x86_64/makecontext.c
+	(__makecontext): Support 32bit address space.
+
 2011-02-26  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* shlib-versions: Move x86_64 default to ...
