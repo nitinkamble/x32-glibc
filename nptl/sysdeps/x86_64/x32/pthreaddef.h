@@ -16,9 +16,14 @@
    Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
    02111-1307 USA.  */
 
+#ifndef _PTHREADDEF_H
+#define _PTHREADDEF_H 1
+
 #include <sysdeps/x86_64/pthreaddef.h>
 
 #undef CURRENT_STACK_FRAME
 /* Location of current stack frame.  The frame pointer is not usable.  */
 #define CURRENT_STACK_FRAME \
   ({ char *frame; asm ("movl %%esp, %0" : "=r" (frame)); frame; })
+
+#endif /* _PTHREADDEF_H */
