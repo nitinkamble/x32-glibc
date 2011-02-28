@@ -124,7 +124,7 @@ __lll_robust_timedlock_wait:
 	je	.Lreltmo
 # endif
 
-	cmpq	$0, (%rdx)
+	CMP_LP	$0, (%rdx)
 	js	7f
 
 	pushq	%r9

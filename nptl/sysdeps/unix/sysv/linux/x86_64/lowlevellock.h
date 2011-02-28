@@ -408,7 +408,7 @@ LLL_STUB_UNWIND_INFO_END
 		       ".type _L_timedlock_%=, @function\n"		      \
 		       "_L_timedlock_%=:\n"				      \
 		       "1:\tleaq %4, %%rdi\n"				      \
-		       "0:\tmovq %8, %%rdx\n"				      \
+		       "0:\tmov %8, %%" RDX_LP "\n"			      \
 		       "2:\tsubq $128, %%rsp\n"				      \
 		       "3:\tcallq __lll_timedlock_wait\n"		      \
 		       "4:\taddq $128, %%rsp\n"				      \
@@ -432,7 +432,7 @@ LLL_STUB_UNWIND_INFO_END
 		       ".type _L_robust_timedlock_%=, @function\n"	      \
 		       "_L_robust_timedlock_%=:\n"			      \
 		       "1:\tleaq %4, %%rdi\n"				      \
-		       "0:\tmovq %8, %%rdx\n"				      \
+		       "0:\tmov %8, %%" RDX_LP "\n"			      \
 		       "2:\tsubq $128, %%rsp\n"				      \
 		       "3:\tcallq __lll_robust_timedlock_wait\n"	      \
 		       "4:\taddq $128, %%rsp\n"				      \

@@ -67,7 +67,7 @@ sem_wait:
 	cfi_adjust_cfa_offset(8)
 
 	LOCK
-	addq	$1, NWAITERS(%rdi)
+	ADD_LP	$1, NWAITERS(%rdi)
 
 .LcleanupSTART:
 6:	call	__pthread_enable_asynccancel
@@ -116,7 +116,7 @@ sem_wait:
 	xorl	%eax, %eax
 
 9:	LOCK
-	subq	$1, NWAITERS(%rdi)
+	SUB_LP	$1, NWAITERS(%rdi)
 
 	leaq	8(%rsp), %rsp
 	cfi_adjust_cfa_offset(-8)
@@ -143,7 +143,7 @@ sem_wait:
 sem_wait_cleanup:
 	movq	(%rsp), %rdi
 	LOCK
-	subq	$1, NWAITERS(%rdi)
+	SUB_LP	$1, NWAITERS(%rdi)
 	movq	%rax, %rdi
 .LcallUR:
 	call	_Unwind_Resume@PLT

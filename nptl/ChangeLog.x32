@@ -1,5 +1,35 @@
 2011-02-27  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/unix/sysv/linux/x86_64/cancellation.S: Use MOVE_LP
+	and RDI_LP.
+
+	* sysdeps/unix/sysv/linux/x86_64/lowlevellock.S: Use CMP_LP,
+	LP_SIZE and RXX_LP.
+	* sysdeps/unix/sysv/linux/x86_64/lowlevelrobustlock.S: Likewise.
+
+	* sysdeps/unix/sysv/linux/x86_64/lowlevellock.h (lll_timedlock):
+	Use RDX_LP.
+	(lll_robust_timedlock): Likewise.
+
+	* sysdeps/unix/sysv/linux/x86_64/lowlevelrobustlock.S: Use CMP_LP.
+
+	* sysdeps/unix/sysv/linux/x86_64/pthread_cond_broadcast.S: Use
+	CMP_LP and R8_LP.
+
+	* sysdeps/unix/sysv/linux/x86_64/pthread_rwlock_timedrdlock.S: Use
+	CMP_LP and LP_SIZE.
+	* sysdeps/unix/sysv/linux/x86_64/pthread_rwlock_timedwrlock.S:
+	Likewise.
+
+	* sysdeps/unix/sysv/linux/x86_64/sem_post.S: Use CMP_LP on
+	NWAITERS.
+
+	* sysdeps/unix/sysv/linux/x86_64/sem_timedwait.S: Use ADD_LP
+	and SUB_LP on NWAITERS.
+	* sysdeps/unix/sysv/linux/x86_64/sem_wait.S: Likewise.
+
+2011-02-27  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/unix/sysv/linux/x86_64/pthread_cond_broadcast.S: Replace
 	%RXX with %RXX_LP.
 	* sysdeps/unix/sysv/linux/x86_64/pthread_cond_signal.S: Likewise.

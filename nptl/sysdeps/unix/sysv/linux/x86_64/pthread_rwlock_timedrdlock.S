@@ -75,7 +75,7 @@ pthread_rwlock_timedrdlock:
 	je	5f
 
 	/* Check the value of the timeout parameter.  */
-3:	cmpq	$1000000000, 8(%r13)
+3:	CMP_LP	$1000000000, LP_SIZE(%r13)
 	jae	19f
 
 	incl	READERS_QUEUED(%r12)
@@ -102,7 +102,7 @@ pthread_rwlock_timedrdlock:
 	je	.Lreltmo
 #endif
 
-	cmpq	$0, (%r13)
+	CMP_LP	$0, (%r13)
 	js	16f		/* Time is already up.  */
 
 	movl	$FUTEX_PRIVATE_FLAG|FUTEX_WAIT_BITSET|FUTEX_CLOCK_REALTIME, %esi

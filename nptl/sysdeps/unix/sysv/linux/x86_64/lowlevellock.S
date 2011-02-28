@@ -169,7 +169,7 @@ __lll_timedlock_wait:
 	je	.Lreltmo
 # endif
 
-	cmpq	$0, (%rdx)
+	CMP_LP	$0, (%rdx)
 	js	5f
 
 	pushq	%r9
@@ -406,21 +406,21 @@ __lll_timedwait_tid:
 	callq	*%rax
 
 	/* Compute relative timeout.  */
-	movq	8(%rsp), %rax
+	mov	LP_SIZE(%rsp), %RAX_LP
 	movl	$1000, %edi
-	mul	%rdi		/* Milli seconds to nano seconds.  */
-	movq	(%r13), %rdi
-	movq	8(%r13), %rsi
-	subq	(%rsp), %rdi
-	subq	%rax, %rsi
+	mul	%RDI_LP		/* Milli seconds to nano seconds.  */
+	mov	(%r13), %RDI_LP
+	mov	LP_SIZE(%r13), %RSI_LP
+	sub	(%rsp), %RDI_LP
+	sub	%RAX_LP, %RSI_LP
 	jns	5f
-	addq	$1000000000, %rsi
-	decq	%rdi
-5:	testq	%rdi, %rdi
+	add	$1000000000, %RSI_LP
+	dec	%RDI_LP
+5:	test	%RDI_LP, %RDI_LP
 	js	6f		/* Time is already up.  */
 
-	movq	%rdi, (%rsp)	/* Store relative timeout.  */
-	movq	%rsi, 8(%rsp)
+	mov	%RDI_LP, (%rsp)	/* Store relative timeout.  */
+	mov	%RSI_LP, LP_SIZE(%rsp)
 
 	movl	(%r12), %edx
 	testl	%edx, %edx
