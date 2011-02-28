@@ -1,5 +1,10 @@
 2011-02-27  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/unix/sysv/linux/x86_64/getcontext.S: Don't use %RCX_LP.
+	* sysdeps/unix/sysv/linux/x86_64/swapcontext.S: Likewise.
+
+2011-02-27  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/x86_64/sysdep.h (MOVE_LP): New.
 	(ADD_LP): Likewise.
 	(SUB_LP): Likewise.

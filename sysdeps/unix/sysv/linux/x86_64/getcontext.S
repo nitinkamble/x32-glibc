@@ -51,7 +51,7 @@ ENTRY(__getcontext)
 
 	movq	(%rsp), %rcx
 	movq	%rcx, oRIP(%rdi)
-	lea	8(%rsp), %RCX_LP	/* Exclude the return address.  */
+	leaq	8(%rsp), %rcx		/* Exclude the return address.  */
 	movq	%rcx, oRSP(%rdi)
 
 	/* We have separate floating-point register content memory on the
