@@ -41,6 +41,15 @@
 
 # define LP_SIZE 4
 
+# undef MOVE_LP
+# define MOVE_LP movl
+
+# undef ADD_LP
+# define ADD_LP addl
+
+# undef SUB_LP
+# define SUB_LP subl
+
 # undef CMP_LP
 # define CMP_LP cmpl
 

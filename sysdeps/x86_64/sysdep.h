@@ -117,6 +117,15 @@ lose:									      \
 /* Long and pointer size in bytes.  */
 #define LP_SIZE	8
 
+/* Instruction to move long and pointer.  */
+#define MOVE_LP movq
+
+/* Instruction to add long and pointer.  */
+#define ADD_LP addq
+
+/* Instruction to substract long and pointer.  */
+#define SUB_LP subq
+
 /* Instruction to compare against long and pointer.  */
 #define CMP_LP cmpq
 

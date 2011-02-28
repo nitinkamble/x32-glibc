@@ -1,5 +1,14 @@
 2011-02-27  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/x86_64/sysdep.h (MOVE_LP): New.
+	(ADD_LP): Likewise.
+	(SUB_LP): Likewise.
+	* sysdeps/x86_64/x32/sysdep.h (MOVE_LP): Likewise.
+	(ADD_LP): Likewise.
+	(SUB_LP): Likewise.
+
+2011-02-27  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/x86_64/sysdep.h (RAX): Removed.
 	(RBP): Likewise.
 	(RCX): Likewise.
