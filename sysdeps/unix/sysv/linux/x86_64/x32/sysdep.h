@@ -31,15 +31,6 @@
 #  define SYSCALL_SET_ERROR_RETURN orl $-1, %eax
 # endif
 
-# undef	PSEUDO
-# define PSEUDO(name, syscall_name, args)				      \
-  .text;								      \
-  ENTRY (name)								      \
-    DO_CALL (syscall_name, args);					      \
-    cmp $-4095, %eax;							      \
-    jae SYSCALL_ERROR_LABEL;						      \
-  L(pseudo_end):
-
 # ifndef PIC
 /* Nothing here.  */
 # elif RTLD_PRIVATE_ERRNO

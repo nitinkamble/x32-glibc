@@ -1,3 +1,10 @@
+2011-02-28  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/x86_64/pthreaddef.h (CURRENT_STACK_FRAME): Use
+	RSP_LP.
+
+	* sysdeps/x86_64/x32/pthreaddef.h: Removed.
+
 2011-02-27  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/unix/sysv/linux/x86_64/cancellation.S: Use MOVE_LP

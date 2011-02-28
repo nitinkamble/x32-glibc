@@ -1,3 +1,7 @@
+2011-02-28  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/sysdep.h (PSEUDO): Removed.
+
 2011-02-27  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/unix/sysv/linux/x86_64/getcontext.S: Don't use %RCX_LP.
