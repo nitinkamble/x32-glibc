@@ -165,6 +165,7 @@ typedef union
     /* FLAGS must stay at this position in the structure to maintain
        binary compatibility.  */
     unsigned int __flags;
+# define __PTHREAD_RWLOCK_INT_FLAGS_SHARED	1
   } __data;
 # else
   struct

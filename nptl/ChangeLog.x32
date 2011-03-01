@@ -1,5 +1,22 @@
 2011-03-01  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* pthread_create.c (start_thread): Check __PTHREAD_MUTEX_HAVE_PREV
+	instead of __WORDSIZE.
+
+	* sysdeps/pthread/pthread.h (PTHREAD_MUTEX_INITIALIZER): Check
+	__PTHREAD_MUTEX_HAVE_PREV instead of __WORDSIZE.
+	(PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP): Likewise.
+	(PTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP): Likewise.
+	(PTHREAD_ADAPTIVE_MUTEX_INITIALIZER_NP): Likewise.
+	(__PTHREAD_RWLOCK_INT_FLAGS_SHARED): New.
+	(PTHREAD_RWLOCK_WRITER_NONRECURSIVE_INITIALIZER_NP): Check
+	__PTHREAD_RWLOCK_INT_FLAGS_SHARED instead of __WORDSIZE.
+
+	* sysdeps/unix/sysv/linux/x86_64/bits/pthreadtypes.h
+	(__PTHREAD_RWLOCK_INT_FLAGS_SHARED): Defined if __WORDSIZE == 64.
+
+2011-03-01  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/unix/sysv/linux/x86_64/bits/pthreadtypes.h
 	(__cleanup_fct_attribute): Check __x86_64__ instead of
 	__x86_64__.
