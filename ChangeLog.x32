@@ -1,3 +1,8 @@
+2011-03-02  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* elf/tls-macros.h (TLS_LE): Use mov/lea instead of movq/leaq
+	to load thread pointer.
+
 2011-03-01  H.J. Lu  <hongjiu.lu@intel.com>
 
 	PR libc/12495

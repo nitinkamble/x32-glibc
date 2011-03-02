@@ -101,15 +101,15 @@
 
 # define TLS_LE(x) \
   ({ int *__l;								      \
-     asm ("movq %%fs:0,%0\n\t"						      \
-	  "leaq " #x "@tpoff(%0), %0"					      \
+     asm ("mov %%fs:0,%0\n\t"						      \
+	  "lea " #x "@tpoff(%0), %0"					      \
 	  : "=r" (__l));						      \
      __l; })
 
 # define TLS_IE(x) \
   ({ int *__l;								      \
-     asm ("movq %%fs:0,%0\n\t"						      \
-	  "addq " #x "@gottpoff(%%rip),%0"				      \
+     asm ("mov %%fs:0,%0\n\t"						      \
+	  "add " #x "@gottpoff(%%rip),%0"				      \
 	  : "=r" (__l));						      \
      __l; })
 
