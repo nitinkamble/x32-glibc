@@ -3370,8 +3370,7 @@ static Void_t* sYSMALLOc(nb, av) INTERNAL_SIZE_T nb; mstate av;
 	      is always true after initialization.
 	    */
 
-	    correction = MALLOC_ALIGNMENT - front_misalign;
-	    aligned_brk += correction;
+	    aligned_brk += MALLOC_ALIGNMENT - front_misalign;
 	  }
 	}
 

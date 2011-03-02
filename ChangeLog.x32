@@ -1,3 +1,9 @@
+2011-03-01  H.J. Lu  <hongjiu.lu@intel.com>
+
+	PR libc/12495
+	* malloc/malloc.c (sYSMALLOc): Don't update correction with
+	front_misalign.
+
 2011-02-28  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/unix/sysv/linux/x86_64/x32/sysdep.h (PSEUDO): Removed.
