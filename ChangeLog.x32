@@ -356,6 +356,7 @@
 
 2007-11-30  Daniel Jacobowitz  <dan@codesourcery.com>
 
+	PR libc/12495
 	* malloc/malloc.c (MALLOC_ALIGNMENT): Use __alignof__ (long double).
 	(SMALLBIN_CORRECTION): New.
 	(MIN_LARGE_SIZE, smallbin_index): Use it to handle 16-byte alignment.
