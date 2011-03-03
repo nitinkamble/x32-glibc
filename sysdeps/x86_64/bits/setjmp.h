@@ -24,8 +24,6 @@
 # error "Never include <bits/setjmp.h> directly; use <setjmp.h> instead."
 #endif
 
-#include <bits/wordsize.h>
-
 #ifndef _ASM
 
 # if __x86_64__
