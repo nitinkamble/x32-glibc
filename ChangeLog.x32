@@ -1,5 +1,14 @@
 2011-03-02  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/unix/sysv/linux/x86_64/x32/gettimeofday.S: Update
+	comments.
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/init-first.c: New.
+	* sysdeps/unix/sysv/linux/x86_64/x32/sched_getcpu.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/time.c: Likewise.
+
+2011-03-02  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/unix/sysv/linux/x86_64/gettimeofday.S: Remove
 	VSYSCALL_ADDR_vgettimeofday.
 	* sysdeps/unix/sysv/linux/x86_64/init-first.c: Likewise.
