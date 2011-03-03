@@ -26,9 +26,6 @@
 
 #include <kernel-features.h>
 
-/* For the calculation see asm/vsyscall.h.  */
-#define VSYSCALL_ADDR_vgettimeofday	0xffffffffff600000
-
 
 	.text
 
@@ -473,8 +470,7 @@ __pthread_cond_timedwait:
 # else
 	leaq	24(%rsp), %rdi
 	xorl	%esi, %esi
-	movq	$VSYSCALL_ADDR_vgettimeofday, %rax
-	callq	*%rax
+	CALL_GETTIMEOFDAY
 
 	/* Compute relative timeout.  */
 	movq	40(%rsp), %rax
@@ -611,8 +607,7 @@ __pthread_cond_timedwait:
 	/* clock_gettime not available.  */
 19:	leaq	32(%rsp), %rdi
 	xorl	%esi, %esi
-	movq	$VSYSCALL_ADDR_vgettimeofday, %rax
-	callq	*%rax
+	CALL_GETTIMEOFDAY
 
 	/* Compute relative timeout.  */
 	movq	40(%rsp), %rax

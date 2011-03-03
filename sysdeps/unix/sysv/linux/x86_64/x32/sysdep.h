@@ -85,6 +85,13 @@
   jmp L(pseudo_end);
 # endif	/* PIC */
 
+/* FIXME: Redefine CALL_GETTIMEOFDAY after x32 vDSO support is added
+   to kernel.  */
+# undef CALL_GETTIMEOFDAY
+# define CALL_GETTIMEOFDAY				\
+  movl	$__NR_gettimeofday, %eax;			
+  syscall
+
 #endif	/* __ASSEMBLER__ */
 
 /* Pointer mangling support.  */

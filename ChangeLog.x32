@@ -1,5 +1,18 @@
 2011-03-02  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/unix/sysv/linux/x86_64/gettimeofday.S: Remove
+	VSYSCALL_ADDR_vgettimeofday.
+	* sysdeps/unix/sysv/linux/x86_64/init-first.c: Likewise.
+
+	* sysdeps/unix/sysv/linux/x86_64/sysdep.h
+	(VSYSCALL_ADDR_vgettimeofday): New.
+	(CALL_GETTIMEOFDAY): Likewise.
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/sysdep.h (CALL_GETTIMEOFDAY):
+	New.
+
+2011-03-02  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* elf/tls-macros.h (TLS_LE): Use mov/lea instead of movq/leaq
 	to load thread pointer.
 

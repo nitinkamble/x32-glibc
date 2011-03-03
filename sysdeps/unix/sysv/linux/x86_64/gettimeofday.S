@@ -20,9 +20,6 @@
 #define _ERRNO_H	1
 #include <bits/errno.h>
 
-/* For the calculation see asm/vsyscall.h.  */
-#define VSYSCALL_ADDR_vgettimeofday	0xffffffffff600000
-
 
 ENTRY (__gettimeofday)
 	/* Align stack.  */

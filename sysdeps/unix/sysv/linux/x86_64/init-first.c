@@ -34,7 +34,6 @@ _libc_vdso_platform_setup (void)
 
   void *p = _dl_vdso_vsym ("gettimeofday", &linux26);
   /* If the vDSO is not available we fall back on the old vsyscall.  */
-#define VSYSCALL_ADDR_vgettimeofday	0xffffffffff600000ul
   if (p == NULL)
     p = (void *) VSYSCALL_ADDR_vgettimeofday;
   PTR_MANGLE (p);

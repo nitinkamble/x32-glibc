@@ -25,9 +25,6 @@
 #include <structsem.h>
 
 
-/* For the calculation see asm/vsyscall.h.  */
-#define VSYSCALL_ADDR_vgettimeofday	0xffffffffff600000
-
 	.text
 
 	.globl	sem_timedwait
@@ -213,8 +210,7 @@ sem_timedwait:
 
 7:	xorl	%esi, %esi
 	movq	%rsp, %rdi
-	movq	$VSYSCALL_ADDR_vgettimeofday, %rax
-	callq	*%rax
+	CALL_GETTIMEOFDAY
 
 	/* Compute relative timeout.  */
 	movq	8(%rsp), %rax

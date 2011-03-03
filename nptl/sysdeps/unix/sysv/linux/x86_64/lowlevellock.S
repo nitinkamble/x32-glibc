@@ -68,10 +68,6 @@
 #endif
 
 
-/* For the calculation see asm/vsyscall.h.  */
-#define VSYSCALL_ADDR_vgettimeofday	0xffffffffff600000
-
-
 	.globl	__lll_lock_wait_private
 	.type	__lll_lock_wait_private,@function
 	.hidden	__lll_lock_wait_private
@@ -250,10 +246,9 @@ __lll_timedlock_wait:
 	/* Get current time.  */
 	movq	%rsp, %rdi
 	xorl	%esi, %esi
-	movq	$VSYSCALL_ADDR_vgettimeofday, %rax
 	/* This is a regular function call, all caller-save registers
 	   might be clobbered.  */
-	callq	*%rax
+	CALL_GETTIMEOFDAY
 
 	/* Compute relative timeout.  */
 	movq	8(%rsp), %rax
@@ -402,8 +397,7 @@ __lll_timedwait_tid:
 	/* Get current time.  */
 2:	movq	%rsp, %rdi
 	xorl	%esi, %esi
-	movq	$VSYSCALL_ADDR_vgettimeofday, %rax
-	callq	*%rax
+	CALL_GETTIMEOFDAY
 
 	/* Compute relative timeout.  */
 	mov	LP_SIZE(%rsp), %RAX_LP

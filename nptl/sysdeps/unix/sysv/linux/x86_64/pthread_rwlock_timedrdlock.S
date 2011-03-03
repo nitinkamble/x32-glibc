@@ -24,9 +24,6 @@
 #include <kernel-features.h>
 
 
-/* For the calculation see asm/vsyscall.h.  */
-#define VSYSCALL_ADDR_vgettimeofday	0xffffffffff600000
-
 	.text
 
 	.globl	pthread_rwlock_timedrdlock
@@ -123,8 +120,7 @@ pthread_rwlock_timedrdlock:
 	/* Get current time.  */
 	movq	%rsp, %rdi
 	xorl	%esi, %esi
-	movq	$VSYSCALL_ADDR_vgettimeofday, %rax
-	callq	*%rax
+	CALL_GETTIMEOFDAY
 
 	/* Compute relative timeout.  */
 	movq	8(%rsp), %rax
