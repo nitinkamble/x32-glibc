@@ -1,5 +1,10 @@
 2011-03-02  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/x86_64/bits/setjmp.h (__jmp_buf): Check __x86_64__
+	instead of __WORDSIZE.  Replace long with long long.
+
+2011-03-02  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/unix/sysv/linux/x86_64/x32/gettimeofday.S: Update
 	comments.
 
