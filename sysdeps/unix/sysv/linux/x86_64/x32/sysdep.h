@@ -136,4 +136,12 @@
 # endif
 #endif
 
+/* FIXME: Remove these after x32 vDSO support is added to kernel.  */
+#undef INLINE_VSYSCALL
+#define INLINE_VSYSCALL(name, nr, args...) \
+  INLINE_SYSCALL (name, nr, ##args)
+#undef INTERNAL_VSYSCALL
+#define INTERNAL_VSYSCALL(name, err, nr, args...) \
+  INTERNAL_SYSCALL (name, err, nr, ##args)
+
 #endif /* linux/x86_64/x32/sysdep.h */

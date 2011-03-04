@@ -1,5 +1,10 @@
 2011-03-03  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/unix/sysv/linux/x86_64/x32/sysdep.h (INLINE_VSYSCALL): New.
+	(INTERNAL_VSYSCALL): Likewise.
+
+2011-03-03  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* tst-auditmod1.c: Support la_x32_gnu_pltenter and
 	la_x32_gnu_pltexit.
 	(pltexit): Cast int_retval to ptrdiff_t.
