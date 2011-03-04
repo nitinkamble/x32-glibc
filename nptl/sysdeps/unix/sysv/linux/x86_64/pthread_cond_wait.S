@@ -490,7 +490,7 @@ __condvar_cleanup1:
 	.section .gnu.linkonce.d.DW.ref.__gcc_personality_v0,"aw",@progbits
 	.align	8
 	.type	DW.ref.__gcc_personality_v0, @object
-	.size	DW.ref.__gcc_personality_v0, 8
+	.size	DW.ref.__gcc_personality_v0, LP_SIZE
 DW.ref.__gcc_personality_v0:
 	ASM_ADDR __gcc_personality_v0
 #endif
