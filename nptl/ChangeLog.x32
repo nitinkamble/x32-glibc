@@ -1,6 +1,16 @@
 2011-03-04  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/unix/sysv/linux/x86_64/pthread_cond_timedwait.S:
+	Align .gnu.linkonce.d.DW.ref.__gcc_personality_v section to
+	LP_SIZE.
+	* sysdeps/unix/sysv/linux/x86_64/pthread_cond_wait.S: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/pthread_once.S: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/sem_timedwait.S: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/sem_wait.S: Likewise.
+
+2011-03-04  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/pthread_cond_timedwait.S:
 	Correct DW.ref.__gcc_personality_v0 size.
 	* sysdeps/unix/sysv/linux/x86_64/pthread_cond_wait.S: Likewise.
 	* sysdeps/unix/sysv/linux/x86_64/pthread_once.S: Likewise.

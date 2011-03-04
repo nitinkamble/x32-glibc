@@ -488,7 +488,7 @@ __condvar_cleanup1:
 	.hidden	DW.ref.__gcc_personality_v0
 	.weak	DW.ref.__gcc_personality_v0
 	.section .gnu.linkonce.d.DW.ref.__gcc_personality_v0,"aw",@progbits
-	.align	8
+	.align	LP_SIZE
 	.type	DW.ref.__gcc_personality_v0, @object
 	.size	DW.ref.__gcc_personality_v0, LP_SIZE
 DW.ref.__gcc_personality_v0:
