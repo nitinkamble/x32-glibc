@@ -1,3 +1,9 @@
+2011-03-04  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/pthread_cond_timedwait.S: Use
+	CMP_LP to compare time_t.
+	* sysdeps/unix/sysv/linux/x86_64/sem_timedwait.S: Likewise.
+
 2011-03-02  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* ysdeps/unix/sysv/linux/x86_64/lowlevellock.S: Remove

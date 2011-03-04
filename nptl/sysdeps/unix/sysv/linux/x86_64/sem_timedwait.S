@@ -62,7 +62,7 @@ sem_timedwait:
 	retq
 
 	/* Check whether the timeout value is valid.  */
-1:	cmpq	$1000000000, 8(%rsi)
+1:	CMP_LP	$1000000000, LP_SIZE(%rsi)
 	jae	6f
 
 #ifndef __ASSUME_FUTEX_CLOCK_REALTIME
@@ -74,7 +74,7 @@ sem_timedwait:
 	je	.Lreltmo
 #endif
 
-	cmpq	$0, (%rsi)
+	CMP_LP	$0, (%rsi)
 	js	16f
 
 	/* This push is only needed to store the sem_t pointer for the
