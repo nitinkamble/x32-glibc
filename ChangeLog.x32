@@ -1,5 +1,13 @@
 2011-03-03  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/unix/sysv/linux/x86_64/____longjmp_chk.S (CALL_FAIL):
+	Use RDI_LP.
+
+	* sysdeps/x86_64/__longjmp.S: Minimize x32 changes.
+	* sysdeps/x86_64/setjmp.S: Likewise.
+
+2011-03-03  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/unix/sysv/linux/x86_64/x32/sysdep.h (INLINE_VSYSCALL): New.
 	(INTERNAL_VSYSCALL): Likewise.
 

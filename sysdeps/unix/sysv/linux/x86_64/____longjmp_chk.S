@@ -33,7 +33,7 @@ longjmp_msg:
 # define CALL_FAIL	leaq	longjmp_msg(%rip), %rdi;		      \
 			call	__GI___fortify_fail
 #else
-# define CALL_FAIL	movq	$longjmp_msg, %rdi;			      \
+# define CALL_FAIL	mov	$longjmp_msg, %RDI_LP;			      \
 			call	__fortify_fail
 #endif
 
