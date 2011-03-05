@@ -1,5 +1,10 @@
 2011-03-04  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/unix/sysv/linux/x86_64/lowlevellock.h (__NR_futex): New.
+	(SYS_futex): Use it.
+
+2011-03-04  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/unix/sysv/linux/x86_64/pthread_cond_timedwait.S:
 	Align .gnu.linkonce.d.DW.ref.__gcc_personality_v section to
 	LP_SIZE.
