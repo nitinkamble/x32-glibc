@@ -1,6 +1,6 @@
 /* memset/bzero -- set memory area to CH/0
    Optimized version for x86-64.
-   Copyright (C) 2002-2005, 2007, 2008 Free Software Foundation, Inc.
+   Copyright (C) 2002-2005, 2007, 2008, 2011 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@
 #define __STOS_LOWER_BOUNDARY	$8192
 #define __STOS_UPPER_BOUNDARY	$65536
 
-        .text
+	.text
 #if !defined NOT_IN_libc && !defined USE_MULTIARCH
 ENTRY(__bzero)
 	mov	%rsi,%rdx	/* Adjust parameter.  */
@@ -367,7 +367,7 @@ L(P4Q0): mov    %edx,-0x4(%rdi)
 		retq
 
 	.balign     16
-#if defined(USE_EXTRA_TABLE)
+#ifdef USE_EXTRA_TABLE
 L(P5QI): mov    %rdx,-0x95(%rdi)
 #endif
 L(P5QH): mov    %rdx,-0x8d(%rdi)
@@ -533,6 +533,8 @@ L(A6Q0):    mov    %dx,-0x6(%rdi)
 	jmp    L(aligned_now)
 
 L(SSE_pre):
+#else
+L(aligned_now):
 #endif
 #if !defined USE_MULTIARCH || defined USE_SSE2
 	 # fill RegXMM0 with the pattern
@@ -1071,9 +1073,9 @@ L(SSExDx):
 #endif /* !defined USE_MULTIARCH || defined USE_SSE2  */
 
 	.balign     16
+#ifndef USE_MULTIARCH
 L(aligned_now):
 
-#ifndef USE_MULTIARCH
 	 cmpl   $0x1,__x86_64_preferred_memory_instruction(%rip)
 	 jg     L(SSE_pre)
 #endif /* USE_MULTIARCH */
@@ -1116,13 +1118,13 @@ L(8byte_move_loop):
 
 L(8byte_move_skip):
 	andl	$127,%r8d
-	lea    	(%rdi,%r8,1),%rdi
+	lea	(%rdi,%r8,1),%rdi
 
 	lea    	L(Got0)(%rip),%R11_LP
 	lea	L(setPxQx)(%rip),%RCX_LP
 	movswq	(%rcx,%r8,2),%rcx
-	lea    	(%rcx,%r11,1),%r11
-	jmpq   	*%r11
+	lea	(%rcx,%r11,1),%r11
+	jmpq	*%r11
 
 	.balign     16
 L(8byte_stos_try):
@@ -1155,12 +1157,12 @@ L(8byte_stos_skip):
 	ja	L(8byte_nt_move)
 
 	andl	$7,%r8d
-	lea    	(%rdi,%r8,1),%rdi
+	lea	(%rdi,%r8,1),%rdi
 	lea    	L(Got0)(%rip),%R11_LP
 	lea     L(setPxQx)(%rip),%RCX_LP
 	movswq	(%rcx,%r8,2),%rcx
 	lea	(%rcx,%r11,1),%r11
-	jmpq   	*%r11
+	jmpq	*%r11
 
 	.balign     16
 L(8byte_nt_move):
@@ -1198,12 +1200,12 @@ L(8byte_nt_move_loop):
 L(8byte_nt_move_skip):
 	andl	$127,%r8d
 
-	lea    	(%rdi,%r8,1),%rdi
+	lea	(%rdi,%r8,1),%rdi
 	lea    	L(Got0)(%rip),%R11_LP
 	lea     L(setPxQx)(%rip),%RCX_LP
 	movswq	(%rcx,%r8,2),%rcx
-	lea    	(%rcx,%r11,1),%r11
-	jmpq   	*%r11
+	lea	(%rcx,%r11,1),%r11
+	jmpq	*%r11
 
 END (memset)
 libc_hidden_builtin_def (memset)
