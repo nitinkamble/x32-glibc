@@ -20,6 +20,8 @@
 #include <jmpbuf-offsets.h>
 #include <asm-syntax.h>
 
+#include "sigaltstack.h"
+
 	.section .rodata.str1.1,"aMS",@progbits,1
 	.type	longjmp_msg,@object
 longjmp_msg:
@@ -68,19 +70,19 @@ ENTRY(____longjmp_chk)
 	cfi_register (%rsi, %rbx)
 
 	xorl	%edi, %edi
-	leaq	-24(%rsp), %rsi
+	lea	-sizeSS(%rsp), %RSI_LP
 	movl	$__NR_sigaltstack, %eax
 	syscall
 	/* Without working sigaltstack we cannot perform the test.  */
 	testl	%eax, %eax
 	jne	.Lok2
-	testl	$1, -16(%rsp)
+	testl	$1, (-sizeSS + oSS_FLAGS)(%rsp)
 	jz	.Lfail
 
-	movq	-24(%rsp), %rax
-	addq	-8(%rsp), %rax
+	mov	(-sizeSS + oSS_SP)(%rsp), %RAX_LP
+	add	(-sizeSS + oSS_SIZE)(%rsp), %RAX_LP
 	subq	%r8, %rax
-	cmpq	-8(%rsp), %rax
+	cmp	(-sizeSS + oSS_SIZE)(%rsp), %RAX_LP
 	jae	.Lok2
 
 .Lfail:	CALL_FAIL
