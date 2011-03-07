@@ -23,6 +23,8 @@
 #include <sysdep-cancel.h>
 #include <sys/syscall.h>
 
+#include <kernel_uio.h>
+
 extern ssize_t __preadv64 (int, const struct iovec *, int, off64_t);
 libc_hidden_proto(__preadv64)
 
@@ -30,14 +32,18 @@ ssize_t
 __preadv64 (int fd, const struct iovec *vector, int count, off64_t offset)
 {
   ssize_t result;
+  struct kernel_iovec kvector;
+
+  kvector.iov_base = (uint64_t) (uintptr_t) vector->iov_base;
+  kvector.iov_len= vector->iov_len;
 
   if (SINGLE_THREAD_P)
-    result = INLINE_SYSCALL (preadv, 5, fd, vector, count, offset, 0);
+    result = INLINE_SYSCALL (preadv, 4, fd, &kvector, count, offset);
   else
     {
       int oldtype = LIBC_CANCEL_ASYNC ();
 
-      result = INLINE_SYSCALL (preadv, 5, fd, vector, count, offset, 0);
+      result = INLINE_SYSCALL (preadv, 4, fd, &kvector, count, offset);
 
       LIBC_CANCEL_RESET (oldtype);
     }

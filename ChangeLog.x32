@@ -1,3 +1,12 @@
+2011-03-07  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/kernel_uio.h: New.
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/preadv64.c: Include
+	<kernel_uio.h>.  Convert user vector to kernel iovec.  Properly
+	inline system call.
+	* sysdeps/unix/sysv/linux/x86_64/x32/pwritev64.c: Likewise.
+
 2011-03-04  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/unix/sysv/linux/x86_64/sigaction.c (RESTORE2): Put back
