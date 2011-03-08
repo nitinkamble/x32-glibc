@@ -1,5 +1,10 @@
 2011-03-07  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/unix/sysv/linux/x86_64/x32/sysdep.h (CALL_GETTIMEOFDAY):
+	Add a missing `\'.
+
+2011-03-07  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/unix/sysv/linux/x86_64/Makefile (gen-as-const-headers):
 	Add sigaltstack.sym.
 

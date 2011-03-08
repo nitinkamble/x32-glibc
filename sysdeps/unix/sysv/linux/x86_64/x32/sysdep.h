@@ -89,7 +89,7 @@
    to kernel.  */
 # undef CALL_GETTIMEOFDAY
 # define CALL_GETTIMEOFDAY				\
-  movl	$__NR_gettimeofday, %eax;			
+  movl	$__NR_gettimeofday, %eax;			\
   syscall
 
 #endif	/* __ASSEMBLER__ */
