@@ -1,3 +1,9 @@
+2011-03-07  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/x86_64/tls.h (THREAD_SETMEM): Use long long on 64bit
+	integer.
+	(THREAD_SETMEM_NC): Likewise.
+
 2011-03-04  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/unix/sysv/linux/x86_64/lowlevellock.h
