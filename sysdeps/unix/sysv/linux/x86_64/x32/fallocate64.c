@@ -20,6 +20,24 @@
 #include <fcntl.h>
 #include <sysdep.h>
 
+#undef LOAD_ARGS_3
+#define LOAD_ARGS_3(a1, a2, a3)				\
+  long long int __arg3 = (long long int) (a3);		\
+  LOAD_ARGS_2 (a1, a2)
+#undef LOAD_REGS_3
+#define LOAD_REGS_3					\
+  register long long int _a3 asm ("rdx") = __arg3;	\
+  LOAD_REGS_2
+
+#undef LOAD_ARGS_4
+#define LOAD_ARGS_4(a1, a2, a3, a4)			\
+  long long int __arg4 = (long long int) (a4);		\
+  LOAD_ARGS_3 (a1, a2, a3)
+#undef LOAD_REGS_4
+#define LOAD_REGS_4					\
+  register long long int _a4 asm ("r10") = __arg4;	\
+  LOAD_REGS_3
+
 extern int __fallocate64 (int, int, __off64_t, __off64_t);
 libc_hidden_proto(__fallocate64)
 
