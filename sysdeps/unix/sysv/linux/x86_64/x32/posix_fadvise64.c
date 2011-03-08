@@ -20,6 +20,24 @@
 #include <fcntl.h>
 #include <sysdep.h>
 
+#undef LOAD_ARGS_2
+#define LOAD_ARGS_2(a1, a2)				\
+  long long int __arg2 = (long long int) (a2);		\
+  LOAD_ARGS_1 (a1)
+#undef LOAD_REGS_2
+#define LOAD_REGS_2					\
+  register long long int _a2 asm ("rsi") = __arg2;	\
+  LOAD_REGS_1
+
+#undef LOAD_ARGS_3
+#define LOAD_ARGS_3(a1, a2, a3)				\
+  long long int __arg3 = (long long int) (a3);		\
+  LOAD_ARGS_2 (a1, a2)
+#undef LOAD_REGS_3
+#define LOAD_REGS_3					\
+  register long long int _a3 asm ("rdx") = __arg3;	\
+  LOAD_REGS_2
+
 extern int __posix_fadvise64 (int, off64_t, off64_t, int);
 libc_hidden_proto(__posix_fadvise64)
 

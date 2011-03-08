@@ -25,6 +25,15 @@
 
 #include <kernel_uio.h>
 
+#undef LOAD_ARGS_4
+#define LOAD_ARGS_4(a1, a2, a3, a4)			\
+  long long int __arg4 = (long long int) (a4);		\
+  LOAD_ARGS_3 (a1, a2, a3)
+#undef LOAD_REGS_4
+#define LOAD_REGS_4					\
+  register long long int _a4 asm ("r10") = __arg4;	\
+  LOAD_REGS_3
+
 extern ssize_t __preadv64 (int, const struct iovec *, int, off64_t);
 libc_hidden_proto(__preadv64)
 
