@@ -122,9 +122,15 @@
 	  : : "rdi", "rsi", "r8", "r9", "r10", "r11"); 			      \
      __l; })
 
+# ifdef __LP64__
+#  define TLS_GD_PREFIX	".byte 0x66\n\t"
+# else
+#  define TLS_GD_PREFIX
+# endif
+
 # define TLS_GD(x) \
   ({ int *__l, __c, __d;						      \
-     asm (".byte 0x66\n\t"						      \
+     asm (TLS_GD_PREFIX							      \
 	  "leaq " #x "@tlsgd(%%rip),%%rdi\n\t"				      \
 	  ".word 0x6666\n\t"						      \
 	  "rex64\n\t"							      \
