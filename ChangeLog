@@ -1,3 +1,29 @@
+2011-03-10  Jakub Jelinek  <jakub@redhat.com>
+
+	* wcsmbs/wchar.h (wmemcmp): Remove __restrict qualifiers.
+
+2011-03-10  Ulrich Drepper  <drepper@gmail.com>
+
+	[BZ #12510]
+	* elf/dl-lookup.c (do_lookup_x): For copy relocations of unique objects
+	copy from the symbol referenced in the relocation to initialize the
+	used variable.
+	Patch by Piotr Bury <pbury@goahead.com>.
+	* elf/Makefile: Add rules to build and tst-unique3.
+	* include/bits/dlfcn.h: Remove _dl_mcount_wrapper_check declaration.
+	* elf/tst-unique3.cc: New file.
+	* elf/tst-unique3.h: New file.
+	* elf/tst-unique3lib.cc: New file.
+	* elf/tst-unique3lib2.cc: New file.
+
+	* elf/Makefile: Don't run tst-execstack* tests of SELinux is enabled.
+
+2011-03-10  Mike Frysinger  <vapier@gentoo.org>
+
+	* sysdeps/sparc/sparc64/elf/configure.in (libc_cv_sparc64_tls): Add
+	$LDFLAGS and -nostdlib -nostartfiles to linking step.  Change main
+	to _start.
+
 2011-03-06  Ulrich Drepper  <drepper@gmail.com>
 
 	* elf/dl-load.c (_dl_map_object): If we are looking for the first
