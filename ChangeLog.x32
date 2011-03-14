@@ -1,5 +1,10 @@
 2011-03-14  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/unix/sysv/linux/getpagesize.c (__getpagesize): Don't
+	assert GLRO(dl_pagesize) in libc.so.
+
+2011-03-14  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/unix/sysv/linux/x86_64/clone.S: Load pointer to TID
 	into R10_LP.
 

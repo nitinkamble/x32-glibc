@@ -28,7 +28,10 @@
 int
 __getpagesize ()
 {
-#ifdef __ASSUME_AT_PAGESIZE
+  /* A static program linked against NSS libraries may load libc.so and
+     __getpagesize in libc.so may be called with GLRO(dl_pagesize) == 0.
+   */
+#if defined __ASSUME_AT_PAGESIZE && !defined SHARED
   assert (GLRO(dl_pagesize) != 0);
   return GLRO(dl_pagesize);
 #else
