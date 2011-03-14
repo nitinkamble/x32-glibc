@@ -1,3 +1,8 @@
+2011-03-14  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/clone.S: Load pointer to TID
+	into R10_LP.
+
 2011-03-12  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* elf/tls-macros.h (TLS_GD_PREFIX): New.
