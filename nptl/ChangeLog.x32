@@ -1,3 +1,10 @@
+2011-03-15  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/lowlevellock.h
+	(LLL_STUB_UNWIND_INFO_START): Align label to LP_SIZE instead
+	of 8.
+	(LLL_STUB_UNWIND_INFO_END): Likewise.
+
 2011-03-07  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/x86_64/tls.h (THREAD_SETMEM): Use long long on 64bit

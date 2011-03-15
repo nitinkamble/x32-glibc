@@ -1,3 +1,8 @@
+2011-03-15  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/sigaction.c (RESTORE2): Align
+	labels to LP_SIZE instead of 8.
+
 2011-03-14  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/unix/sysv/linux/getpagesize.c (__getpagesize): Don't
