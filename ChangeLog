@@ -1,3 +1,9 @@
+2011-04-07  Andreas Schwab  <schwab@redhat.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/____longjmp_chk.S (CALL_FAIL):
+	Maintain aligned stack.
+	(CHECK_RSP): Remove unused macro.
+
 2011-04-03  Ulrich Drepper  <drepper@gmail.com>
 
 	* sysdeps/x86_64/cacheinfo.c (intel_02_known): Fix typo in table.
@@ -7,7 +13,7 @@
 
 	* sysdeps/unix/sysv/linux/bits/time.h (CLOCK_BOOTTIME): Define.
 
-	* include/features.h: Mention __USW_XOPEN2K8 in comment.
+	* include/features.h: Mention __USE_XOPEN2K8 in comment.
 
 2011-03-26  H.J. Lu  <hongjiu.lu@intel.com>
 
