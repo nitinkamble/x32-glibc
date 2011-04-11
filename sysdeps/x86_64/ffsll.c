@@ -1,7 +1,8 @@
 /* ffsll -- find first set bit in a word, counted from least significant end.
    For AMD x86-64.
    This file is part of the GNU C Library.
-   Copyright (C) 1991,92,93,94,97,98,2001 Free Software Foundation, Inc.
+   Copyright (C) 1991,92,93,94,97,98,2001,2011
+   Free Software Foundation, Inc.
    Contributed by Ulrich Drepper <drepper@cygnus.com>.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -36,6 +37,3 @@ ffsll (long long int x)
 
   return cnt + 1;
 }
-
-#undef	ffsl
-weak_alias (ffsll, ffsl)

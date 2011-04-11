@@ -1,5 +1,5 @@
-/* ffsll -- find first set bit in a word, counted from least significant
-   end.  X32 version.
+/* ffsll -- find first set bit in a word, counted from least significant end.
+   For AMD x86-64.
    This file is part of the GNU C Library.
    Copyright (C) 2011 Free Software Foundation, Inc.
 
@@ -18,19 +18,7 @@
    Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
    02111-1307 USA.  */
 
-#include <string.h>
+#include <sysdeps/x86_64/ffsll.c>
 
-#undef	ffsll
-
-int
-ffsll (long long int x)
-{
-  long long int cnt;
-  long long int tmp;
-
-  asm ("bsfq %2,%0\n"		/* Count low bits in X and store in %1.  */
-       "cmoveq %1,%0\n"		/* If number was zero, use -1 as result.  */
-       : "=&r" (cnt), "=r" (tmp) : "rm" (x), "1" (-1));
-
-  return cnt + 1;
-}
+#undef	ffsl
+weak_alias (ffsll, ffsl)
