@@ -64,7 +64,7 @@ __llround (double x)
 
 weak_alias (__llround, llround)
 
-/* long is retuned as the lower 32bit of long long on x32.  */
+/* long is returned as the lower 32bit of long long on x32.  */
 #undef lround
 #undef __lround
 strong_alias (__llround, __lround)

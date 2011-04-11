@@ -1,5 +1,9 @@
 2011-04-11  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/x86_64/x32/fpu/s_llround.c: Fix a typo in comments.
+
+2011-04-11  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/x86_64/ffsll.c: Remove ffsl alias.
 
 	* sysdeps/x86_64/lp64/ffsll.c: New.
