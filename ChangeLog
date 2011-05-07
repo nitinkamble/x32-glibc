@@ -1,3 +1,57 @@
+2011-05-06  Ulrich Drepper  <drepper@gmail.com>
+
+	* nss/nss_files/files-initgroups.c (_nss_files_initgroups_dyn): Return
+	NSS_STATUS_NOTFOUND if no record was found.
+
+2011-05-05  Andreas Schwab  <schwab@redhat.com>
+
+	* sunrpc/Makefile (headers): Add rpc/netdb.h.
+	(headers-not-in-tirpc): Remove rpc/netdb.h
+	* resolv/netdb.h: Revert last change.
+
+2011-05-05  Paul Pluzhnikov  <ppluzhnikov@google.com>
+
+	* Makeconfig (link-libc-static): Use --{start,end}-group to handle
+	circular dependency between libgcc.a and libc.a.
+
+2011-05-05  Andreas Schwab  <schwab@redhat.com>
+
+	* resolv/netdb.h: Don't include <rpc/netdb.h>.
+	* nis/Makefile: Don't install rpcsvc/*.
+	* inet/protocols/timed.h: Include <sys/types.h> and <sys/time.h>
+	instead of <rpc/types.h>.
+	(MAXHOSTNAMELEN): Define.
+
+2011-05-03  Andreas Schwab  <schwab@redhat.com>
+
+	* elf/ldconfig.c (add_dir): Don't crash on empty path.
+
+2011-04-28  Maciej Babinski  <mbabinski@google.com>
+
+	[BZ #12714]
+	* sysdeps/posix/getaddrinfo.c (gaih_inet): Don't bypass
+	gethostbyname4_r when IPv6 results are possible.
+
+2011-05-02  Ulrich Drepper  <drepper@gmail.com>
+
+	[BZ #12723]
+	* sysdeps/unix/sysv/linux/pathconf.c (__pathconf): Implement
+	_PC_PIPE_BUF handling.
+
+2011-04-30  Bruno Haible  <bruno@clisp.org>
+
+	[BZ #12717]
+	* conform/data/netdb.h-data (getnameinfo): Make POSIX compliant.
+	* resolv/netdb.h (getnameinfo): Change type of flags parameter
+	to 'int'.
+	* inet/getnameinfo.c (getnameinfo): Likewise.
+
+2011-04-29  Ulrich Drepper  <drepper@gmail.com>
+
+	* grp/initgroups.c (internal_getgrouplist): Prefer initgroups setting
+	to groups setting in database lookup.
+	* nss/nsswitch.conf: Add initgroups entry.
+
 2011-04-22  Ulrich Drepper  <drepper@gmail.com>
 
 	[BZ #12685]
