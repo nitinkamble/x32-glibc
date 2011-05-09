@@ -46,8 +46,8 @@ ar_TN.UTF-8/UTF-8 \
 ar_TN/ISO-8859-6 \
 ar_YE.UTF-8/UTF-8 \
 ar_YE/ISO-8859-6 \
-az_AZ.UTF-8/UTF-8 \
-as_IN.UTF-8/UTF-8 \
+az_AZ/UTF-8 \
+as_IN/UTF-8 \
 ast_ES.UTF-8/UTF-8 \
 ast_ES/ISO-8859-15 \
 be_BY.UTF-8/UTF-8 \
@@ -315,6 +315,7 @@ om_ET/UTF-8 \
 om_KE.UTF-8/UTF-8 \
 om_KE/ISO-8859-1 \
 or_IN/UTF-8 \
+os_RU/UTF-8 \
 pa_IN/UTF-8 \
 pa_PK/UTF-8 \
 pap_AN/UTF-8 \
@@ -385,8 +386,8 @@ tr_CY/ISO-8859-9 \
 tr_TR.UTF-8/UTF-8 \
 tr_TR/ISO-8859-9 \
 ts_ZA/UTF-8 \
-tt_RU.UTF-8/UTF-8 \
-tt_RU.UTF-8@iqtelif/UTF-8 \
+tt_RU/UTF-8 \
+tt_RU@iqtelif/UTF-8 \
 ug_CN/UTF-8 \
 uk_UA.UTF-8/UTF-8 \
 uk_UA/KOI8-U \

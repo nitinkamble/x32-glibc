@@ -1,3 +1,69 @@
+2011-05-08  Ulrich Drepper  <drepper@gmail.com>
+
+	[BZ #12713]
+	* sysdeps/unix/sysv/linux/getcwd.c: If getcwd syscall report
+	ENAMETOOLONG use generic getcwd.
+	* sysdeps/posix/getcwd.c: Add support to use openat.  Make usable
+	in rtld.  Use *stat64.
+	* sysdeps/unix/sysv/linux/Makefile [subdir=elf] (sysdep-rtld-routines):
+	Add dl-getcwd, dl-openat64, dl-opendir, dl-fxstatat64.
+	* sysdeps/unix/sysv/linux/dl-getcwd.c: New file.
+	* sysdeps/unix/sysv/linux/dl-openat64.c: New file.
+	* sysdeps/unix/sysv/linux/dl-opendir.c: New file.
+	* sysdeps/unix/sysv/linux/dl-fxstat64.c: New file.
+	* include/sys/stat.h: Define __fstatat, __lstat64, __fstat64, and
+	__fstatat64 macros.
+	* include/dirent.h: Add libc_hidden_proto for rewinddir.
+	* dirent/rewinddir.c: Add libc_hidden_def.
+	* sysdeps/mach/hurd/rewinddir.c: Likewise.
+	* sysdeps/unix/rewinddir.c: Likewise.  Don't do locking outside libc.
+
+	* include/dirent.h (__alloc_dir): Add flags parameter.
+	* sysdeps/unix/fdopendir.c (__fdopendir): Pass flags to __alloc_dir.
+	* sysdeps/unix/opendir.c (__opendir): Pass 0 in new parameter to
+	__alloc_dir.
+	(__alloc_dir): Take new parameter.  Don't call fcntl for invocations
+	from fdopendir if O_CLOEXEC is already set.
+
+2011-03-15  Alan Modra  <amodra@gmail.com>
+
+	* elf/dl-reloc.c (_dl_try_allocate_static_tls <TLS_DTV_AT_TP>): Handle
+	l_tls_firstbyte_offset non-zero.  Save padding offset in
+	l_tls_firstbyte_offset for later use.
+	* elf/dl-close.c (_dl_close_worker <TLS_DTV_AT_TP>): Correct code
+	freeing static tls block.
+
+2011-03-05  Jonathan Nieder  <jrnieder@gmail.com>
+
+	* sysdeps/unix/sysv/linux/sys/param.h: Fix an #ifndef __undef_ARG_MAX
+	where #ifdef was intended.  The intent is to prevent ARG_MAX from
+	being defined by the kernel headers.
+
+2011-05-07  Ulrich Drepper  <drepper@gmail.com>
+
+	[BZ #12734]
+	* resolv/resolv.h: Define RES_NOTLDQUERY.
+	* resolv/res_init.c (res_setoptions): Recognize no_tld_query and
+	no-tld-query and set RES_NOTLDQUERY.
+	* resolv/res_debug.c (p_option): Handle RES_NOTLDQUERY.
+	* resolv/res_query.c (__libc_res_nsearch): Backport changes from
+	modern BIND to search name as TLD unless forbidden.
+
+2011-05-07  Petr Baudis  <pasky@suse.cz>
+	    Ulrich Drepper  <drepper@gmail.com>
+
+	[BZ #12393]
+	* elf/dl-load.c (fillin_rpath): Move trusted path check...
+	(is_trusted_path): ...to here.
+	(is_trusted_path_normalize): Wrapper for /../ and /./ normalization.
+	(_dl_dst_substitute): Verify expanded $ORIGIN path elements
+	using is_trusted_path_normalize() in setuid scripts.
+
+2011-05-06  Paul Pluzhnikov  <ppluzhnikov@google.com>
+
+	* sysdeps/unix/sysv/linux/sys/sysmacros.h: Add missing
+	__BEGIN/__END_DECLS.
+
 2011-05-06  Ulrich Drepper  <drepper@gmail.com>
 
 	* nss/nss_files/files-initgroups.c (_nss_files_initgroups_dyn): Return
