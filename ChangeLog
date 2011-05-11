@@ -1,3 +1,71 @@
+2011-05-11  Ulrich Drepper  <drepper@gmail.com>
+
+	[BZ #12393]
+	* elf/dl-load.c (is_trusted_path): Remove unnecessary test.
+	(is_trusted_path_normalize): Skip initial colon.  Append slash
+	to empty buffer.  Duplicate is_trusted_path code but allow
+	constructed patch to be prefix.
+	(is_dst): Allow $ORIGIN followed by /.
+	(_dl_dst_substitute): Correct clearing of check_for_trusted.
+	Correct testing of result of is_trusted_path_normalize
+	(decompose_rpath): Fix warning.
+
+2011-05-10  Ulrich Drepper  <drepper@gmail.com>
+
+	[BZ #11257]
+	* grp/initgroups.c (internal_getgrouplist): When we found the service
+	list through the initgroups entry in nsswitch.conf do not always
+	continue on a successful lookup.  Don't always use the
+	__nss_group_database value if it is set.
+	* nss/nsswitch.conf (initgroups): Change action for successful db
+	lookup to continue for compatibility.
+
+2011-05-09  Ulrich Drepper  <drepper@gmail.com>
+
+	[BZ #11532]
+	* iconvdata/Makefile: Add rules to build CP770, CP771, CP772, CP773,
+	and CP774 modules.
+	* iconvdata/gconv-modules: Add entries for CP770, CP771, CP772, CP773,
+	and CP774 modules.
+	* iconvdata/tst-tables.sh: Likewise.
+	* iconvdata/cp770.c: New file.
+	* iconvdata/cp771.c: New file.
+	* iconvdata/cp772.c: New file.
+	* iconvdata/cp773.c: New file.
+	* iconvdata/cp774.c: New file.
+	* iconvdata/testdata/CP770: New file.
+	* iconvdata/testdata/CP770..UTF8: New file.
+	* iconvdata/testdata/CP771: New file.
+	* iconvdata/testdata/CP771..UTF8: New file.
+	* iconvdata/testdata/CP772: New file.
+	* iconvdata/testdata/CP772..UTF8: New file.
+	* iconvdata/testdata/CP773: New file.
+	* iconvdata/testdata/CP773..UTF8: New file.
+	* iconvdata/testdata/CP774: New file.
+	* iconvdata/testdata/CP774..UTF8: New file.
+
+	* iconvdata/gen-8bit-gap-1.sh: End reading of charmap file at
+	END CHARMAP line.
+	* iconvdata/gen-8bit-gap.sh: Likewise.
+	* iconvdata/gen-8bit.sh: Likewise.
+
+	* locale/iso-639.def: Add ary entry.
+
+	[BZ #11258]
+	* locale/C-translit.h.in: Add U20A1 transliteration.
+
+	[BZ #12178]
+	* locale/iso-639.def: Add wae entry.
+	Patch by Kevin Bortis <bortis@translate-wae.ch>.
+
+	[BZ #12545]
+	* locale/programs/localedef.c (construct_output_path): Use ssize_t
+	for n.
+
+	[BZ #12711]
+	* locale/C-translit.h.in: Add entry for U20B9.
+	Patch by pravin.d.s@gmail.com.
+
 2011-05-08  Ulrich Drepper  <drepper@gmail.com>
 
 	[BZ #12713]
