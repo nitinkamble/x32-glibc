@@ -1,4 +1,5 @@
-/* Copyright (C) 2008, 2011 Free Software Foundation, Inc.
+/* Test for powl
+   Copyright (C) 2011 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -16,34 +17,35 @@
    Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
    02111-1307 USA.  */
 
-#include <errno.h>
-#include <fcntl.h>
-#include <unistd.h>
+#include <stdio.h>
+#include <math.h>
+#include <float.h>
+#include <ieee754.h>
 
-
-/* Duplicate FD to FD2, closing the old FD2 and making FD2 be
-   open the same file as FD is which setting flags according to
-   FLAGS.  Return FD2 or -1.  */
 int
-dup3 (fd, fd2, flags)
-     int fd;
-     int fd2;
-     int flags;
+main (void)
 {
-  if (fd < 0 || fd2 < 0)
+  int result = 0;
+
+#ifndef NO_LONG_DOUBLE
+# if LDBL_MANT_DIG == 64
     {
-      __set_errno (EBADF);
-      return -1;
+      long double x = 1e-20;
+      union ieee854_long_double u;
+      u.ieee.mantissa0 = 1;
+      u.ieee.mantissa1 = 1;
+      u.ieee.exponent = 0;
+      u.ieee.negative = 0;
+      (void) powl (0.2, u.d);
+      x = powl (x, 1.5);
+      if (fabsl (x - 1e-30) > 1e-10)
+	{
+	  printf ("powl (1e-20, 1.5): wrong result: %Lg\n", x);
+	  result = 1;
+	}
     }
+# endif
+#endif
 
-  if (fd == fd2)
-    /* No way to check that they are valid.  */
-    return fd2;
-
-  __set_errno (ENOSYS);
-  return -1;
+  return result;
 }
-libc_hidden_def (dup3)
-stub_warning (dup3)
-
-#include <stub-tag.h>

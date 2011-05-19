@@ -1,4 +1,4 @@
-/* Copyright (C) 2001, 2002, 2004 Free Software Foundation, Inc.
+/* Copyright (C) 2001, 2002, 2004, 2011 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -27,48 +27,48 @@
 
 struct user_fpregs_struct
 {
-  __uint16_t		cwd;
-  __uint16_t		swd;
-  __uint16_t		ftw;
-  __uint16_t		fop;
-  __uint64_t		rip;
-  __uint64_t		rdp;
-  __uint32_t		mxcsr;
-  __uint32_t		mxcr_mask;
-  __uint32_t		st_space[32];   /* 8*16 bytes for each FP-reg = 128 bytes */
-  __uint32_t		xmm_space[64];  /* 16*16 bytes for each XMM-reg = 256 bytes */
-  __uint32_t		padding[24];
+  unsigned short int	cwd;
+  unsigned short int	swd;
+  unsigned short int	ftw;
+  unsigned short int	fop;
+  unsigned long int	rip;
+  unsigned long int	rdp;
+  unsigned int		mxcsr;
+  unsigned int		mxcr_mask;
+  unsigned int		st_space[32];   /* 8*16 bytes for each FP-reg = 128 bytes */
+  unsigned int		xmm_space[64];  /* 16*16 bytes for each XMM-reg = 256 bytes */
+  unsigned int		padding[24];
 };
 
 struct user_regs_struct
 {
-  unsigned long long r15;
-  unsigned long long r14;
-  unsigned long long r13;
-  unsigned long long r12;
-  unsigned long long rbp;
-  unsigned long long rbx;
-  unsigned long long r11;
-  unsigned long long r10;
-  unsigned long long r9;
-  unsigned long long r8;
-  unsigned long long rax;
-  unsigned long long rcx;
-  unsigned long long rdx;
-  unsigned long long rsi;
-  unsigned long long rdi;
-  unsigned long long orig_rax;
-  unsigned long long rip;
-  unsigned long long cs;
-  unsigned long long eflags;
-  unsigned long long rsp;
-  unsigned long long ss;
-  unsigned long long fs_base;
-  unsigned long long gs_base;
-  unsigned long long ds;
-  unsigned long long es;
-  unsigned long long fs;
-  unsigned long long gs;
+  unsigned long long int r15;
+  unsigned long long int r14;
+  unsigned long long int r13;
+  unsigned long long int r12;
+  unsigned long long int rbp;
+  unsigned long long int rbx;
+  unsigned long long int r11;
+  unsigned long long int r10;
+  unsigned long long int r9;
+  unsigned long long int r8;
+  unsigned long long int rax;
+  unsigned long long int rcx;
+  unsigned long long int rdx;
+  unsigned long long int rsi;
+  unsigned long long int rdi;
+  unsigned long long int orig_rax;
+  unsigned long long int rip;
+  unsigned long long int cs;
+  unsigned long long int eflags;
+  unsigned long long int rsp;
+  unsigned long long int ss;
+  unsigned long long int fs_base;
+  unsigned long long int gs_base;
+  unsigned long long int ds;
+  unsigned long long int es;
+  unsigned long long int fs;
+  unsigned long long int gs;
 };
 
 struct user
@@ -79,8 +79,8 @@ struct user
   unsigned long long int	u_tsize;
   unsigned long long int	u_dsize;
   unsigned long long int	u_ssize;
-  unsigned long long		start_code;
-  unsigned long long		start_stack;
+  unsigned long long int	start_code;
+  unsigned long long int	start_stack;
   long long int			signal;
   int				reserved;
   struct user_regs_struct*	u_ar0;
@@ -156,8 +156,8 @@ struct user
   unsigned long int		u_tsize;
   unsigned long int		u_dsize;
   unsigned long int		u_ssize;
-  unsigned long			start_code;
-  unsigned long			start_stack;
+  unsigned long int		start_code;
+  unsigned long int		start_stack;
   long int			signal;
   int				reserved;
   struct user_regs_struct*	u_ar0;
