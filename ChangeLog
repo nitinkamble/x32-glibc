@@ -1,3 +1,12 @@
+2011-05-19  Andreas Schwab  <schwab@redhat.com>
+
+	* grp/compat-initgroups.c (__libc_use_alloca): Don't define.
+
+2011-05-19  Ulrich Drepper  <drepper@gmail.com>
+
+	* libio/freopen.c (freopen): Use __dup2, not dup2.
+	* libio/freopen64.c (freopen64): Likewise.
+
 2011-05-17  H.J. Lu  <hongjiu.lu@intel.com>
 
 	[BZ #12775]
