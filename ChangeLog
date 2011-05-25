@@ -1,4 +1,51 @@
+2011-05-23  Ulrich Drepper  <drepper@gmail.com>
+
+	[BZ #12795]
+	* sysdeps/unix/sysv/linux/bits/resource.h (RLIMIT_RTTIME): Define.
+	* sysdeps/unix/sysv/linux/sparc/bits/resource.h: Likewise.
+
+2011-05-20  Andreas Schwab  <schwab@redhat.com>
+
+	* stdlib/longlong.h: Update from GCC.
+
+2011-05-23  Andreas Schwab  <schwab@redhat.com>
+
+	* sysdeps/unix/sysv/linux/ia64/sysconf.c (HAS_CPUCLOCK): Add
+	parameter name.
+	* sysdeps/unix/sysv/linux/sysconf.c (has_cpuclock, HAS_CPUCLOCK):
+	Add parameter name.
+	(__sysconf): Pass it down.
+
+2011-05-22  Ulrich Drepper  <drepper@gmail.com>
+
+	[BZ #12671]
+	* nis/nss_nis/nis-alias.c (_nss_nis_getaliasbyname_r): Use malloc in
+	some situations.
+	* nscd/nscd_getserv_r.c (nscd_getserv_r): Likewise.
+	* posix/glob.c (glob_in_dir): Take additional parameter alloca_used.
+	add in in __libc_use_alloca calls.  Adjust callers.
+	(glob): Use malloc in some situations.
+
+	* elf/dl-runtime.c (_dl_profile_fixup): Also store LA_SYMB_NOPLTENTER
+	and LA_SYMB_NOPLTEXIT in flags which are passed to pltenter and
+	pltexit.
+
 2011-05-21  Ulrich Drepper  <drepper@gmail.com>
+
+	* sysdeps/unix/sysv/linux/bits/time.h: Define CLOCK_REALTIME_ALARM
+	and CLOCK_BOOTTIME_ALARM.
+
+	[BZ #12782]
+	* string/xpg-strerror.c (__xpg_strerror_r): Fill buffer even if error
+	is returned.
+
+	* string/_strerror.c (__strerror_r): Print negative errors as signed
+	numbers.
+
+	[BZ #12777]
+	* iconvdata/cp1258.c (comp_table_data): Remove entry 0x00A5 0xEC.
+	(decomp_table): Change U0385 entry to emit 0xA5 0xEC.
+	* iconvdata/CP1258.irreversible: Adjust entry 0xA8EC.
 
 	* configure.in: Fix typo in redirection and correct removal of test
 	files in two cases.
