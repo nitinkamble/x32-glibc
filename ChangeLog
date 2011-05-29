@@ -1,3 +1,62 @@
+2011-05-28  Ulrich Drepper  <drepper@gmail.com>
+
+	[BZ #12811]
+	* posix/regex_internal.c (build_wcs_buffer): Don't signal we have to
+	grow the buffers more if it already has to be sufficient.
+	(build_wcs_upper_buffer): Likewise.
+	* posix/regexec.c (check_matching): Likewise.
+	(clean_state_log_if_needed): Likewise.
+	(extend_buffers): Don't enlarge buffers beyond size of the input
+	buffer.
+	Patches mostly by Emil Wojak <emil@wojak.eu>.
+	* posix/bug-regex32.c: New file.
+	* posix/Makefile (tests): Add bug-regex32.
+
+	* locale/findlocale.c (_nl_find_locale): Return right away if
+	_nl_explode_name failed.
+	* locale/programs/locarchive.c (add_locale_to_archive): Likewise.
+
+	* sysdeps/unix/sysv/linux/socketcall.h (SOCKOP_sendmmsg): Define.
+
+	* debug/xtrace.sh: Unify messages.
+	* malloc/memusage.sh: Likewise.
+
+	[BZ #12813]
+	* sysdeps/unix/sysv/linux/x86_64/init-first.c (__vdso_time): Retrieve
+	time symbol from vDSO.  Substitute with vsyscall if not available.
+	* sysdeps/unix/sysv/linux/x86_64/time.S [SHARED]: Use
+	__vdso_time.
+
+	* sysdeps/unix/sysv/linux/internal_sendmmsg.S: New file.
+	* sysdeps/unix/sysv/linux/sendmmsg.c: New file.
+	* sysdeps/unix/sysv/linux/Makefile [subdir=socket] (sysdep_routines):
+	Add sendmmsg and internal_sendmmsg.
+	* sysdeps/unix/sysv/linux/Versions [GLIBC_2.14]: Add sendmmsg.
+	* sysdeps/unix/sysv/linux/bits/socket.h: Declare sendmmsg.
+	* sysdeps/unix/sysv/linux/kernel-features.h: Define __ASSUME_SENDMMSG.
+
+	* sysdeps/unix/sysv/linux/syscalls.list: Add setns entry.
+	* sysdeps/unix/sysv/linux/bits/sched.h: Declare setns.
+	* sysdeps/unix/sysv/linux/Versions [GLIBC_2.14]: Add setns.
+
+2011-05-27  Ulrich Drepper  <drepper@gmail.com>
+
+	[BZ #12813]
+	* sysdeps/unix/sysv/linux/x86_64/init-first.c (__vdso_getcpu):
+	Retrieve getcpu symbol from vDSO.  Substitute with vsyscall if not
+	available.
+	* sysdeps/unix/sysv/linux/x86_64/sched_getcpu.S [SHARED]: Use
+	__vdso_getcpu.
+
+	[BZ #12814]
+	* iconvdata/Makefile (tests): Add bug-iconv9.
+	* iconvdata/bug-iconv9.c: New file.
+
+2011-05-27  Andreas Schwab  <schwab@redhat.com>
+
+	[BZ #12814]
+	* iconvdata/iso-2022-jp.c (BODY): Fix invalid variable shadowing.
+
 2011-05-25  Jakub Jelinek  <jakub@redhat.com>
 
 	* sysdeps/unix/sysv/linux/x86_64/sys/user.h
