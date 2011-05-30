@@ -1,3 +1,48 @@
+2011-05-30  Ulrich Drepper  <drepper@gmail.com>
+
+	[BZ #12454]
+	* elf/dl-deps.c (_dl_map_object_deps): Run initializer sorting only
+	when there are multiple maps.
+	* elf/dl-fini.c (_dl_sort_fini): Check for list of one.
+	(_dl_fini): Remove test here.
+
+	* elf/rtld.c (dl_main): Don't allow the loader to load itself.
+
+2011-05-29  Ulrich Drepper  <drepper@gmail.com>
+
+	[BZ #12350]
+	* sysdeps/posix/getaddrinfo.c (gethosts): Restore only RES_USE_IENT6
+	bit from old_res_options.
+	(gaih_inet): Likewise.
+
+	[BZ #11099]
+	* shadow/sgetspent_r.c (LINE_PARSER): Interpret numeric field values
+	as signed.
+
+	* resolv/res_init.c (res_setoptions): Make the code more compact.
+
+	[BZ #11558]
+	* resolv/res_init.c (res_setoptions): Recognize use-vc option and
+	set RES_USEVC.
+
+	[BZ #11634]
+	* elf/Makefile (tests): Don't add tst-audit[67] without working -mavx.
+
+	* malloc/malloc.h: Mark malloc hook variables as deprecated.
+
+	[BZ #11781]
+	* malloc/malloc.h: Declare malloc hook variables as volatile.
+
+	* locale/programs/locarchive.c (add_locale_to_archive): Fix typo
+	in last patch.
+
+	[BZ #11799]
+	* sysdeps/unix/sysv/linux/bits/siginfo.h (SI_USER): Don't mention
+	raise in the comment.
+	* sysdeps/unix/sysv/linux/s390/bits/siginfo.h: Likewise.
+	* sysdeps/unix/sysv/linux/sparc/bits/siginfo.h: Likewise.
+	* sysdeps/unix/sysv/linux/ia64/bits/siginfo.h: Likewise.
+
 2011-05-28  Ulrich Drepper  <drepper@gmail.com>
 
 	[BZ #12811]
@@ -2492,6 +2537,7 @@
 
 2010-07-06  Andreas Schwab  <schwab@redhat.com>
 
+	[BZ #11577]
 	* elf/dl-version.c (match_symbol): Don't pass NULL occation to
 	dl_signal_cerror.
 
