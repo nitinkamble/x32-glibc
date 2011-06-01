@@ -1,0 +1,5 @@
+2011-06-01  H.J. Lu  <hongjiu.lu@intel.com>
+
+	PR libc/12744
+	* elf/ldconfig.c (is_python_file): New.
+	(search_dir): Use it.
