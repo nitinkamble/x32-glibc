@@ -620,6 +620,14 @@ manual_link (char *library)
   free (path);
 }
 
+/* Check if string corresponds to a Python file.  */
+static int
+is_python_file (const char *name)
+{
+  size_t len = strlen (name);
+  return len > 7 && strcmp (name + len - 7, "-gdb.py") == 0;
+}
+
 
 /* Read a whole directory and search for libraries.
    The purpose is two-fold:
@@ -715,7 +723,8 @@ search_dir (const struct dir_entry *entry)
 	 shared library.  */
       if (((strncmp (direntry->d_name, "lib", 3) != 0
 	    && strncmp (direntry->d_name, "ld-", 3) != 0)
-	   || strstr (direntry->d_name, ".so") == NULL)
+	   || strstr (direntry->d_name, ".so") == NULL
+	   || is_python_file (direntry->d_name))
 	  && (
 #ifdef _DIRENT_HAVE_D_TYPE
 	      direntry->d_type == DT_REG ||
