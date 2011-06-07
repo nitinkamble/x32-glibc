@@ -1,3 +1,26 @@
+2011-06-06  Roland McGrath  <roland@hack.frob.com>
+
+	[BZ #12849]
+	* manual/fdl-1.1.texi: New file, verbatim from:
+	http://www.gnu.org/licenses/old-licenses/fdl-1.1.texi
+	* manual/lgpl-2.1.texi: New file, verbatim from:
+	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.texi
+	* manual/Makefile (licenses): New variable, list those new file names.
+	(texis): Use it.
+	(chapters.% top-menu.%): Include $(licenses) with $(appendices).
+
+	* manual/fdl.texi: File removed.
+	* manual/lesser.texi: File removed.
+	* manual/libc.texinfo (Copying, Documentation License):
+	Use new @include file names, put @appendix directive before @include.
+
+2011-06-04  Jakub Jelinek  <jakub@redhat.com>
+
+	[BZ #12841]
+	* rt/bits/mqueue2.h (__mq_open_2): Add __THROW.
+	(__mq_open_alias): Use __REDIRECT_NTH instead of __REDIRECT.
+	(mq_open): Add __NTH.
+
 2011-06-02  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/x86_64/multiarch/init-arch.c (__init_cpu_features):
