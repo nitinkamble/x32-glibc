@@ -1,2 +1,2 @@
-/* FIXME: Remove this file after x32 vDSO support is added to kernel.  */
+/* FIXME: Remove this file after time syscall is added to x32 vDSO.  */
 #include "../../time.c"

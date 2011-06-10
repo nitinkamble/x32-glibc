@@ -1,3 +1,27 @@
+2011-06-10  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/gettimeofday.S: Use vDSO
+	gettimeofday.
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/init-first.c: Use vDSO
+	gettimeofday and clock_gettime.
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/Makefile: New.
+	* sysdeps/unix/sysv/linux/x86_64/x32/Versions: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/bits/libc-vdso.h: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/sched_getcpu-static.c:
+	Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/sched_getcpu.S: Likewise.
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/sysdep.h (CALL_GETTIMEOFDAY):
+	Use vDSO gettimeofday.
+	(INLINE_VSYSCALL): Removed.
+	(INTERNAL_VSYSCALL): Likewise.
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/sched_getcpu.c: Removed.
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/time.c: Update comments.
+
 2011-06-09  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/x86_64/dl-trampoline.S: Check if RTLD_SAVESPACE_SSE

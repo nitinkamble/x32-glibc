@@ -85,12 +85,20 @@
   jmp L(pseudo_end);
 # endif	/* PIC */
 
-/* FIXME: Redefine CALL_GETTIMEOFDAY after x32 vDSO support is added
-   to kernel.  */
+/* Since x32 doesn't have vsyscall page, we can only use vDSO or
+   normal system call.  */
 # undef CALL_GETTIMEOFDAY
-# define CALL_GETTIMEOFDAY				\
+# ifdef SHARED
+#  define CALL_GETTIMEOFDAY				\
+  movl	__vdso_gettimeofday@GOTPCREL(%rip), %eax;	\
+  movl	(%rax), %eax;					\
+  PTR_DEMANGLE (%eax);					\
+  callq	*%rax
+# else
+#  define CALL_GETTIMEOFDAY				\
   movl	$__NR_gettimeofday, %eax;			\
   syscall
+#endif
 
 #endif	/* __ASSEMBLER__ */
 
@@ -135,13 +143,5 @@
 						      pointer_guard)))
 # endif
 #endif
-
-/* FIXME: Remove these after x32 vDSO support is added to kernel.  */
-#undef INLINE_VSYSCALL
-#define INLINE_VSYSCALL(name, nr, args...) \
-  INLINE_SYSCALL (name, nr, ##args)
-#undef INTERNAL_VSYSCALL
-#define INTERNAL_VSYSCALL(name, err, nr, args...) \
-  INTERNAL_SYSCALL (name, err, nr, ##args)
 
 #endif /* linux/x86_64/x32/sysdep.h */

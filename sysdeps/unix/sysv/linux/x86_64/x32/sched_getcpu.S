@@ -18,36 +18,32 @@
 
 #ifdef SHARED
 #include <sysdep.h>
+#include <tls.h>
 #define _ERRNO_H	1
 #include <bits/errno.h>
 
-ENTRY (__gettimeofday)
-	/* Align stack.  */
+ENTRY (sched_getcpu)
+	/* Align stack and create local variable for result.  */
 	sub	$0x8, %esp
 	cfi_adjust_cfa_offset(8)
 
-	mov	__GI___vdso_gettimeofday(%rip), %eax
+	mov	%esp, %edi
+	xor	%esi, %esi
+	mov	$VGETCPU_CACHE_OFFSET, %edx
+	add	%fs:0, %edx
+
+	mov	__vdso_getcpu(%rip), %eax
 	PTR_DEMANGLE (%eax)
 	callq	*%rax
-	/* Check error return.  */
+
 	cmp	$-4095, %eax
 	jae	SYSCALL_ERROR_LABEL
+
+	mov	(%rsp), %eax
 
 L(pseudo_end):
 	add	$0x8, %esp
 	cfi_adjust_cfa_offset(-8)
 	ret
-PSEUDO_END(__gettimeofday)
-
-strong_alias (__gettimeofday, __gettimeofday_internal)
-weak_alias (__gettimeofday, gettimeofday)
-#else
-#define SYSCALL_NAME gettimeofday
-#define SYSCALL_NARGS 2
-#define SYSCALL_SYMBOL __gettimeofday
-#include <syscall-template.S>
-weak_alias (__gettimeofday, gettimeofday)
-libc_hidden_weak (gettimeofday)
-weak_alias (__gettimeofday, __gettimeofday_internal)
-libc_hidden_weak (__gettimeofday_internal)
+PSEUDO_END(sched_getcpu)
 #endif
