@@ -49,7 +49,6 @@ _libc_vdso_platform_setup (void)
 
   p = _dl_vdso_vsym ("getcpu", &linux26);
   /* If the vDSO is not available we fall back on the old vsyscall.  */
-#define VSYSCALL_ADDR_vgetcpu	0xffffffffff600800
   if (p == NULL)
     p = (void *) VSYSCALL_ADDR_vgetcpu;
   PTR_MANGLE (p);
@@ -57,7 +56,6 @@ _libc_vdso_platform_setup (void)
 
   p = _dl_vdso_vsym ("time", &linux26);
   /* If the vDSO is not available we fall back on the old vsyscall.  */
-#define VSYSCALL_ADDR_vtime	0xffffffffff600400
   if (p == NULL)
     p = (void *) VSYSCALL_ADDR_vtime;
   PTR_MANGLE (p);

@@ -117,7 +117,7 @@ pthread_rwlock_timedwrlock:
 	/* Get current time.  */
 	movq	%rsp, %rdi
 	xorl	%esi, %esi
-	CALL_GETTIMEOFDAY
+	ASM_VSYSCALL (gettimeofday)
 
 	/* Compute relative timeout.  */
 	movq	8(%rsp), %rax

@@ -220,9 +220,11 @@
 
 /* For the calculation see asm/vsyscall.h.  */
 # define VSYSCALL_ADDR_vgettimeofday	0xffffffffff600000
+# define VSYSCALL_ADDR_vtime		0xffffffffff600400
+# define VSYSCALL_ADDR_vgetcpu		0xffffffffff600800
 
-# define CALL_GETTIMEOFDAY				\
-  movq	$VSYSCALL_ADDR_vgettimeofday, %rax;		\
+# define ASM_VSYSCALL(name)			\
+  movq	$VSYSCALL_ADDR_v##name, %rax;		\
   callq	*%rax
 
 #else	/* !__ASSEMBLER__ */
@@ -375,6 +377,8 @@
 
 /* For the calculation see asm/vsyscall.h.  */
 # define VSYSCALL_ADDR_vgettimeofday	0xffffffffff600000ul
+# define VSYSCALL_ADDR_vgetcpu		0xffffffffff600800ul
+# define VSYSCALL_ADDR_vtime		0xffffffffff600400ul
 
 #endif	/* __ASSEMBLER__ */
 

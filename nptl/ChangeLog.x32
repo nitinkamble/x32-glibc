@@ -1,3 +1,16 @@
+2011-06-12  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/lowlevellock.S: Replace
+	CALL_GETTIMEOFDAY with ASM_VSYSCALL (gettimeofday).
+	* sysdeps/unix/sysv/linux/x86_64/lowlevelrobustlock.S: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/pthread_cond_timedwait.S:
+	Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/pthread_rwlock_timedrdlock.S:
+	Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/pthread_rwlock_timedwrlock.S:
+	Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/sem_timedwait.S: Likewise.
+
 2011-06-09  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/x86_64/tls.h (tcbhead_t): Pad rtld_savespace_sse to

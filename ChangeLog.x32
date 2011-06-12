@@ -1,3 +1,23 @@
+2011-06-12  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/init-first.c (VSYSCALL_ADDR_vgetcpu):
+	Removed.
+	(VSYSCALL_ADDR_vtime): Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/sched_getcpu.S
+	(VSYSCALL_ADDR_vgetcpu): Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/time.S (VSYSCALL_ADDR_vtime):
+	Likewise.
+
+	* sysdeps/unix/sysv/linux/x86_64/sysdep.h (VSYSCALL_ADDR_vtime):
+	New.
+	(VSYSCALL_ADDR_vgetcpu): Likewise.
+	(ASM_VSYSCALL): Likewise.
+	(CALL_GETTIMEOFDAY): Removed.
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/sysdep.h (CALL_GETTIMEOFDAY):
+	Removed.
+	(ASM_VSYSCALL): New.
+
 2011-06-10  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/unix/sysv/linux/x86_64/x32/gettimeofday.S: Use vDSO

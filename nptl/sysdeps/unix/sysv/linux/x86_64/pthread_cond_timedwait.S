@@ -470,7 +470,7 @@ __pthread_cond_timedwait:
 # else
 	leaq	24(%rsp), %rdi
 	xorl	%esi, %esi
-	CALL_GETTIMEOFDAY
+	ASM_VSYSCALL (gettimeofday)
 
 	/* Compute relative timeout.  */
 	movq	40(%rsp), %rax
@@ -607,7 +607,7 @@ __pthread_cond_timedwait:
 	/* clock_gettime not available.  */
 19:	leaq	32(%rsp), %rdi
 	xorl	%esi, %esi
-	CALL_GETTIMEOFDAY
+	ASM_VSYSCALL (gettimeofday)
 
 	/* Compute relative timeout.  */
 	movq	40(%rsp), %rax

@@ -217,7 +217,7 @@ __lll_robust_timedlock_wait:
 	xorl	%esi, %esi
 	/* This is a regular function call, all caller-save registers
 	   might be clobbered.  */
-	CALL_GETTIMEOFDAY
+	ASM_VSYSCALL (gettimeofday)
 
 	/* Compute relative timeout.  */
 	movq	8(%rsp), %rax

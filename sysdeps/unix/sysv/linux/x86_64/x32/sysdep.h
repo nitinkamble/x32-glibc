@@ -87,16 +87,16 @@
 
 /* Since x32 doesn't have vsyscall page, we can only use vDSO or
    normal system call.  */
-# undef CALL_GETTIMEOFDAY
+# undef ASM_VSYSCALL
 # ifdef SHARED
-#  define CALL_GETTIMEOFDAY				\
-  movl	__vdso_gettimeofday@GOTPCREL(%rip), %eax;	\
-  movl	(%rax), %eax;					\
-  PTR_DEMANGLE (%eax);					\
+#  define ASM_VSYSCALL(name)			\
+  movl	__vdso_##name@GOTPCREL(%rip), %eax;	\
+  movl	(%rax), %eax;				\
+  PTR_DEMANGLE (%eax);				\
   callq	*%rax
 # else
-#  define CALL_GETTIMEOFDAY				\
-  movl	$__NR_gettimeofday, %eax;			\
+#  define ASM_VSYSCALL(name)			\
+  movl	$__NR_##name, %eax;			\
   syscall
 #endif
 

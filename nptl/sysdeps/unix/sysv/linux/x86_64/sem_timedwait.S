@@ -210,7 +210,7 @@ sem_timedwait:
 
 7:	xorl	%esi, %esi
 	movq	%rsp, %rdi
-	CALL_GETTIMEOFDAY
+	ASM_VSYSCALL (gettimeofday)
 
 	/* Compute relative timeout.  */
 	movq	8(%rsp), %rax
