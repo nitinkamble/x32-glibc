@@ -31,8 +31,8 @@ struct user_fpregs_struct
   unsigned short int	swd;
   unsigned short int	ftw;
   unsigned short int	fop;
-  unsigned long int	rip;
-  unsigned long int	rdp;
+  unsigned long long int rip;
+  unsigned long long int rdp;
   unsigned int		mxcsr;
   unsigned int		mxcr_mask;
   unsigned int		st_space[32];   /* 8*16 bytes for each FP-reg = 128 bytes */

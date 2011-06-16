@@ -1,5 +1,11 @@
 2011-06-16  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/unix/sysv/linux/x86_64/sys/user.h (user_fpregs_struct):
+	Use "unsigned long long" instead of "unsigned long" if __x86_64__
+	is defined.
+
+2011-06-16  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/unix/sysv/linux/x86_64/sys/procfs.h (elf_prstatus):
 	Always use "unsigned long int".
 	(elf_prpsinfo): Check __WORDSIZE on pr_uid and pr_gid.
