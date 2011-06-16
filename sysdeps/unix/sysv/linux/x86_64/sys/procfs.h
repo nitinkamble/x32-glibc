@@ -84,13 +84,8 @@ struct elf_prstatus
   {
     struct elf_siginfo pr_info;		/* Info associated with signal.  */
     short int pr_cursig;		/* Current signal.  */
-#ifdef __x86_64__
-    unsigned long long int pr_sigpend;	/* Set of pending signals.  */
-    unsigned long long int pr_sighold;	/* Set of held signals.  */
-#else
     unsigned long int pr_sigpend;	/* Set of pending signals.  */
     unsigned long int pr_sighold;	/* Set of held signals.  */
-#endif
     __pid_t pr_pid;
     __pid_t pr_ppid;
     __pid_t pr_pgrp;
@@ -113,7 +108,7 @@ struct elf_prpsinfo
     char pr_zomb;			/* Zombie.  */
     char pr_nice;			/* Nice val.  */
     unsigned long int pr_flag;		/* Flags.  */
-#ifndef __x86_64__
+#if __WORDSIZE == 32
     unsigned short int pr_uid;
     unsigned short int pr_gid;
 #else

@@ -1,3 +1,9 @@
+2011-06-16  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/sys/procfs.h (elf_prstatus):
+	Always use "unsigned long int".
+	(elf_prpsinfo): Check __WORDSIZE on pr_uid and pr_gid.
+
 2011-06-12  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/unix/sysv/linux/x86_64/init-first.c (VSYSCALL_ADDR_vgetcpu):
