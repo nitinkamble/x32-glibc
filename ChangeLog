@@ -1,3 +1,81 @@
+2011-06-15  Ulrich Drepper  <drepper@gmail.com>
+
+	* resolv/res_send.c (__libc_res_nsend): Fix typos in last patch.  We
+	need to dereference resplen2.
+
+2011-06-14  Andreas Schwab  <schwab@redhat.com>
+
+	* sysdeps/unix/sysv/linux/wordsize-64/dl-fxstatat64.c: New file.
+
+2011-06-15  Ulrich Drepper  <drepper@gmail.com>
+
+	* Makeconfig: Define vardbdir and inst_vardbdir.
+	* nss/Makefile: Add rules to install db-Makefile.
+
+	* nss/nss_db/db-XXX.c: Cleanup.
+
+	* nss/Makefile (libnss_db-dbs): Add db-initgroups.
+	* nss/Versions [libnss_db]: Add _nss_db_initgroups_dyn for
+	GLIBC_PRIVATE.
+	* nss/db-Makefile (groups.db): Emit entries for initgroups lookups.
+	* nss/makedb.c: Implement -g option to specify that value strings
+	are generated and should not be added to table iterated over for
+	get*ent calls.
+	* nss/nss_db/db-initgroups.c: New file.
+
+	* nss/getent.c: Add support for initgroups lookups through getgrouplist
+	interface.
+
+	* grp/initgroups.c (__nss_initgroups_database): Renamed and exported.
+	(internal_getgrouplist): Adjust to name change.
+	Update use_initgroups_entry if this is not the first call.
+	* nss/databases.def: Add initgroups entry.
+
+	* nss/makedb.c (compute_tables): Check result of multiple hash table
+	sizes to minimize maximum chain length.
+
+2011-06-14  Ulrich Drepper  <drepper@gmail.com>
+
+	* Versions.def: Add entry for libnss_db.
+	* shlib-versions: Likewise.
+	* nss/Makefile: Add rules to build libnss_db.
+	* nss/Versions: Add libnss_db information.  Organize libnss_files
+	entries better.
+	* nss/db-Makefile: Add gshadow support.  Change rules for the new
+	makedb progra.  Some minor improvements to generate smaller files.
+	* nss/nss_db/nss_db.h: Move NSS database header data structures to
+	here from...
+	* nss/makedb.c: ...here.
+	Improve database format to be smaller and require less memory at
+	runtime.
+	* nss/nss_db/db-XXX.x: Adjust for new database format.  Don't use
+	db anymore.
+	* nss/nss_db/db-netgrp.c: Likewise.
+	* nss/nss_db/db-open.c: Likewise.
+	* nss/nss_files/flies-XXX.x: Adjust comments.
+	* nss/nss_files/files-ethers.c: Adjust for new DB_LOOKUP definition.
+	* nss/nss_files/files-grp.c: Likewise.
+	* nss/nss_files/files-hosts.c: Likewise.
+	* nss/nss_files/files-network.c: Likewise.
+	* nss/nss_files/files-proto.c: Likewise.
+	* nss/nss_files/files-pwd.c: Likewise.
+	* nss/nss_files/files-rpc.c: Likewise.
+	* nss/nss_files/files-service.c: Likewise.
+	* nss/nss_files/files-sgrp.c: Likewise.
+	* nss/nss_files/files-spwd.c: Likewise.
+	* nss/nss_db/db-alias.c: Removed.
+	* nss/nss_db/dummy-db.h: Removed.
+
+2011-06-02  Ulrich Drepper  <drepper@gmail.com>
+
+	* nss/makedb.c: Rewritten to not use database library.
+	* nss/Makefile: Update to build new makedb program.
+
+2011-06-14  Andreas Jaeger  <aj@suse.de>
+
+	* sysdeps/unix/sysv/linux/check_native.c: Include <string.h> for
+	memset declaration.
+
 2011-06-10  Andreas Schwab  <schwab@redhat.com>
 
 	* sysdeps/posix/getaddrinfo.c (gaih_inet): Fix logic allocating
