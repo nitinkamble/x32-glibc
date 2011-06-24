@@ -26,6 +26,13 @@
 
 #define ELF_MACHINE_IRELA	1
 
+static inline ElfW(Addr)
+__attribute ((always_inline))
+elf_ifunc_invoke (ElfW(Addr) addr)
+{
+  return ((ElfW(Addr) (*) (void)) (addr)) ();
+}
+
 static inline void
 __attribute ((always_inline))
 elf_irela (const ElfW(Rela) *reloc)
@@ -35,7 +42,7 @@ elf_irela (const ElfW(Rela) *reloc)
 
   if (__builtin_expect (r_type == R_X86_64_IRELATIVE, 1))
     {
-      ElfW(Addr) value = ((ElfW(Addr) (*) (void)) reloc->r_addend) ();
+      ElfW(Addr) value = elf_ifunc_invoke(reloc->r_addend);
       *reloc_addr = value;
     }
   else

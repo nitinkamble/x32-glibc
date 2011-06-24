@@ -1,3 +1,58 @@
+2011-06-22  Ulrich Drepper  <drepper@gmail.com>
+
+	[BZ #12907]
+	* sysdeps/posix/getaddrinfo.c (getaddrinfo): Avoid calling __check_pf
+	until it is clear that the information is realy needed.
+	Patch mostly by David Hanisch <david.hanisch@nsn.com>.
+
+2011-06-22  Andreas Schwab  <schwab@redhat.com>
+
+	* sysdeps/posix/getaddrinfo.c (gaih_inet): Fix last change.
+
+2011-06-22  Ulrich Drepper  <drepper@gmail.com>
+
+	* sysdeps/unix/sysv/linux/getsysstats.c (__get_nprocs): Use
+	/sys/devices/system/cpu/online if it is usable.
+
+	* sysdeps/unix/sysv/linux/getsysstats.c (__get_nprocs): Rate limit
+	reading the information from the /proc filesystem to once a second.
+
+2011-06-21  Andreas Jaeger  <aj@suse.de>
+
+	* sysdeps/unix/sysv/linux/bits/sigcontext.h: Fix definition of
+	NULL after inclusion of kernel headers.
+
+2011-06-21  Ulrich Drepper  <drepper@gmail.com>
+
+	* nss/nss_db/db-XXX.c (nss_db_setENT): Only set entidx for successful
+	calls to internal_setent.
+
+	[BZ #12885]
+	* sysdeps/posix/getaddrinfo.c (gaih_inet): When looking up only IPv6
+	addresses using gethostbyname4_r ignore IPv4 addresses.
+
+	* sysdeps/posix/getaddrinfo.c (gaih_inet): After the last change the
+	branch using gethostbyname2 is only for AF_INET.  Optimize accordingly.
+
+	* inet/getnetgrent_r.c: Use DL_CALL_FCT in several places.
+
+2011-06-20  David S. Miller  <davem@davemloft.net>
+
+	* sysdeps/sparc/sparc32/dl-plt.h: Protect against multiple
+	inclusions.
+	* sysdeps/sparc/sparc64/dl-plt.h: Likewise.
+
+	* sysdeps/i386/dl-irel.h (elf_ifunc_invoke): New.
+	(elf_irel): Use it.
+	* sysdeps/powerpc/powerpc32/dl-irel.h: Likewise.
+	* sysdeps/powerpc/powerpc64/dl-irel.h: Likewise.
+	* sysdeps/sparc/sparc32/dl-irel.h: Likewise.
+	* sysdeps/sparc/sparc64/dl-irel.h: Likewise.
+	* sysdeps/x86_64/dl-irel.h: Likewise.
+
+	* elf/dl-runtime.c: Use elf_ifunc_invoke.
+	* elf/dl-sym.c: Likewise.
+
 2011-06-15  Ulrich Drepper  <drepper@gmail.com>
 
 	* resolv/res_send.c (__libc_res_nsend): Fix typos in last patch.  We
