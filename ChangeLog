@@ -1,3 +1,56 @@
+2011-06-22  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/x86_64/multiarch/Makefile (sysdep_routines): Add
+	strcpy-ssse3 strncpy-ssse3 stpcpy-ssse3 stpncpy-ssse3
+	strcpy-sse2-unaligned strncpy-sse2-unaligned
+	stpcpy-sse2-unaligned stpncpy-sse2-unaligned.
+	* sysdeps/x86_64/multiarch/stpcpy-sse2-unaligned.S: New file.
+	* sysdeps/x86_64/multiarch/stpcpy-ssse3.S: New file.
+	* sysdeps/x86_64/multiarch/stpncpy-sse2-unaligned.S: New file.
+	* sysdeps/x86_64/multiarch/stpncpy-ssse3.S: New file.
+	* sysdeps/x86_64/multiarch/strcpy-sse2-unaligned.S: New file.
+	* sysdeps/x86_64/multiarch/strcpy-ssse3.S: New file.
+	* sysdeps/x86_64/multiarch/strncpy-sse2-unaligned.S: New file.
+	* sysdeps/x86_64/multiarch/strncpy-ssse3.S: New file.
+	* sysdeps/x86_64/multiarch/strcpy.S: Remove strcpy with SSSE3.
+	(STRCPY): Support SSE2 and SSSE3 versions.
+
+2011-06-24  Ulrich Drepper  <drepper@gmail.com>
+
+	[BZ #12874]
+	* sysdeps/unix/sysv/linux/Makefile (CFLAGS-tst-writev.c): Define.
+	* sysdeps/wordsize-64/tst-writev.c: Work around problem with 2.6.38+
+	kernels which artificially limit size of requests.
+
+2011-06-22  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/i386/i686/multiarch/Makefile (sysdep_routines): Add
+	strncpy-c strcpy-ssse3 strncpy-ssse3 stpcpy-ssse3 stpncpy-ssse3
+	strcpy-sse2 strncpy-sse2 stpcpy-sse2 stpncpy-sse2.
+	* sysdeps/i386/i686/multiarch/stpcpy-sse2.S: New file.
+	* sysdeps/i386/i686/multiarch/stpcpy-ssse3.S: New file.
+	* sysdeps/i386/i686/multiarch/stpncpy-sse2.S: New file.
+	* sysdeps/i386/i686/multiarch/stpncpy-ssse3.S: New file.
+	* sysdeps/i386/i686/multiarch/stpncpy.S : New file.
+	* sysdeps/i386/i686/multiarch/strcpy-sse2.S : New file.
+	* sysdeps/i386/i686/multiarch/strcpy-ssse3.S: New file.
+	* sysdeps/i386/i686/multiarch/strcpy.S: New file.
+	* sysdeps/i386/i686/multiarch/strncpy-c.c: New file.
+	* sysdeps/i386/i686/multiarch/strncpy-sse2.S: New file.
+	* sysdeps/i386/i686/multiarch/strncpy-ssse3.S: New file.
+	* sysdeps/i386/i686/multiarch/strncpy.S: New file.
+	* sysdeps/x86_64/multiarch/init-arch.c (__init_cpu_features):
+	Enable unaligned load optimization for Intel Core i3, i5 and i7
+	processors.
+	* sysdeps/x86_64/multiarch/init-arch.h (bit_Fast_Unaligned_Load):
+	Define.
+	(index_Fast_Unaligned_Load): Define.
+	(HAS_FAST_UNALIGNED_LOAD): Define.
+
+2011-06-23  Marek Polacek  <mpolacek@redhat.com>
+
+	* nss/nss_db/db-open.c: Include <unistd.h> for read declaration.
+
 2011-06-22  Ulrich Drepper  <drepper@gmail.com>
 
 	[BZ #12907]
