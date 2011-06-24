@@ -27,8 +27,8 @@
 # endif
 
 # define JMPTBL(I, B)	I - B
-# define BRANCH_TO_JMPTBL_ENTRY(TABLE, INDEX, SCALE)             \
-	lea	TABLE(%rip), %r11;                              \
+# define BRANCH_TO_JMPTBL_ENTRY(TABLE, INDEX, SCALE)            \
+	lea	TABLE(%rip), %R11_LP;                           \
 	movslq	(%r11, INDEX, SCALE), %rcx;                     \
 	lea	(%r11, %rcx), %rcx;                             \
 	jmp	*%rcx
