@@ -1,3 +1,14 @@
+2011-06-30  Andreas Schwab  <schwab@redhat.com>
+
+	* sysdeps/posix/getaddrinfo.c (gaih_inet): Make sure RES_USE_INET6
+	is always restored.
+
+2011-06-29  Ulrich Drepper  <drepper@gmail.com>
+
+	* nscd/grpcache.c (cache_addgr): Don't write notfound reply if we
+	are re-adding the entry.
+	* nscd/servicescache.c (cache_addserv): Likewise.
+
 2011-06-30  Aurelien Jarno  <aurelien@aurel32.net>
 
 	* sysdeps/generic/dl-irel.h: fix protection against multiple
