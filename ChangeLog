@@ -1,3 +1,78 @@
+2011-07-02  Roland McGrath  <roland@hack.frob.com>
+
+	* Makerules ($(common-objpfx)format.lds): Fail if result is empty.
+
+	* Makefile ($(common-objpfx)testrun.sh): Generate to work relative to
+	containing directory rather than embedding absolute directory names.
+
+	* scripts/check-local-headers.sh: Rewritten using awk.
+	Match by word, not by line.  Print error messages for matches.
+	* Makefile ($(objpfx)check-local-headers.out): Pass AWK in to it.
+
+	* Makerules [shlib-lds-flags empty]:
+	($(common-objpfx)libc_pic.opts): New target.
+	($(common-objpfx)libc_pic.os.clean): New target.
+	($(common-objpfx)libc.so): Link it instead of libc_pic.os.
+
+	* config.make.in (OBJCOPY): New variable.
+	* aclocal.m4 (LIBC_PROG_BINUTILS): Substitute OBJCOPY too.
+	* configure: Regenerated.
+
+	* config.make.in (use-default-link): New variable.
+	* configure.in (use_default_link): Grok --with-default-link to set it.
+	* configure: Regenerated.
+	* Makerules [$(elf) = yes] [$(use-default-link) = yes]:
+	(shlib-lds, shlib-lds-flags): Define to empty.
+
+	* Makerules (shlib-lds): New variable.
+	(shlib-lds-flags): New variable.
+	(build-shlib, build-moduile, build-module-asneeded): Use it.
+	($(common-objpfx)libc.so): Use $(shlib-lds).
+	($(extra-modules-build:%=$(objpfx)%.so)): Likewise.
+	* iconvdata/extra-module.mk ($(objpfx)$(mod).so): Likewise.
+
+	* elf/dynamic-link.h (elf_get_dynamic_info): Make asserts accept
+	DT_FLAGS/DT_FLAGS_1 with zero flags.
+
+	* elf/Makefile ($(objpfx)ld.so): Use -defsym=_begin=0 instead of
+	linker script munging.
+
+2011-07-02  Ulrich Drepper  <drepper@gmail.com>
+
+	* crypt/sha512.h (struct sha512_ctx): Add union to access total also
+	as 128-bit value.
+	* crypt/sha512.c (sha512_process_block): Perform total addition using
+	128-bit if possible.
+	(__sha512_finish_ctx): Likewise.
+	* crypt/sha256.h (struct sha256_ctx): Add union to access total also
+	as 64-bit value.
+	* crypt/sha256.c (SWAP64): Define.
+	(sha256_process_block): Perform total addition using 64-bit if
+	possible.
+	(__sha256_finish_ctx): Likewise.
+
+2011-07-01  Ulrich Drepper  <drepper@gmail.com>
+
+	* nscd/pwdcache.c (cache_addpw): Cleanup.  Add branch prediction.
+	* nscd/initgrcache.c (addinitgroupsX): Likewise.
+	* nscd/hstcache.c (cache_addhst): Likewise.
+	* nscd/grpcache.c (cache_addgr): Likewise.
+	* nscd/aicache.c (addhstaiX): Likewise
+	* nscd/servicescache.c (cache_addserv): Handle zero negtimeout.
+
+2011-07-01  Thorsten Kukuk  <kukuk@suse.de>
+
+	* nscd/pwdcache.c (cache_addpw): Handle zero negtimeout.
+	* nscd/initgrcache.c (addinitgroupsX): Likewise.
+	* nscd/hstcache.c (cache_addhst): Likewise.
+	* nscd/grpcache.c (cache_addgr): Likewise.
+	* nscd/aicache.c (addhstaiX): Likewise
+
+2011-07-01  Andreas Schwab  <schwab@redhat.com>
+
+	* nis/nss_compat/compat-pwd.c (getpwent_next_nss_netgr): Query NIS
+	domain only when needed.
+
 2011-06-30  Andreas Schwab  <schwab@redhat.com>
 
 	* sysdeps/posix/getaddrinfo.c (gaih_inet): Make sure RES_USE_INET6
