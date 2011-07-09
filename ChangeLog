@@ -1,3 +1,13 @@
+2011-07-08  Ulrich Drepper  <drepper@gmail.com>
+
+	* malloc/hooks.c (memalign_check): Avoid using checked_request2size
+	if the result is not used.
+
+2011-07-05  Andreas Jaeger  <aj@suse.de>
+
+	[BZ#9696]
+	* stdlib/tst-strtod.c: Add testcase.
+
 2011-07-07  Ulrich Drepper  <drepper@gmail.com>
 
 	* sysdeps/unix/sysv/linux/pathconf.c (distinguish_extX): New function.
