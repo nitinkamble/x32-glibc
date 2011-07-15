@@ -1,0 +1,4 @@
+2011-07-14  H.J. Lu  <hongjiu.lu@intel.com>
+
+	PR libc/12872
+	* sysdeps/x86_64/bits/link.h (La_x86_64_ymm): Aligned to 16byte.

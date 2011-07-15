@@ -65,7 +65,7 @@ __END_DECLS
 /* Registers for entry into PLT on x86-64.  */
 # if __GNUC_PREREQ (4,0)
 typedef float La_x86_64_xmm __attribute__ ((__vector_size__ (16)));
-typedef float La_x86_64_ymm __attribute__ ((__vector_size__ (32)));
+typedef float La_x86_64_ymm __attribute__ ((__vector_size__ (32), aligned(16)));
 # else
 typedef float La_x86_64_xmm __attribute__ ((__mode__ (__V4SF__)));
 # endif
