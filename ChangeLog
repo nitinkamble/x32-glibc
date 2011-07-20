@@ -1,3 +1,31 @@
+2011-07-20  Ulrich Drepper  <drepper@gmail.com>
+
+	* sysdeps/x86_64/bits/link.h (La_x86_64_ymm): Force 16-byt alignment.
+
+2011-07-09  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* sysdeps/unix/sysv/linux/pathconf.c: Include <string.h>.
+
+2011-07-20  Ulrich Drepper  <drepper@gmail.com>
+
+	* po/cs.po: Update from translation team.
+	* po/bg.po: Likewise.
+
+2011-07-12  Marek Polacek  <mpolacek@redhat.com>
+
+	* misc/sys/cdefs.h: Add support for const attribute.
+	* sysdeps/unix/sysv/linux/sys/sysmacros.h: Add __attribute_const__
+	to gnu_dev_{major,minor,makedev} functions.
+
+2011-07-20  Marek Polacek  <mpolacek@redhat.com>
+
+	* intl/dcigettext.c (get_output_charset): Add missing bracket.
+
+2011-07-20  Andreas Schwab  <schwab@redhat.com>
+
+	* resolv/res_query.c (__libc_res_nquerydomain): Use size_t for
+	strlen results.
+
 2011-07-13  Andreas Krebbel  <Andreas.Krebbel@de.ibm.com>
 
 	* sysdeps/unix/sysv/linux/s390/s390-32/sysdep.h
