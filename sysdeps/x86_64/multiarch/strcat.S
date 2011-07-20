@@ -50,13 +50,13 @@ ENTRY(STRCAT)
 	cmpl	$0, __cpu_features+KIND_OFFSET(%rip)
 	jne	1f
 	call	__init_cpu_features
-1:	leaq	STRCAT_SSE2_UNALIGNED(%rip), %rax
+1:	lea	STRCAT_SSE2_UNALIGNED(%rip), %RAX_LP
 	testl	$bit_Fast_Unaligned_Load, __cpu_features+FEATURE_OFFSET+index_Fast_Unaligned_Load(%rip)
 	jnz	2f
-	leaq	STRCAT_SSE2(%rip), %rax
+	lea	STRCAT_SSE2(%rip), %RAX_LP
 	testl	$bit_SSSE3, __cpu_features+CPUID_OFFSET+index_SSSE3(%rip)
 	jz	2f
-	leaq	STRCAT_SSSE3(%rip), %rax
+	lea	STRCAT_SSSE3(%rip), %RAX_LP
 2:	ret
 END(STRCAT)
 
