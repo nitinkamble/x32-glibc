@@ -147,7 +147,7 @@ L(have_avx):
 	// AVX and XSAVE supported?
 	andl	$((1 << 28) | (1 << 27)), %ecx
 	cmpl	$((1 << 28) | (1 << 27)), %ecx
-	je	2f
+	jne	2f
 	xorl	%ecx, %ecx
 	// Get XFEATURE_ENABLED_MASK
 	xgetbv
@@ -193,7 +193,7 @@ _dl_x86_64_save_sse:
 	// AVX and XSAVE supported?
 	andl	$((1 << 28) | (1 << 27)), %ecx
 	cmpl	$((1 << 28) | (1 << 27)), %ecx
-	je	2f
+	jne	2f
 	xorl	%ecx, %ecx
 	// Get XFEATURE_ENABLED_MASK
 	xgetbv
