@@ -1,5 +1,13 @@
 2011-07-24  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* configure.in: Check size of long.
+	* configure: Regenerated.
+
+	* sysdeps/x86_64/preconfigure: Check size of long instead of
+	-mx32.
+
+2011-07-24  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/unix/sysv/linux/x86_64/lp64: Renamed to ...
 	* sysdeps/unix/sysv/linux/x86_64/64: This.
 

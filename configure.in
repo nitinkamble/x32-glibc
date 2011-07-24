@@ -316,6 +316,10 @@ else
 fi
 AC_SUBST(libc_cv_nss_crypt)
 
+dnl check for the size of 'long'.
+AC_CHECK_SIZEOF(long, 0)
+sizeof_long=$ac_cv_sizeof_long
+
 # The way shlib-versions is used to generate soversions.mk uses a
 # fairly simplistic model for name recognition that can't distinguish
 # i486-pc-linux-gnu fully from i486-pc-gnu.  So we mutate a $host_os

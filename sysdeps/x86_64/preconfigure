@@ -1,8 +1,7 @@
 case "$base_machine" in
 x86_64)
   stubs_biarch_h=stubs-triarch.h
-  case "$CC $CFLAGS $CPPFLAGS " in
-  *" -mx32"*)
+  if test "$sizeof_long" = 4; then
     machine=x86_64/x32
     libc_cv_slibdir="/libx32"
     if test "$libdir" = '${exec_prefix}/lib'; then
@@ -10,9 +9,7 @@ x86_64)
       # Locale data can be shared.
       libc_cv_localedir='${exec_prefix}/lib/locale'
     fi
-    ;;
-  *)
+  else
     machine=x86_64/64
-    ;;
-  esac
+  fi
 esac
