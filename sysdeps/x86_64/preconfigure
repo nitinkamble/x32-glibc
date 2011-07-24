@@ -12,7 +12,7 @@ x86_64)
     fi
     ;;
   *)
-    machine=x86_64/lp64
+    machine=x86_64/64
     ;;
   esac
 esac

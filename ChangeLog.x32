@@ -1,3 +1,17 @@
+2011-07-24  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/lp64: Renamed to ...
+	* sysdeps/unix/sysv/linux/x86_64/64: This.
+
+	* sysdeps/x86_64/lp64: Renamed to ...
+	* sysdeps/x86_64/64: This.
+
+	* sysdeps/unix/sysv/linux/configure.in: Replace x86_64/lp64
+	with x86_64/64.
+	* sysdeps/x86_64/preconfigure: Likewise.
+
+	* sysdeps/unix/sysv/linux/configure: Regenerated.
+
 2011-07-19  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/x86_64/multiarch/strcat.S (STRCAT): Load function
