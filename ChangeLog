@@ -1,3 +1,11 @@
+2011-08-10  Andreas Schwab  <schwab@redhat.com>
+
+	* include/dirent.h: Add libc_hidden_proto for scandirat and
+	scandirat64.  Don't declare __scandirat64.
+	* dirent/scandirat.c: Add libc_hidden_def.
+	* dirent/scandirat64.c (SCANDIRAT): Remove underscores.
+	* sysdeps/unix/sysv/linux/i386/scandir64.c (SCANDIRAT): Likewise.
+
 2011-08-10  David S. Miller  <davem@davemloft.net>
 
 	* sysdeps/unix/sysv/linux/ia64/sys/ptrace.h: Add missing comma in
