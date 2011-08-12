@@ -1,3 +1,10 @@
+2011-08-12  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* elf/elf.h (R_X86_64_RELATIVE64): New.
+
+	* sysdeps/x86_64/dl-machine.h (elf_machine_rela): Handle
+	R_X86_64_RELATIVE64 and R_X86_64_64 for x32.
+
 2011-07-24  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* configure.in: Check size of long.

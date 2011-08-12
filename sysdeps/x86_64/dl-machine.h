@@ -286,6 +286,12 @@ elf_machine_rela (struct link_map *map, const ElfW(Rela) *reloc,
     }
   else
 # endif
+# if !defined RTLD_BOOTSTRAP && !defined __LP64__
+  if (__builtin_expect (r_type == R_X86_64_RELATIVE64, 0))
+    *((Elf64_Addr *) (uintptr_t) reloc_addr)
+      = (Elf64_Addr) map->l_addr + reloc->r_addend;
+  else
+# endif
   if (__builtin_expect (r_type == R_X86_64_NONE, 0))
     return;
   else
@@ -404,11 +410,14 @@ elf_machine_rela (struct link_map *map, const ElfW(Rela) *reloc,
 # endif
 
 # ifndef RTLD_BOOTSTRAP
-#  ifdef __LP64__
 	case R_X86_64_64:
+#  ifdef __LP64__
 	  *reloc_addr = value + reloc->r_addend;
-	  break;
+#  else
+	  *((Elf64_Addr *) (uintptr_t) reloc_addr)
+	    = (Elf64_Addr) value + reloc->r_addend;
 #  endif
+	  break;
 	case R_X86_64_32:
 	  value += reloc->r_addend;
 	  *(unsigned int *) reloc_addr = value;
