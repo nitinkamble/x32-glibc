@@ -1,3 +1,27 @@
+2011-08-13  Ulrich Drepper  <drepper@gmail.com>
+
+	* elf/dl-libc.c (do_dlopen_args): Add caller_dlopen.
+	(do_dlopen): Pass caller_dlopen to dl_open.
+	(__libc_dlopen_mode): Initialize caller_dlopen.
+
+	* intl/l10nflist.c (_nl_normalize_codeset): Make it compile outside
+	of libc.  Make tolower call locale-independent.  Optimize a bit by
+	using isdigit instead of isalnum.
+	* locale/Makefile (locale-CPPFLAGS): Add -DNOT_IN_libc.
+
+2011-08-12  Ulrich Drepper  <drepper@gmail.com>
+
+	* elf/dl-load.c (_dl_map_object): Show in debug output whether a DSO
+	was a dependency or dynamically loaded.
+
+2011-08-11  Ulrich Drepper  <drepper@gmail.com>
+
+	* intl/l10nflist.c: Allow architecture-specific pop function.
+	* sysdeps/x86_64/l10nflist.c: New file.
+
+	* intl/l10nflist.c (_nl_make_l10nflist): Use locale-independent
+	classification.
+
 2011-08-10  Andreas Schwab  <schwab@redhat.com>
 
 	* include/dirent.h: Add libc_hidden_proto for scandirat and
