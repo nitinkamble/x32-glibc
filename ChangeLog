@@ -1,4 +1,59 @@
+2011-08-17  Ulrich Drepper  <drepper@gmail.com>
+
+	* elf/pldd.c (main): Attach to all threads in the process.
+	Rewrite /proc handling to use *at functions.
+
+2011-08-16  Ulrich Drepper  <drepper@gmail.com>
+
+	* elf/dl-open.c (_dl_show_scope): Take additional parameter which
+	specifies first scope to show.
+	(dl_open_worker): Update callers.  Move printing scope of new
+	object to before the relocation.
+	* rtld.c (dl_main): Update _dl_show_scope call.
+	* sysdeps/generic/ldsodefs.h: Update declaration.
+
+	* elf/dl-open.c (_dl_show_scope): Use _dl_debug_printf to generate the
+	string for the scope number.
+
+2011-08-14  Ulrich Drepper  <drepper@gmail.com>
+
+	* nscd/servicescache.c (cache_addserv): Make sure written is always
+	initialized.
+
+2011-08-14  Roland McGrath  <roland@hack.frob.com>
+
+	* sysdeps/i386/i486/bits/atomic.h
+	(__arch_compare_and_exchange_val_64_acq): Use RET alone at end of
+	statement expression, so as to suppress "set but not used" warning.
+	(__arch_c_compare_and_exchange_val_64_acq): Likewise.
+
+	* string/strncat.c (STRNCAT): Use prototype definition.
+
+	* locale/Makefile (locale-CPPFLAGS): Renamed CPPFLAGS-locale-programs.
+	(locale-CPPFLAGS): New variable; put LOCALEDIR, LOCALE_ALIAS_PATH and
+	-Iprograms here.
+	(cppflags-iterator.mk sequence): Use locale-programs in place of nonlib.
+	(localedef-modules): Add localedef.
+	(locale-modules): Add locale.
+
+	* sysdeps/generic/ldsodefs.h (struct unique_sym): Add a const.
+	* elf/rtld.c (dl_main): Invert order of assignment in last change,
+	to avoid a warning.
+
+2011-08-14  David S. Miller  <davem@davemloft.net>
+
+	* sysdeps/unix/sysv/linux/sparc/bits/resource.h (RLIM_INFINITY,
+	RLIM64_INFINITY): Fix 64-bit values for 32-bit sparc.
+
 2011-08-13  Ulrich Drepper  <drepper@gmail.com>
+
+	* elf/dl-open.c: Rename show_scope to _dl_schow_scope and export.
+	(dl_open_worker): Call _dl_show_scope when DL_DEBUG_SCOPES is set.
+	* elf/rtld.c (dl_main): Set l_name of vDSO.
+	Call _dl_show_scope when DL_DEBUG_SCOPES.
+	(process_dl_debug): Recognize scopes flag and also set it for all.
+	* sysdeps/generic/ldsodefs.h: Define DL_DEBUG_SCOPES.
+	Declare _dl_show_scope.
 
 	* elf/dl-libc.c (do_dlopen_args): Add caller_dlopen.
 	(do_dlopen): Pass caller_dlopen to dl_open.
