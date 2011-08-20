@@ -1,4 +1,45 @@
-2011-08-14  David S. Miller  <davem@firepit.lan>
+2011-08-20  Ulrich Drepper  <drepper@gmail.com>
+
+	* nss/nss_files/files-alias.c (get_next_alias): Use feof_unlocked
+	and fgetc_unlocked.
+	* nss/nss_files/files-key.c (search): Use fgets_unlocked and
+	getc_unlocked.
+
+	* elf/dl-open.c (add_to_global): Report additions to the global scope
+	for LD_DEBUG=scopes.
+	(dl_open_worker): Also print scope of newly loaded dependencies.
+	(_dl_show_scope): Indicate if there is no scope.
+
+	[BZ #13114]
+	* stdio-common/Makefile (tests): Add bug24.
+	* stdio-common/bug24.c: New file.
+
+2011-08-19  Andreas Jaeger  <aj@suse.de>
+
+	[BZ #13114]
+	* libio/fileops.c (_IO_new_file_fopen): Fix handling of
+	non-existant file when using close-on-exec mode.
+
+2011-08-20  Ulrich Drepper  <drepper@gmail.com>
+
+	* sysdeps/x86_64/dl-trampoline.S (_dl_runtime_resolve): Fix CFI for
+	the very first instruction.
+
+	* sysdeps/x86_64/dl-trampoline.h: If MORE_CODE is defined, restore
+	the CFI state in the end.
+	* sysdeps/x86_64/dl-trampoline.S: Define MORE_CODE before first
+	inclusion of dl-trampoline.h.
+	Based on a patch by Jiri Olsa <jolsa@redhat.com>.
+
+2011-08-19  Andreas Schwab  <schwab@redhat.com>
+
+	* sysdeps/powerpc/fpu/libm-test-ulps: Relax ctan (0.75 + 1.25 i)
+	expectations for long double.
+
+	* sysdeps/unix/sysv/linux/powerpc/powerpc32/scandir64.c: Renamed
+	from sysdeps/unix/sysv/linux/powerpc/scandir64.c.
+
+2011-08-14  David S. Miller  <davem@davemloft.net>
 
 	* sysdeps/unix/sysv/linux/Makefile (CFLAGS-tst-writev.c): The
 	artificual limit depends upon the system page size.
