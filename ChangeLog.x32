@@ -1,3 +1,8 @@
+2011-08-20  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* malloc/malloc.c (MALLOC_ALIGNMENT): Don't use
+	__alignof__ (long double).
+
 2011-08-12  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* elf/elf.h (R_X86_64_RELATIVE64): New.
