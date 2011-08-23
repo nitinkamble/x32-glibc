@@ -20,10 +20,6 @@
 # include <dl-vdso.h>
 # include <bits/libc-vdso.h>
 
-long int (*__vdso_gettimeofday) (struct timeval *, void *)
-  __attribute__ ((nocommon));
-strong_alias (__vdso_gettimeofday, __GI___vdso_gettimeofday attribute_hidden)
-
 long int (*__vdso_clock_gettime) (clockid_t, struct timespec *)
   __attribute__ ((nocommon));
 strong_alias (__vdso_clock_gettime, __GI___vdso_clock_gettime attribute_hidden)
@@ -35,24 +31,13 @@ _libc_vdso_platform_setup (void)
 {
   PREPARE_VERSION (linux26, "LINUX_2.6", 61765110);
 
-  void *p = _dl_vdso_vsym ("gettimeofday", &linux26);
-  PTR_MANGLE (p);
-  __GI___vdso_gettimeofday = p;
-
-  p = _dl_vdso_vsym ("clock_gettime", &linux26);
+  void *p = _dl_vdso_vsym ("clock_gettime", &linux26);
   PTR_MANGLE (p);
   __GI___vdso_clock_gettime = p;
 
   p = _dl_vdso_vsym ("getcpu", &linux26);
   PTR_MANGLE (p);
   __vdso_getcpu = p;
-
-#if 0
-  /* FIXME: The vDSO doesn't support time syscall.  */
-  p = _dl_vdso_vsym ("time", &linux26);
-  PTR_MANGLE (p);
-  __vdso_time = p;
-#endif
 }
 
 # define VDSO_SETUP _libc_vdso_platform_setup

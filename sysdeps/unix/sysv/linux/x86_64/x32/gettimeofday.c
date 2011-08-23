@@ -17,37 +17,29 @@
    02111-1307 USA.  */
 
 #ifdef SHARED
-#include <sysdep.h>
-#define _ERRNO_H	1
-#include <bits/errno.h>
+# include <dl-vdso.h>
 
-ENTRY (__gettimeofday)
-	/* Align stack.  */
-	sub	$0x8, %esp
-	cfi_adjust_cfa_offset(8)
+void *gettimeofday_ifunc (void) __asm__ ("__gettimeofday");
 
-	mov	__GI___vdso_gettimeofday(%rip), %eax
-	PTR_DEMANGLE (%eax)
-	callq	*%rax
-	/* Check error return.  */
-	cmp	$-4095, %eax
-	jae	SYSCALL_ERROR_LABEL
+void *
+gettimeofday_ifunc (void)
+{
+  PREPARE_VERSION (linux26, "LINUX_2.6", 61765110);
 
-L(pseudo_end):
-	add	$0x8, %esp
-	cfi_adjust_cfa_offset(-8)
-	ret
-PSEUDO_END(__gettimeofday)
-
-strong_alias (__gettimeofday, __gettimeofday_internal)
-weak_alias (__gettimeofday, gettimeofday)
+  return _dl_vdso_vsym ("gettimeofday", &linux26);
+}
+__asm (".type __gettimeofday, %gnu_indirect_function");
 #else
-#define SYSCALL_NAME gettimeofday
-#define SYSCALL_NARGS 2
-#define SYSCALL_SYMBOL __gettimeofday
-#include <syscall-template.S>
-weak_alias (__gettimeofday, gettimeofday)
-libc_hidden_weak (gettimeofday)
-weak_alias (__gettimeofday, __gettimeofday_internal)
-libc_hidden_weak (__gettimeofday_internal)
+# include <errno.h>
+# include <sysdep.h>
+# include <sys/time.h>
+
+int
+__gettimeofday (struct timeval *tv, struct timezone *tz)
+{
+  return INLINE_SYSCALL (gettimeofday, 2, tv, tz);
+}
 #endif
+
+weak_alias (__gettimeofday, gettimeofday)
+strong_alias (__gettimeofday, __gettimeofday_internal)

@@ -90,10 +90,7 @@
 # undef ASM_VSYSCALL
 # ifdef SHARED
 #  define ASM_VSYSCALL(name)			\
-  movl	__vdso_##name@GOTPCREL(%rip), %eax;	\
-  movl	(%rax), %eax;				\
-  PTR_DEMANGLE (%eax);				\
-  callq	*%rax
+  call	__##name@PLT
 # else
 #  define ASM_VSYSCALL(name)			\
   movl	$__NR_##name, %eax;			\
