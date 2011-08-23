@@ -1,5 +1,9 @@
 2011-08-23  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/unix/sysv/linux/x86_64/x32/time.c: Rewrote.
+
+2011-08-23  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/unix/sysv/linux/x86_64/x32/gettimeofday.c: New.
 
 	* sysdeps/unix/sysv/linux/x86_64/x32/gettimeofday.S: Removed.
