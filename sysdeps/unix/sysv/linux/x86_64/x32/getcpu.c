@@ -18,23 +18,15 @@
 
 #ifdef SHARED
 # include <dl-vdso.h>
-# include <bits/libc-vdso.h>
 
-long int (*__vdso_clock_gettime) (clockid_t, struct timespec *)
-  __attribute__ ((nocommon));
-strong_alias (__vdso_clock_gettime, __GI___vdso_clock_gettime attribute_hidden)
+void *getcpu_ifunc (void) __asm__ ("__getcpu");
 
-static inline void
-_libc_vdso_platform_setup (void)
+void *
+getcpu_ifunc (void)
 {
   PREPARE_VERSION (linux26, "LINUX_2.6", 61765110);
 
-  void *p = _dl_vdso_vsym ("clock_gettime", &linux26);
-  PTR_MANGLE (p);
-  __GI___vdso_clock_gettime = p;
+  return _dl_vdso_vsym ("getcpu", &linux26);
 }
-
-# define VDSO_SETUP _libc_vdso_platform_setup
+__asm (".type __getcpu, %gnu_indirect_function");
 #endif
-
-#include "../../init-first.c"

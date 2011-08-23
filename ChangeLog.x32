@@ -1,5 +1,21 @@
 2011-08-23  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/unix/sysv/linux/x86_64/x32/Makefile (sysdep_routines):
+	Add getcpu.
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/Versions: Removed.
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/getcpu.c: New.
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/init-first.c (__vdso_getcpu):
+	Removed.
+	(_libc_vdso_platform_setup): Updated.
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/sched_getcpu.S (sched_getcpu):
+	Call __getcpu via PLT if SHARED is defined.
+
+2011-08-23  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/unix/sysv/linux/x86_64/x32/time.c: Rewrote.
 
 2011-08-23  H.J. Lu  <hongjiu.lu@intel.com>
