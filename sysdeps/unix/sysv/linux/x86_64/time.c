@@ -16,28 +16,28 @@
    Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
    02111-1307 USA.  */
 
-#include <sysdep.h>
-#define _ERRNO_H	1
-#include <bits/errno.h>
-
-/* Return the current time as a `time_t' and also put it in *T if T is
-   not NULL.  Time is represented as seconds from Jan 1 00:00:00 1970.  */
-
-ENTRY (time)
-	/* Align stack.  */
-	sub	$0x8, %rsp
-	cfi_adjust_cfa_offset(8)
+#include <dl-vdso.h>
 
 #ifdef SHARED
-	movq	__vdso_time(%rip), %rax
-	PTR_DEMANGLE (%rax)
-#else
-	movq	$VSYSCALL_ADDR_vtime, %rax
-#endif
-	callq	*%rax
+void *time_ifunc (void) __asm__ ("time");
 
-	add	$0x8, %rsp
-	cfi_adjust_cfa_offset(-8)
-	ret
-PSEUDO_END_NOERRNO(time)
-libc_hidden_def (time)
+void *
+time_ifunc (void)
+{
+  PREPARE_VERSION (linux26, "LINUX_2.6", 61765110);
+
+  /* If the vDSO is not available we fall back on the old vsyscall.  */
+  return _dl_vdso_vsym ("time", &linux26) ?: (void *) VSYSCALL_ADDR_vtime;
+}
+__asm (".type time, %gnu_indirect_function");
+#else
+# include <time.h>
+
+time_t
+time (time_t *t)
+{
+  return ((time_t (*) (time_t *)) VSYSCALL_ADDR_vtime) (t);
+}
+#endif
+
+strong_alias (time, __GI_time)
