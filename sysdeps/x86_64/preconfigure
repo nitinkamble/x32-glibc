@@ -3,6 +3,7 @@ x86_64)
   stubs_biarch_h=stubs-triarch.h
   if test "$sizeof_long" = 4; then
     machine=x86_64/x32
+    data_machine=x32
     libc_cv_slibdir="/libx32"
     if test "$libdir" = '${exec_prefix}/lib'; then
       libdir='${exec_prefix}/libx32';

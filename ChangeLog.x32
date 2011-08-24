@@ -1,3 +1,18 @@
+2011-08-24  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* Makefile (data-machine): New.
+	(check-data): Use it.
+
+	* config.make.in (data-machine): New.
+
+	* configure.in: Substitute data_machine.
+	* configure: Regenerated.
+
+	* scripts/data/c++-types-x32-linux-gnu.data: New.
+
+	* sysdeps/x86_64/preconfigure (data_machine): Set to x32 for
+	x32.
+
 2011-08-23  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/unix/sysv/linux/x86_64/x32/Makefile (sysdep_routines):
