@@ -1,0 +1,6 @@
+2011-09-01  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* time/mktime.c (ydhms_diff): Check TIME_T_MAX instead of
+	LONG_MAX.
+
+	* time/offtime.c (__offtime): Add more overflow check.
