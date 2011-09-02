@@ -1,3 +1,8 @@
+2011-09-02  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/unix/sysv/linux/bits/resource.h (RLIM_INFINITY): Cast
+	-1 to __rlim_t.
+
 2011-09-01  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* time/mktime.c (ydhms_diff): Check TIME_T_MAX instead of
