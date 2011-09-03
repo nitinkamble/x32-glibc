@@ -27,47 +27,56 @@
 /* See <bits/types.h> for the meaning of these macros.  This file exists so
    that <bits/types.h> need not vary across different GNU platforms.  */
 
-/* IA32 and x32 kernel interfaces align 64bit to 4 byte.  */
-#ifndef __kernel_int64_align
-# ifndef __WORDSIZE
-#   error "__WORDSIZE is not defined."
-# endif
-# if __WORDSIZE == 64
-#  define  __kernel_int64_align
-# else
-#  define  __kernel_int64_align __attribute__((aligned(4)))
-# endif
-#endif
-
-#define __DEV_T_TYPE		__UQUAD_TYPE __kernel_int64_align
-#define __UID_T_TYPE		__U32_TYPE
-#define __GID_T_TYPE		__U32_TYPE
+/* X32 kernel interface is 64bit.  */
+#if defined __x86_64__ && __WORDSIZE == 32
+#define __INO_T_TYPE		__UQUAD_TYPE
+#define __NLINK_T_TYPE		__UQUAD_TYPE
+#define __OFF_T_TYPE		__SQUAD_TYPE
+#define __RLIM_T_TYPE		__UQUAD_TYPE
+#define	__BLKCNT_T_TYPE		__SQUAD_TYPE
+#define	__FSFILCNT_T_TYPE	__UQUAD_TYPE
+#define	__FSBLKCNT_T_TYPE	__UQUAD_TYPE
+#define __TIME_T_TYPE		__SQUAD_TYPE
+#define __BLKSIZE_T_TYPE	__SQUAD_TYPE
+#define __SUSECONDS_T_TYPE	__SQUAD_TYPE
+#define __SNSECONDS_T_TYPE	__SQUAD_TYPE
+#define __SNATIVE_LONG_TYPE	__SQUAD_TYPE
+#define __UNATIVE_LONG_TYPE	__UQUAD_TYPE
+#else
 #define __INO_T_TYPE		__ULONGWORD_TYPE
-#define __INO64_T_TYPE		__UQUAD_TYPE __kernel_int64_align
-#define __MODE_T_TYPE		__U32_TYPE
 #define __NLINK_T_TYPE		__UWORD_TYPE
 #define __OFF_T_TYPE		__SLONGWORD_TYPE
-#define __OFF64_T_TYPE		__SQUAD_TYPE __kernel_int64_align
-#define __PID_T_TYPE		__S32_TYPE
 #define __RLIM_T_TYPE		__ULONGWORD_TYPE
-#define __RLIM64_T_TYPE		__UQUAD_TYPE __kernel_int64_align
 #define	__BLKCNT_T_TYPE		__SLONGWORD_TYPE
-#define	__BLKCNT64_T_TYPE	__SQUAD_TYPE __kernel_int64_align
-#define	__FSBLKCNT_T_TYPE	__ULONGWORD_TYPE
-#define	__FSBLKCNT64_T_TYPE	__UQUAD_TYPE __kernel_int64_align
 #define	__FSFILCNT_T_TYPE	__ULONGWORD_TYPE
-#define	__FSFILCNT64_T_TYPE	__UQUAD_TYPE __kernel_int64_align
+#define	__FSBLKCNT_T_TYPE	__ULONGWORD_TYPE
+#define __TIME_T_TYPE		__SLONGWORD_TYPE
+#define __BLKSIZE_T_TYPE	__SLONGWORD_TYPE
+#define __SUSECONDS_T_TYPE	__SLONGWORD_TYPE
+#define __SNSECONDS_T_TYPE	__SLONGWORD_TYPE
+#define __SNATIVE_LONG_TYPE	__SLONGWORD_TYPE
+#define __UNATIVE_LONG_TYPE	__ULONGWORD_TYPE
+#endif
+
+#define __DEV_T_TYPE		__UQUAD_TYPE
+#define __UID_T_TYPE		__U32_TYPE
+#define __GID_T_TYPE		__U32_TYPE
+#define __INO64_T_TYPE		__UQUAD_TYPE
+#define __MODE_T_TYPE		__U32_TYPE
+#define __OFF64_T_TYPE		__SQUAD_TYPE
+#define __PID_T_TYPE		__S32_TYPE
+#define __RLIM64_T_TYPE		__UQUAD_TYPE
+#define	__BLKCNT64_T_TYPE	__SQUAD_TYPE
+#define	__FSBLKCNT64_T_TYPE	__UQUAD_TYPE
+#define	__FSFILCNT64_T_TYPE	__UQUAD_TYPE
 #define	__ID_T_TYPE		__U32_TYPE
 #define __CLOCK_T_TYPE		__SLONGWORD_TYPE
-#define __TIME_T_TYPE		__SLONGWORD_TYPE
 #define __USECONDS_T_TYPE	__U32_TYPE
-#define __SUSECONDS_T_TYPE	__SLONGWORD_TYPE
 #define __DADDR_T_TYPE		__S32_TYPE
 #define __SWBLK_T_TYPE		__SLONGWORD_TYPE
 #define __KEY_T_TYPE		__S32_TYPE
 #define __CLOCKID_T_TYPE	__S32_TYPE
 #define __TIMER_T_TYPE		void *
-#define __BLKSIZE_T_TYPE	__SLONGWORD_TYPE
 #define __FSID_T_TYPE		struct { int __val[2]; }
 #define __SSIZE_T_TYPE		__SWORD_TYPE
 

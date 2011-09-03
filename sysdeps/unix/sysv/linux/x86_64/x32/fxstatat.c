@@ -1,1 +1,1 @@
-#include <sysdeps/unix/sysv/linux/i386/fxstatat.c>
+#include <sysdeps/unix/sysv/linux/wordsize-64/fxstatat.c>

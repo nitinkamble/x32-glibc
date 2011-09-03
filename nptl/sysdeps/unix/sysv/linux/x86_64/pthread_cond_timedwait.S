@@ -68,7 +68,7 @@ __pthread_cond_timedwait:
 	cfi_adjust_cfa_offset(FRAME_SIZE)
 	cfi_remember_state
 
-	CMP_LP	$1000000000, LP_SIZE(%rdx)
+	cmpq	$1000000000, 8(%rdx)
 	movl	$EINVAL, %eax
 	jae	48f
 
@@ -141,7 +141,7 @@ __pthread_cond_timedwait:
 	movq	%r9, 24(%rsp)
 	movl	%edx, 4(%rsp)
 
-	CMP_LP	$0, (%r13)
+	cmpq	$0, (%r13)
 	movq	$-ETIMEDOUT, %r14
 	js	36f
 

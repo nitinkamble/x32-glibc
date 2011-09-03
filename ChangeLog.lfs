@@ -1,5 +1,168 @@
 2011-09-03  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* scripts/data/c++-types-x32-linux-gnu.data: Updated.
+
+	* sysdeps/unix/sysv/linux/x86_64/bits/ipc.h: New file.
+	* sysdeps/unix/sysv/linux/x86_64/bits/mqueue.h: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/bits/statfs.h: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/bits/timex.h: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/sys/msg.h: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/aio_read.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/aio_read64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/aio_write.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/aio_write64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/alphasort.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/alphasort64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/creat64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/dl-fxstatat64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/fallocate.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/fseeko.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/fseeko64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/fstatfs64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/fstatvfs.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/fstatvfs64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/ftello.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/ftello64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/ftruncate64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/ftw.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/ftw64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/fxstat64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/fxstatat64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/getdents.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/getdents64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/getdirentries.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/getdirentries64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/getrlimit64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/getrusage.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/glob.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/glob64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/internal_statvfs64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/iofgetpos.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/iofgetpos64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/iofopen.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/iofopen64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/iofsetpos.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/iofsetpos64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/kernel_resource.h: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/lio_listio.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/lio_listio64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/llseek.S: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/lockf.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/lxstat64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/mkostemp.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/mkostemp64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/mkstemp.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/mkstemp64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/mmap64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/open64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/openat.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/openat64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/posix_fadvise.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/posix_fallocate.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/pread64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/preadv.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/pselect.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/pwrite64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/pwritev.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/readdir.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/readdir64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/readdir64_r.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/readdir_r.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/scandir.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/scandir64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/scandirat.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/scandirat64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/sendfile64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/setrlimit64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/statfs64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/statvfs.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/statvfs64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/tmpfile.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/tmpfile64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/truncate64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/versionsort.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/versionsort64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/wait4.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/xstat64.c: Likewise.
+
+	* sysdeps/unix/sysv/linux/x86_64/bits/msq.h: Don't include
+	<bits/wordsize.h>.
+	(msgqnum_t): Use __UNATIVE_LONG_TYPE.
+	(msglen_t): Likewise.
+	(msqid_ds): Check __x86_64__ instead of __WORDSIZE.  Use
+	__UNATIVE_LONG_TYPE.
+
+	* sysdeps/unix/sysv/linux/x86_64/bits/sem.h (semid_ds): Add
+	__unused1 and __unused2 only if __x86_64__ isn't defined.  Use
+	__UNATIVE_LONG_TYPE.
+
+	* sysdeps/unix/sysv/linux/x86_64/bits/shm.h (shmatt_t): Use
+	__UNATIVE_LONG_TYPE.
+	(shmid_ds): Add __unused1 and __unused2 only if __x86_64__ isn't
+	defined.  Use __UNATIVE_LONG_TYPE.
+	(shminfo): Use __UNATIVE_LONG_TYPE.
+	(shm_info): Likewise.
+
+	* sysdeps/unix/sysv/linux/x86_64/bits/stat.h (_STAT_VER_SVR4):
+	Check __x86_64__ instead of __WORDSIZE.
+	(_STAT_VER_LINUX): Likewise.
+	(stat): Check __x86_64__ instead of __WORDSIZE.  Use
+	__UNATIVE_LONG_TYPE.
+	(stat64): Likewise.
+
+	* sysdeps/unix/sysv/linux/x86_64/bits/typesizes.h
+	(__kernel_int64_align): Removed.
+	(__INO_T_TYPE): Defined to 64bit for x32.
+	(__NLINK_T_TYPE): Likewise.
+	(__OFF_T_TYPE): Likewise.
+	(__RLIM_T_TYPE): Likewise.
+	(__BLKCNT_T_TYPE): Likewise.
+	(__FSFILCNT_T_TYPE): Likewise.
+	(__FSBLKCNT_T_TYPE): Likewise.
+	(__TIME_T_TYPE): Likewise.
+	(__BLKSIZE_T_TYPE): Likewise.
+	(__SUSECONDS_T_TYPE): Likewise.
+	(__SNSECONDS_T_TYPE): New.
+	(__SNATIVE_LONG_TYPE): Likewise.
+	(__UNATIVE_LONG_TYPE): Likewise.
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/fallocate.S: Removed.
+	* sysdeps/unix/sysv/linux/x86_64/x32/ftruncate.S: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/kernel_stat.h: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/kernel_uio.h: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/llseek.S: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/lseek.S: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/mmap.S: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/posix_fadvise.S: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/posix_fallocate.S: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/pread.S: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/preadv.S: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/pwrite.S: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/pwritev.S: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/sendfile.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/truncate.S: Likewise.
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/fallocate64.c: Use 64bit
+	version.
+	* sysdeps/unix/sysv/linux/x86_64/x32/fxstat.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/fxstatat.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/lockf64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/lxstat.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/posix_fadvise64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/posix_fallocate64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/preadv64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/pwritev64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/xstat.c: Likewise.
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/syscalls.list: Copied from
+	64-bit system calls without llseek.
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/time.c (INLINE_SYSCALL): New.
+	(INTERNAL_SYSCALL_NCS): Likewise.
+	(INTERNAL_SYSCALL_ERROR_P): Likewise.
+
+2011-09-03  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* bits/types.h (__snseconds_t): New.
 	* bits/typesizes.h (__NSECONDS_T_TYPE): Likewise.
 

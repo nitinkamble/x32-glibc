@@ -1,1 +1,1 @@
-#include <sysdeps/unix/sysv/linux/i386/lxstat.c>
+#include <sysdeps/unix/sysv/linux/wordsize-64/lxstat.c>

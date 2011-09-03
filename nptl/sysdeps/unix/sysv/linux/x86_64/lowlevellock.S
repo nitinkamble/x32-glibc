@@ -165,7 +165,7 @@ __lll_timedlock_wait:
 	je	.Lreltmo
 # endif
 
-	CMP_LP	$0, (%rdx)
+	cmpq	$0, (%rdx)
 	js	5f
 
 	pushq	%r9
@@ -400,21 +400,21 @@ __lll_timedwait_tid:
 	ASM_VSYSCALL (gettimeofday)
 
 	/* Compute relative timeout.  */
-	mov	LP_SIZE(%rsp), %RAX_LP
+	movq	8(%rsp), %rax
 	movl	$1000, %edi
-	mul	%RDI_LP		/* Milli seconds to nano seconds.  */
-	mov	(%r13), %RDI_LP
-	mov	LP_SIZE(%r13), %RSI_LP
-	sub	(%rsp), %RDI_LP
-	sub	%RAX_LP, %RSI_LP
+	mul	%rdi		/* Milli seconds to nano seconds.  */
+	movq	(%r13), %rdi
+	movq	8(%r13), %rsi
+	subq	(%rsp), %rdi
+	subq	%rax, %rsi
 	jns	5f
-	add	$1000000000, %RSI_LP
-	dec	%RDI_LP
-5:	test	%RDI_LP, %RDI_LP
+	addq	$1000000000, %rsi
+	decq	%rdi
+5:	testq	%rdi, %rdi
 	js	6f		/* Time is already up.  */
 
-	mov	%RDI_LP, (%rsp)	/* Store relative timeout.  */
-	mov	%RSI_LP, LP_SIZE(%rsp)
+	movq	%rdi, (%rsp)	/* Store relative timeout.  */
+	movq	%rsi, 8(%rsp)
 
 	movl	(%r12), %edx
 	testl	%edx, %edx

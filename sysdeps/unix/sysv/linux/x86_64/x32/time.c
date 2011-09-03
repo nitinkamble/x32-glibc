@@ -20,6 +20,33 @@
 #include <sysdep.h>
 #include <time.h>
 
+# undef INLINE_SYSCALL
+# define INLINE_SYSCALL(name, nr, args...) \
+  ({									      \
+    unsigned long long int resultvar = INTERNAL_SYSCALL (name, , nr, args);   \
+    if (__builtin_expect (INTERNAL_SYSCALL_ERROR_P (resultvar, ), 0))	      \
+      {									      \
+	__set_errno (INTERNAL_SYSCALL_ERRNO (resultvar, ));		      \
+	resultvar = (unsigned long long int) -1LL;			      \
+      }									      \
+    (long long int) resultvar; })
+
+# undef INTERNAL_SYSCALL_NCS
+# define INTERNAL_SYSCALL_NCS(name, err, nr, args...) \
+  ({									      \
+    unsigned long long int resultvar;					      \
+    LOAD_ARGS_##nr (args)						      \
+    LOAD_REGS_##nr							      \
+    asm volatile (							      \
+    "syscall\n\t"							      \
+    : "=a" (resultvar)							      \
+    : "0" (name) ASM_ARGS_##nr : "memory", "cc", "r11", "cx");		      \
+    (long long int) resultvar; })
+
+# undef INTERNAL_SYSCALL_ERROR_P
+# define INTERNAL_SYSCALL_ERROR_P(val, err) \
+  ((unsigned long long int) (long long int) (val) >= -4095LL)
+
 #ifdef SHARED
 # include <dl-vdso.h>
 
