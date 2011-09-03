@@ -1,3 +1,10 @@
+2011-09-03  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* bits/types.h (__snseconds_t): New.
+	* bits/typesizes.h (__NSECONDS_T_TYPE): Likewise.
+
+	* time/time.h (timespec): Use __snseconds_t on tv_nsec.
+
 2011-09-02  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/unix/sysv/linux/bits/resource.h (RLIM_INFINITY): Cast
