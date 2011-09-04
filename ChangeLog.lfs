@@ -1,5 +1,16 @@
 2011-09-03  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/unix/sysv/linux/bits/resource.h (RLIM_INFINITY): Don't
+	Cast -1 to __rlim_t.
+
+	* sysdeps/unix/sysv/linux/x86_64/bits/resource.h: New file.
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/getrusage.c: Removed.
+	* sysdeps/unix/sysv/linux/x86_64/x32/kernel_resource.h: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/wait4.c: Likewise.
+
+2011-09-03  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* scripts/data/c++-types-x32-linux-gnu.data: Updated.
 
 	* sysdeps/unix/sysv/linux/x86_64/bits/ipc.h: New file.
