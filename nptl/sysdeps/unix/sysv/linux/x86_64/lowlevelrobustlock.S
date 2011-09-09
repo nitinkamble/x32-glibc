@@ -1,4 +1,4 @@
-/* Copyright (C) 2002=2007, 2009, 2010 Free Software Foundation, Inc.
+/* Copyright (C) 2002, 2011=2007, 2009, 2010 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Ulrich Drepper <drepper@redhat.com>, 2002.
 
@@ -49,6 +49,7 @@
 	andl	%fs:PRIVATE_FUTEX, reg ; \
 	orl	$FUTEX_WAIT_BITSET | FUTEX_CLOCK_REALTIME, reg
 #endif
+
 
 	.globl	__lll_robust_lock_wait
 	.type	__lll_robust_lock_wait,@function
@@ -215,9 +216,9 @@ __lll_robust_timedlock_wait:
 	/* Get current time.  */
 	movq	%rsp, %rdi
 	xorl	%esi, %esi
-	/* This is a regular function call, all caller-save registers
-	   might be clobbered.  */
-	ASM_VSYSCALL (gettimeofday)
+	/* This call works because we directly jump to a system call entry
+	   which preserves all the registers.  */
+	call	JUMPTARGET(__gettimeofday)
 
 	/* Compute relative timeout.  */
 	movq	8(%rsp), %rax

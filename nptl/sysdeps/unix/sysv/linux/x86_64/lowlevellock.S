@@ -1,4 +1,4 @@
-/* Copyright (C) 2002-2006, 2007, 2009, 2010 Free Software Foundation, Inc.
+/* Copyright (C) 2002-2007, 2009, 2010, 2011 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Ulrich Drepper <drepper@redhat.com>, 2002.
 
@@ -246,9 +246,9 @@ __lll_timedlock_wait:
 	/* Get current time.  */
 	movq	%rsp, %rdi
 	xorl	%esi, %esi
-	/* This is a regular function call, all caller-save registers
-	   might be clobbered.  */
-	ASM_VSYSCALL (gettimeofday)
+	/* This call works because we directly jump to a system call entry
+	   which preserves all the registers.  */
+	call	JUMPTARGET(__gettimeofday)
 
 	/* Compute relative timeout.  */
 	movq	8(%rsp), %rax
@@ -397,7 +397,9 @@ __lll_timedwait_tid:
 	/* Get current time.  */
 2:	movq	%rsp, %rdi
 	xorl	%esi, %esi
-	ASM_VSYSCALL (gettimeofday)
+	/* This call works because we directly jump to a system call entry
+	   which preserves all the registers.  */
+	call	JUMPTARGET(__gettimeofday)
 
 	/* Compute relative timeout.  */
 	movq	8(%rsp), %rax

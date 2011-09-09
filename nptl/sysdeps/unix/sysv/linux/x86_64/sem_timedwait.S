@@ -1,4 +1,4 @@
-/* Copyright (C) 2002,2003,2005,2007,2009,2010 Free Software Foundation, Inc.
+/* Copyright (C) 2002,2003,2005,2007,2009,2010,2011 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Ulrich Drepper <drepper@redhat.com>, 2002.
 
@@ -23,7 +23,6 @@
 #include <shlib-compat.h>
 #include <pthread-errnos.h>
 #include <structsem.h>
-
 
 	.text
 
@@ -209,8 +208,10 @@ sem_timedwait:
 	ADD_LP	$1, NWAITERS(%r12)
 
 7:	xorl	%esi, %esi
-	movq	%rsp, %rdi
-	ASM_VSYSCALL (gettimeofday)
+	movq	%rsp,%rdi
+	/* This call works because we directly jump to a system call entry
+	   which preserves all the registers.  */
+	call	JUMPTARGET(__gettimeofday)
 
 	/* Compute relative timeout.  */
 	movq	8(%rsp), %rax

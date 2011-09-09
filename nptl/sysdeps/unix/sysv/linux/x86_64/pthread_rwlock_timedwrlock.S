@@ -1,4 +1,5 @@
-/* Copyright (C) 2002, 2003, 2005, 2007, 2009, 2010 Free Software Foundation, Inc.
+/* Copyright (C) 2002, 2003, 2005, 2007, 2009, 2010, 2011
+   Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Ulrich Drepper <drepper@redhat.com>, 2002.
 
@@ -22,7 +23,6 @@
 #include <lowlevelrwlock.h>
 #include <pthread-errnos.h>
 #include <kernel-features.h>
-
 
 	.text
 
@@ -117,7 +117,9 @@ pthread_rwlock_timedwrlock:
 	/* Get current time.  */
 	movq	%rsp, %rdi
 	xorl	%esi, %esi
-	ASM_VSYSCALL (gettimeofday)
+	/* This call works because we directly jump to a system call entry
+	   which preserves all the registers.  */
+	call	JUMPTARGET(__gettimeofday)
 
 	/* Compute relative timeout.  */
 	movq	8(%rsp), %rax
@@ -188,7 +190,7 @@ pthread_rwlock_timedwrlock:
 
 7:	movq	%rdx, %rax
 
-#ifndef __ASSUME_PRIVATE_FUTEX
+#ifndef __ASSUME_FUTEX_CLOCK_REALTIME
 	addq	$16, %rsp
 	cfi_adjust_cfa_offset(-16)
 	popq	%r14

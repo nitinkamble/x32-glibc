@@ -450,13 +450,11 @@ __pthread_cond_timedwait:
 	mov	__vdso_clock_gettime@GOTPCREL(%rip), %RAX_LP
 	mov	(%rax), %RAX_LP
 	PTR_DEMANGLE (%RAX_LP)
-	jz	26f
 	call	*%rax
-	jmp	27f
-#  endif
-26:	movl	$__NR_clock_gettime, %eax
+#  else
+	movl	$__NR_clock_gettime, %eax
 	syscall
-27:
+#  endif
 #  ifndef __ASSUME_POSIX_TIMERS
 	cmpq	$-ENOSYS, %rax
 	je	19f
@@ -470,7 +468,9 @@ __pthread_cond_timedwait:
 # else
 	leaq	24(%rsp), %rdi
 	xorl	%esi, %esi
-	ASM_VSYSCALL (gettimeofday)
+	/* This call works because we directly jump to a system call entry
+	   which preserves all the registers.  */
+	call	JUMPTARGET(__gettimeofday)
 
 	/* Compute relative timeout.  */
 	movq	40(%rsp), %rax
@@ -607,7 +607,9 @@ __pthread_cond_timedwait:
 	/* clock_gettime not available.  */
 19:	leaq	32(%rsp), %rdi
 	xorl	%esi, %esi
-	ASM_VSYSCALL (gettimeofday)
+	/* This call works because we directly jump to a system call entry
+	   which preserves all the registers.  */
+	call	JUMPTARGET(__gettimeofday)
 
 	/* Compute relative timeout.  */
 	movq	40(%rsp), %rax

@@ -35,7 +35,11 @@ ENTRY(strrchr)
 	testl	$bit_SSE4_2, __cpu_features+CPUID_OFFSET+index_SSE4_2(%rip)
 	jz	2f
 	lea	__strrchr_sse42(%rip), %RAX_LP
-2:	ret
+	ret
+2:	testl	$bit_Slow_BSF, __cpu_features+FEATURE_OFFSET+index_Slow_BSF(%rip)
+	jz	3f
+	lea    __strrchr_sse2_no_bsf(%rip), %RAX_LP
+3:	ret
 END(strrchr)
 
 /*
