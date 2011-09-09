@@ -223,10 +223,6 @@
 # define VSYSCALL_ADDR_vtime		0xffffffffff600400
 # define VSYSCALL_ADDR_vgetcpu		0xffffffffff600800
 
-# define ASM_VSYSCALL(name)			\
-  movq	$VSYSCALL_ADDR_v##name, %rax;		\
-  callq	*%rax
-
 #else	/* !__ASSEMBLER__ */
 /* Define a macro which expands inline into the wrapper code for a system
    call.  */

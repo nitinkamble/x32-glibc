@@ -85,18 +85,6 @@
   jmp L(pseudo_end);
 # endif	/* PIC */
 
-/* Since x32 doesn't have vsyscall page, we can only use vDSO or
-   normal system call.  */
-# undef ASM_VSYSCALL
-# ifdef SHARED
-#  define ASM_VSYSCALL(name)			\
-  call	__##name@PLT
-# else
-#  define ASM_VSYSCALL(name)			\
-  movl	$__NR_##name, %eax;			\
-  syscall
-#endif
-
 #endif	/* __ASSEMBLER__ */
 
 /* Pointer mangling support.  */
