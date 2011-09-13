@@ -1,7 +1,7 @@
 case "$base_machine" in
 x86_64)
   stubs_biarch_h=stubs-triarch.h
-  if test "$sizeof_long" = 4; then
+  if echo __LP64__ | ${CC-cc} -E - | grep __LP64__ > /dev/null; then
     machine=x86_64/x32
     data_machine=x32
     libc_cv_slibdir="/libx32"
