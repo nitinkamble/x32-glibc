@@ -1,3 +1,229 @@
+2011-09-12  Ulrich Drepper  <drepper@gmail.com>
+
+	* sysdeps/ieee754/dbl-64/wordsize-64/s_logb.c: New file.
+
+2011-09-12  Andreas Schwab  <schwab@redhat.com>
+
+	* sysdeps/unix/sysv/linux/bits/socket.h (__cmsg_nxthdr): Cast to
+	`struct cmsghdr *' instead of `void *'.
+	* sysdeps/unix/sysv/linux/sparc/bits/socket.h (__cmsg_nxthdr):
+	Likewise.
+
+2011-09-11  Andreas Schwab  <schwab@linux-m68k.org>
+
+	* elf/Makefile (gen-ldd): Prepend $(..) to $(ldd-rewrite-script)
+	if non-absolute.
+	* sysdeps/unix/sysv/linux/configure.in: Remove leading ../ from
+	ldd_rewrite_script.
+
+2011-09-11  Ulrich Drepper  <drepper@gmail.com>
+
+	* configure.in: Remove --with-tls option.
+	* config.h.in: Remove HAVE_TLS_SUPPORT entry.
+	* sysdeps/i386/elf/configure.in: Always test for TLS support and err
+	out in case it is missing.
+	* sysdeps/ia64/elf/configure.in: Likewise.
+	* sysdeps/powerpc/powerpc32/elf/configure.in: Likewise.
+	* sysdeps/powerpc/powerpc64/elf/configure.in: Likewise.
+	* sysdeps/s390/s390-32/elf/configure.in: Likewise.
+	* sysdeps/s390/s390-64/elf/configure.in: Likewise.
+	* sysdeps/sh/elf/configure.in: Likewise.
+	* sysdeps/sparc/sparc32/elf/configure.in: Likewise.
+	* sysdeps/sparc/sparc64/elf/configure.in: Likewise.
+	* sysdeps/x86_64/elf/configure.in: Likewise.
+	* sysdeps/mach/hurd/i386/tls.h: Remove test for HAVE_TLS_SUPPORT.
+	* sysdeps/mach/hurd/tls.h: Likewise.
+
+	[BZ #13067]
+	* malloc/obstack.h [!GNUC] (obstack_free): Avoid cast to int.
+
+	[BZ #13090]
+	* configure.in: Fix use of AC_INIT.
+
+	* elf/dl-support.c (_dl_pagesize): Initialize to EXEC_PAGESIZE.
+
+2011-09-10  Ulrich Drepper  <drepper@gmail.com>
+
+	* malloc/malloc.c: Replace MALLOC_FAILURE_ACTION with use of
+	__set_errno.
+	* malloc/hooks.c: Likewise.
+
+	* malloc/arena.c (ptmalloc_init_minimal): Removed.  Initialize all
+	variables statically.
+	(narenas): Initialize.
+	(list_lock): Initialize.
+	(ptmalloc_init): Don't call ptmalloc_init_minimal.  Remove
+	initializtion of main_arena and list_lock.  Small cleanups.
+	Replace all uses of malloc_getpagesize with GLRO(dl_pagesize).
+	* malloc/malloc.c: Remove malloc_getpagesize.  Include <ldsodefs.h>.
+	Add initializers to main_arena and mp_.
+	(malloc_state): Remove pagesize member.  Change all users to use
+	GLRO(dl_pagesize).
+
+	* elf/rtld.c (rtld_global_ro): Initialize _dl_pagesize.
+	* sysdeps/unix/sysv/linux/getpagesize.c: Simplify.  GLRO(dl_pagesize)
+	is always initialized.
+
+	* malloc/malloc.c: Removed unused configurations and dead code.
+	* malloc/arena.c: Likewise.
+	* malloc/hooks.c: Likewise.
+	* malloc/Makefile (CPPFLAGS-malloc.c): Don't add -DATOMIC_FASTBINS.
+
+	* include/tls.h: Removed.  USE___THREAD must always be defined.
+	* bits/libc-tsd.h: Don't handle !USE___THREAD.
+	* elf/dl-libc.c: Likewise.
+	* elf/dl-tsd.c: Likewise.
+	* include/errno.h: Likewise.
+	* include/netdb.h: Likewise.
+	* include/resolv.h: Likewise.
+	* inet/herrno-loc.c: Likewise.
+	* inet/herrno.c: Likewise.
+	* malloc/arena.c: Likewise.
+	* malloc/hooks.c: Likewise.
+	* malloc/malloc.c: Likewise.
+	* resolv/res-state.c: Likewise.
+	* resolv/res_libc.c: Likewise.
+	* sysdeps/i386/dl-machine.h: Likewise.
+	* sysdeps/ia64/dl-machine.h: Likewise.
+	* sysdeps/powerpc/powerpc32/dl-machine.h: Likewise.
+	* sysdeps/powerpc/powerpc64/dl-machine.h: Likewise.
+	* sysdeps/s390/s390-32/dl-machine.h: Likewise.
+	* sysdeps/s390/s390-64/dl-machine.h: Likewise.
+	* sysdeps/sh/dl-machine.h: Likewise.
+	* sysdeps/sparc/sparc32/dl-machine.h: Likewise.
+	* sysdeps/sparc/sparc64/dl-machine.h: Likewise.
+	* sysdeps/unix/i386/sysdep.S: Likewise.
+	* sysdeps/unix/sysv/linux/i386/sysdep.h: Likewise.
+	* sysdeps/unix/sysv/linux/ia64/sysdep.S: Likewise.
+	* sysdeps/unix/sysv/linux/s390/s390-32/sysdep.S: Likewise.
+	* sysdeps/unix/sysv/linux/s390/s390-32/sysdep.h: Likewise.
+	* sysdeps/unix/sysv/linux/s390/s390-64/sysdep.S: Likewise.
+	* sysdeps/unix/sysv/linux/s390/s390-64/sysdep.h: Likewise.
+	* sysdeps/unix/sysv/linux/sh/sysdep.h: Likewise.
+	* sysdeps/unix/sysv/linux/sparc/sparc32/sysdep.h: Likewise.
+	* sysdeps/unix/sysv/linux/sparc/sparc64/sysdep.h: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/sysdep.h: Likewise.
+	* sysdeps/unix/x86_64/sysdep.S: Likewise.
+	* sysdeps/x86_64/dl-machine.h: Likewise.
+	* tls.make.c: Likewise.
+
+	* configure.in: Remove --with-__thread option.  Make tests for
+	--no-whole-archive, __builtin_expect, symbol redirection, __thread,
+	tls_model attribute fail if no support is available.  Remove
+	USE_IN_LIBIO.
+	* Makeconfig: Adjust for dropped configure option.  All features are
+	now mandatory.
+	* Makerules: Likewise.
+	* Versions.def: Likewise.
+	* argp/argp-fmtstream.c: Likewise.
+	* argp/argp-fmtstream.h: Likewise.
+	* argp/argp-help.c: Likewise.
+	* assert/assert.c: Likewise.
+	* config.h.in: Likewise.
+	* config.make.in: Likewise.
+	* configure: Likewise.
+	* configure.in: Likewise.
+	* csu/Versions: Likewise.
+	* csu/init.c: Likewise.
+	* elf/tst-audit2.c: Likewise.
+	* elf/tst-tls10.c: Likewise.
+	* elf/tst-tls10.h: Likewise.
+	* elf/tst-tls11.c: Likewise.
+	* elf/tst-tls12.c: Likewise.
+	* elf/tst-tls14.c: Likewise.
+	* elf/tst-tlsmod11.c: Likewise.
+	* elf/tst-tlsmod12.c: Likewise.
+	* elf/tst-tlsmod13.c: Likewise.
+	* elf/tst-tlsmod13a.c: Likewise.
+	* elf/tst-tlsmod14a.c: Likewise.
+	* elf/tst-tlsmod15b.c: Likewise.
+	* elf/tst-tlsmod16a.c: Likewise.
+	* elf/tst-tlsmod16b.c: Likewise.
+	* elf/tst-tlsmod7.c: Likewise.
+	* elf/tst-tlsmod8.c: Likewise.
+	* elf/tst-tlsmod9.c: Likewise.
+	* gmon/gmon.c: Likewise.
+	* grp/fgetgrent_r.c: Likewise.
+	* grp/putgrent.c: Likewise.
+	* hurd/fopenport.c: Likewise.
+	* include/libc-symbols.h: Likewise.
+	* include/tls.h: Likewise.
+	* intl/gettextP.h: Likewise.
+	* intl/loadinfo.h: Likewise.
+	* locale/global-locale.c: Likewise.
+	* locale/localeinfo.h: Likewise.
+	* mach/devstream.c: Likewise.
+	* malloc/arena.c: Likewise.
+	* malloc/set-freeres.c: Likewise.
+	* misc/err.c: Likewise.
+	* misc/getttyent.c: Likewise.
+	* misc/mntent_r.c: Likewise.
+	* posix/getopt.c: Likewise.
+	* posix/wordexp.c: Likewise.
+	* pwd/fgetpwent_r.c: Likewise.
+	* resolv/Versions: Likewise.
+	* resolv/res_hconf.c: Likewise.
+	* shadow/fgetspent_r.c: Likewise.
+	* shadow/putspent.c: Likewise.
+	* stdio-common/printf_fphex.c: Likewise.
+	* stdio-common/tmpfile.c: Likewise.
+	* stdlib/abort.c: Likewise.
+	* stdlib/fmtmsg.c: Likewise.
+	* sunrpc/auth_unix.c: Likewise.
+	* sunrpc/clnt_perr.c: Likewise.
+	* sunrpc/clnt_tcp.c: Likewise.
+	* sunrpc/clnt_udp.c: Likewise.
+	* sunrpc/clnt_unix.c: Likewise.
+	* sunrpc/openchild.c: Likewise.
+	* sunrpc/svc_simple.c: Likewise.
+	* sunrpc/svc_tcp.c: Likewise.
+	* sunrpc/svc_udp.c: Likewise.
+	* sunrpc/svc_unix.c: Likewise.
+	* sunrpc/xdr.c: Likewise.
+	* sunrpc/xdr_array.c: Likewise.
+	* sunrpc/xdr_rec.c: Likewise.
+	* sunrpc/xdr_ref.c: Likewise.
+	* sunrpc/xdr_stdio.c: Likewise.
+
+2011-09-09  Ulrich Drepper  <drepper@gmail.com>
+
+	* sysdeps/i386/fpu/libm-test-ulps: Adjust ULPs for jn tests.
+
+2011-07-03  Andreas Jaeger  <aj@suse.de>
+
+	* math/libm-test.inc (jn_test): Add tests for BZ#11589.
+	* sysdeps/x86_64/fpu/libm-test-ulps: Add new ULPs for jn_test,
+	regenerate with gen-libm-tests.pl.
+
+2010-05-12  Petr Baudis  <pasky@suse.cz>
+
+	[BZ #11589]
+	* sysdeps/ieee754/dbl-64/e_jn.c: Compensate major precision loss
+	around j0() zero points by switching to j1().
+	* sysdeps/ieee754/flt-32/e_jnf.c: Likewise.
+	* sysdeps/ieee754/ldbl-128/e_jnl.c: Likewise.
+	* sysdeps/ieee754/ldbl-128ibm/e_jnl.c: Likewise.
+	* sysdeps/ieee754/ldbl-96/e_jnl.c: Likewise.
+
+2011-09-09  Ulrich Drepper  <drepper@gmail.com>
+
+	* sysdeps/unix/bsd/bsd4.4/bits/socket.h (__cmsg_nxthdr): Use NULL
+	instead of 0.
+	* sysdeps/unix/sysv/linux/bits/socket.h (__cmsg_nxthdr): Use (void*)0
+	instead of 0.                              .
+	* sysdeps/unix/sysv/linux/sparc/bits/socket.h: Likewise.
+	Patch in part by Pavel Roskin <proski@gnu.org>.
+
+	[BZ #13138]
+	* stdio-common/vfscanf.c (ADDW): Allocate large memory block with
+	realloc.
+	(_IO_vfscanf_internal): Remove reteof.  Use errout after setting done.
+	Free memory block if necessary.
+
+	[BZ #12847]
+	* libio/genops.c (INTDEF): For string streams the _lock pointer can
+	be NULL.  Don't lock in this case.
+
 2011-09-09  Roland McGrath  <roland@hack.frob.com>
 
 	* elf/elf.h (ELFOSABI_GNU): New macro.

@@ -1,6 +1,7 @@
-/* Copyright (C) 1991,1992,1995-1997,2000,2002,2004,2010
-   Free Software Foundation, Inc.
+/* Compute radix independent exponent.
+   Copyright (C) 2011 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
+   Contributed by Ulrich Drepper <drepper@gmail.com>, 2011.
 
    The GNU C Library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Lesser General Public
@@ -17,19 +18,27 @@
    Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
    02111-1307 USA.  */
 
-#include <assert.h>
-#include <unistd.h>
-#include <sys/param.h>
+#include <math.h>
 
-#include <ldsodefs.h>
-#include <kernel-features.h>
+#include "math_private.h"
 
-/* Return the system page size.  */
-int
-__getpagesize ()
+
+double
+__logb (double x)
 {
-  assert (GLRO(dl_pagesize) != 0);
-  return GLRO(dl_pagesize);
+  int64_t ix;
+
+  EXTRACT_WORDS64 (ix, x);
+  ix &= UINT64_C(0x7fffffffffffffff);
+  if (ix == 0)
+    return -1.0 / fabs (x);
+  unsigned int ex = ix >> 52;
+  if (ex == 0x7ff)
+    return x * x;
+  return ex == 0 ? -1022.0 : (double) (ex - 1023);
 }
-libc_hidden_def (__getpagesize)
-weak_alias (__getpagesize, getpagesize)
+weak_alias (__logb, logb)
+#ifdef NO_LONG_DOUBLE
+strong_alias (__logb, __logbl)
+weak_alias (__logb, logbl)
+#endif
