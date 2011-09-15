@@ -1,3 +1,8 @@
+2011-09-15  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/x86_64/preconfigure: Pass "$CFLAGS $CPPFLAGS" to CC
+	when checking __LP64__.
+
 2011-09-12  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/unix/sysv/linux/x86_64/x32/sysdep.h: Don't handle
