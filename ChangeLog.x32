@@ -1,3 +1,18 @@
+2011-09-16  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/bits/a.out.h: Don't include
+	<bits/wordsize.h>.  Check __x86_64__ instead of __WORDSIZE.
+	* sysdeps/unix/sysv/linux/x86_64/bits/fcntl.h: Likwise.
+	* sysdeps/x86_64/bits/mathdef.h: Likwise.
+
+	* sysdeps/unix/sysv/linux/x86_64/bits/ipctypes.h: New.
+	* sysdeps/unix/sysv/linux/x86_64/bits/statvfs.h: Likwise.
+	* sysdeps/unix/sysv/linux/x86_64/bits/utmp.h: Likwise.
+	* sysdeps/unix/sysv/linux/x86_64/bits/utmpx.h: Likwise.
+
+	* sysdeps/x86_64/64/bits/wordsize.h (__WORDSIZE_COMPAT32):
+	Removed.
+
 2011-09-15  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/x86_64/bits/byteswap.h: Don't include
