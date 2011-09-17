@@ -2392,6 +2392,11 @@ if test -z "${stubs_biarch_h}"; then
 fi
 AC_SUBST(stubs_biarch_h)
 
+if test -z "${lib_names_awk}"; then
+  lib_names_awk=scripts/lib-names.awk
+fi
+AC_SUBST(lib_names_awk)
+
 if test "`(cd $srcdir; pwd)`" = "`pwd`"; then
   config_makefile=
 else
