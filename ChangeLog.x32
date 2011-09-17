@@ -1,5 +1,15 @@
 2011-09-17  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/unix/sysv/linux/Makefile ($(objpfx)syscall-%.h
+	$(objpfx)syscall-%.d): Defined only if $(stubs-biarch_h) is
+	include/stubs-biarch.h.
+
+	* sysdeps/unix/sysv/linux/x86_64/Makefile (64bit-predefine): Add
+	__LP64__.
+	($(objpfx)syscall-%.h $(objpfx)syscall-%.d): New.
+
+2011-09-17  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* Makeconfig ($(common-objpfx)gnu/lib-names.stmp): Depend on
 	$(lib-names_awk) instead of scripts/lib-names.awk.
 
