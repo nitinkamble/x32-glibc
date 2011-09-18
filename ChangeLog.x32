@@ -1,5 +1,10 @@
 2011-09-18  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* include/libc-symbols.h (HIDDEN_JUMPTARGET): Revert the last
+	change.
+
+2011-09-18  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* config.make.in (use-default-syscall-macros): New.
 
 	* configure.in (use_default_syscall_macros): Set to yes if not
