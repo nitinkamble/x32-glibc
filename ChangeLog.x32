@@ -1,3 +1,11 @@
+2011-09-18  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/stubs-triarch.h: Moved to ...
+	* sysdeps/x86_64/stubs-biarch.h: Here.
+
+	* sysdeps/x86_64/preconfigure (stubs_biarch_h): Set to
+	sysdeps/x86_64/stubs-biarch.h.
+
 2011-09-17  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* sysdeps/unix/sysv/linux/Makefile ($(objpfx)syscall-%.h
