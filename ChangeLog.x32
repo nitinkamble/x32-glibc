@@ -1,5 +1,17 @@
 2011-09-18  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* config.make.in (use-default-syscall-macros): New.
+
+	* configure.in (use_default_syscall_macros): Set to yes if not
+	set.  Substitute.
+	* configure: Regenerated.
+
+	* sysdeps/unix/sysv/linux/Makefile ($(objpfx)syscall-%.h
+	$(objpfx)syscall-%.d): Check $(use-default-syscall-macros)
+	instead of $(stubs-biarch_h).
+
+2011-09-18  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/unix/sysv/linux/x86_64/stubs-triarch.h: Moved to ...
 	* sysdeps/x86_64/stubs-biarch.h: Here.
 

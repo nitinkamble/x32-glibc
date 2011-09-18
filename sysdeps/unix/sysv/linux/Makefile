@@ -38,7 +38,7 @@ install-others += $(inst_includedir)/bits/syscall.h
 
 tests += tst-clone
 
-ifeq ($(stubs-biarch_h),include/stubs-biarch.h)
+ifeq (yes,$(use-default-syscall-macros))
 # Generate the list of SYS_* macros for the system calls (__NR_* macros).
 # For bi-arch platforms, the CPU/Makefile defines {32,64}bit-predefine and
 # we generate a file that uses <bits/wordsize.h>.
