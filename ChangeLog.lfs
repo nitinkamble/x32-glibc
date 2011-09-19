@@ -1,3 +1,54 @@
+2011-09-19  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/aio_read.c: Removed.
+	* sysdeps/unix/sysv/linux/x86_64/x32/aio_read64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/aio_write.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/aio_write64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/creat64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/dl-fxstatat64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/fallocate64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/fstatfs64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/fstatvfs.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/fstatvfs64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/ftruncate64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/fxstat.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/fxstat64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/fxstatat.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/fxstatat64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/getdents64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/getdirentries.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/getdirentries64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/getrlimit64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/glob64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/internal_statvfs64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/lio_listio.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/lio_listio64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/lxstat.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/lxstat64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/mmap64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/open64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/openat.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/openat64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/posix_fadvise64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/posix_fallocate64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/pread64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/preadv64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/pwrite64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/pwritev64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/readdir.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/readdir64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/readdir64_r.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/readdir_r.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/setrlimit64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/statfs64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/statvfs.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/statvfs64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/truncate64.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/xstat.c: Likewise.
+	* sysdeps/unix/sysv/linux/x86_64/x32/xstat64.c: Likewise.
+
+	* sysdeps/unix/sysv/linux/x86_64/x32/Implies: New.
+
 2011-09-18  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* bits/typesizes.h (__NSECONDS_T_TYPE): Renamed to ...
