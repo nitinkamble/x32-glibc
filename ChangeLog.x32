@@ -1,5 +1,12 @@
 2011-09-19  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/x86_64/bits/wordsize.h: Removed.
+
+	* sysdeps/x86_64/64/bits/wordsize.h: Restored.
+	* sysdeps/x86_64/x32/bits/wordsize.h: Likewise.
+
+2011-09-19  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* sysdeps/x86_64/ffsll.c: Put back ffsl alias only if __LP64__
 	is defined.
 
