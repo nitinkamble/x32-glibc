@@ -1,5 +1,18 @@
 2011-09-21  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* sysdeps/x86_64/fpu/bits/mathinline.h (__signbitf): Support AVX.
+	(__signbit): Likewise.
+	(lrintf): Likewise.
+	(lrint): Likewise.
+	(llrintf): Likewise.
+	(llrint): Likewise.
+	(fmaxf): Likewise.
+	(fmax): Likewise.
+	(fminf): Likewise.
+	(fmin): Likewise.
+
+2011-09-21  H.J. Lu  <hongjiu.lu@intel.com>
+
 	PR math/13202
 	* Makefile (tests): Add test-c99.
 	(CFLAGS-test-c99.c): Set to -std=c99.
