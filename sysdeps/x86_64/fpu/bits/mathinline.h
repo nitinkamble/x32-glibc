@@ -39,7 +39,11 @@ __NTH (__signbitf (float __x))
   return __u.__i < 0;
 # else
   int __m;
+#ifdef __AVX__
+  __asm ("vpmovmskb %1, %0" : "=r" (__m) : "x" (__x));
+#else
   __asm ("pmovmskb %1, %0" : "=r" (__m) : "x" (__x));
+#endif
   return __m & 0x8;
 # endif
 }
@@ -51,7 +55,11 @@ __NTH (__signbit (double __x))
   return __u.__i[1] < 0;
 # else
   int __m;
+#ifdef __AVX__
+  __asm ("vpmovmskb %1, %0" : "=r" (__m) : "x" (__x));
+#else
   __asm ("pmovmskb %1, %0" : "=r" (__m) : "x" (__x));
+#endif
   return __m & 0x80;
 # endif
 }
@@ -71,7 +79,11 @@ __MATH_INLINE long int
 __NTH (lrintf (float __x))
 {
   long int __res;
-  asm ("cvtss2si %1, %0" : "=r" (__res) : "xm" (__x));
+#ifdef __AVX__
+  __asm ("vcvtss2si %1, %0" : "=r" (__res) : "xm" (__x));
+#else
+  __asm ("cvtss2si %1, %0" : "=r" (__res) : "xm" (__x));
+#endif
   return __res;
 }
 #  endif
@@ -80,7 +92,11 @@ __MATH_INLINE long int
 __NTH (lrint (double __x))
 {
   long int __res;
-  asm ("cvtsd2si %1, %0" : "=r" (__res) : "xm" (__x));
+#ifdef __AVX__
+  __asm ("vcvtsd2si %1, %0" : "=r" (__res) : "xm" (__x));
+#else
+  __asm ("cvtsd2si %1, %0" : "=r" (__res) : "xm" (__x));
+#endif
   return __res;
 }
 #  endif
@@ -89,14 +105,22 @@ __MATH_INLINE long long int
 __NTH (llrintf (float __x))
 {
   long long int __res;
-  asm ("cvtss2si %1, %0" : "=r" (__res) : "xm" (__x));
+#ifdef __AVX__
+  __asm ("vcvtss2si %1, %0" : "=r" (__res) : "xm" (__x));
+#else
+  __asm ("cvtss2si %1, %0" : "=r" (__res) : "xm" (__x));
+#endif
   return __res;
 }
 __MATH_INLINE long long int
 __NTH (llrint (double __x))
 {
   long long int __res;
-  asm ("cvtsd2si %1, %0" : "=r" (__res) : "xm" (__x));
+#ifdef __AVX__
+  __asm ("vcvtsd2si %1, %0" : "=r" (__res) : "xm" (__x));
+#else
+  __asm ("cvtsd2si %1, %0" : "=r" (__res) : "xm" (__x));
+#endif
   return __res;
 }
 #  endif
@@ -106,28 +130,52 @@ __NTH (llrint (double __x))
 __MATH_INLINE float
 __NTH (fmaxf (float __x, float __y))
 {
-  asm ("maxss %1, %0" : "+x" (__x) : "xm" (__y));
+#ifdef __AVX__
+  float __res;
+  __asm ("vmaxss %2, %1, %0" : "=x" (__res) : "x" (__x), "xm" (__y));
+  return __res;
+#else
+  __asm ("maxss %1, %0" : "+x" (__x) : "xm" (__y));
   return __x;
+#endif
 }
 __MATH_INLINE double
 __NTH (fmax (double __x, double __y))
 {
-  asm ("maxsd %1, %0" : "+x" (__x) : "xm" (__y));
+#ifdef __AVX__
+  double __res;
+  __asm ("vmaxsd %2, %1, %0" : "=x" (__res) : "x" (__x), "xm" (__y));
+  return __res;
+#else
+  __asm ("maxsd %1, %0" : "+x" (__x) : "xm" (__y));
   return __x;
+#endif
 }
 
 /* Determine minimum of two values.  */
 __MATH_INLINE float
 __NTH (fminf (float __x, float __y))
 {
-  asm ("minss %1, %0" : "+x" (__x) : "xm" (__y));
+#ifdef __AVX__
+  float __res;
+  __asm ("vminss %2, %1, %0" : "=x" (__res) : "x" (__x), "xm" (__y));
+  return __res;
+#else
+  __asm ("minss %1, %0" : "+x" (__x) : "xm" (__y));
   return __x;
+#endif
 }
 __MATH_INLINE double
 __NTH (fmin (double __x, double __y))
 {
-  asm ("minsd %1, %0" : "+x" (__x) : "xm" (__y));
+#ifdef __AVX__
+  float __res;
+  __asm ("vminsd %2, %1, %0" : "=x" (__res) : "x" (__x), "xm" (__y));
+  return __res;
+#else
+  __asm ("minsd %1, %0" : "+x" (__x) : "xm" (__y));
   return __x;
+#endif
 }
 #  endif
 
