@@ -1,0 +1,17 @@
+2011-09-21  H.J. Lu  <hongjiu.lu@intel.com>
+
+	PR math/13202
+	* Makefile (tests): Add test-c99.
+	(CFLAGS-test-c99.c): Set to -std=c99.
+
+	* math/test-c99.c: New.
+
+	* sysdeps/x86_64/fpu/bits/mathinline.h (lrintf): Replace asm
+	with __asm.
+	(lrint): Likewise.
+	(llrintf): Likewise.
+	(llrint): Likewise.
+	(fmaxf): Likewise.
+	(fmax): Likewise.
+	(fminf): Likewise.
+	(fmin): Likewise.
